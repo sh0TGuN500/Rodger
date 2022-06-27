@@ -1,0 +1,18 @@
+h1 {
+    color: darkblue;
+    font-family: cursive;
+    text-shadow: #8f8f8f 0.1vw 0.1vw 0, #8f8f8f -0.1vw -0.1vw 0,
+                 #8f8f8f -0.1vw 0.1vw 0, #8f8f8f 0.1vw -0.1vw 0;
+}
+
+body {
+    background: white url("../images/home_background.gif") no-repeat;
+    background-size: cover;
+    min-width: 100vh;
+    min-height: 97.9vh
+}
+
+nav  {
+    color: gray;
+    font-family: cursive;
+}

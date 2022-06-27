@@ -1,0 +1,53 @@
+{% extends 'polls/base_polls.html' %}
+
+{% block title %}
+	<h3>Questions</h3>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_list.css' %}">
+        {% if user.is_staff %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'polls:add_question' %}" class="add_question"> + Add question</a>
+            {% else %}
+                <p class="add_question">For add question you need to <a href="/accounts/login/">Sign In</a></p>
+            {% endif %}
+        {% endif %}
+
+    <h3>Questions:</h3>
+
+    <ul>
+        {% if error_message %}
+		    <p><strong>{{ error_message }} <a href={% url 'account_login' %}>Sign In</a></strong></p>
+	    {% else %}
+            {% for question in page_obj %}
+                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a></li>
+            {% empty %}
+                <p>No questions are available.</p>
+            {% endfor %}
+        {% endif %}
+    </ul>
+</div>
+<div class="pagination">
+    <span class="step-links">
+    {% if page_obj.number %}
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    {% endif %}
+    </span>
+</div>
+{% endblock %}

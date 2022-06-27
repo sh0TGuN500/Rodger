@@ -1,0 +1,37 @@
+{% extends 'polls/base_polls.html' %}
+
+{% block title %}
+	Add question
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'polls/css/add_question.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;300;400;700&display=swap" rel="stylesheet">
+
+        {% if error_message %}
+            <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+        <form action="{% url 'polls:leave_question' %}" method="post">
+            {% csrf_token %}
+            <br>
+            <div class="wrapper">
+                {{ form.as_p }}
+                <div id="survey_options">
+                </div>
+                <div class="controls">
+                  <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
+                  <a href="#" id="remove_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                </div>
+              </div>
+            <button type="submit">Left question</button>
+        </form>
+    </div>
+    <script src="{% static 'polls/js/script.js' %}"></script>
+    <header>
+        <h1>New question</h1>
+    </header>
+{% endblock %}

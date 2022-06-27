@@ -1,0 +1,72 @@
+{% extends 'polls/base_polls.html' %}
+
+{% block title %}
+	Question | {{ question.question_title }}
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
+
+	<em>{% if question.was_published_recently %}
+			NEW QUESTION!<br>
+		{% endif %}
+        <h2>{{ question.author_name }}</h2><br>
+        {{ question.pub_date }}
+    </em>
+
+        {% if question.question_text %}
+            <p>{{ question.question_text }}</p>
+            <hr>
+        {% endif %}
+
+	{% if user.is_authenticated %}
+        {% if error_message %}
+		    <p><strong>{{ error_message }}</strong></p>
+	    {% endif %}
+        {% if question.choice_set.all %}
+            <form action="{% url 'polls:vote' question.id %}" method="post">
+                {% csrf_token %}
+                {% for choice in question.choice_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+                {% endfor %}
+                <br><input type="submit" value="Vote" class="vote">
+            </form>
+            <hr>
+        {% endif %}
+
+        <form action="{% url 'polls:leave_comment' question.id %}" method="post" class="mt-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Left comment</button>
+        </form>
+	{% else %}
+		<p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
+	{% endif %}
+	<hr>
+	{% for comment in question.comment_set.all %}
+		<p class="comment_autor">
+			<strong>{{comment.author_name}}:</strong>
+			<p class="comment_text">{{comment.comment_text}}</p>
+	{% empty %}
+		<p>Comments not found! Be the first ;)</p>
+	{% endfor %}
+	<hr>
+    {% comment %}
+	{% if form.errors %}
+		<p><strong>{{ form.errors }}error</strong></p>
+    {% else %}
+        {% for i in form %}
+        <p><strong>var: {{ i }}</strong></p>
+        {% endfor %}
+	{% endif %}
+	{% endcomment %}
+</div>
+
+<header>
+	<h1>{{ question.question_title }}</h1>
+</header>
+{% endblock %}

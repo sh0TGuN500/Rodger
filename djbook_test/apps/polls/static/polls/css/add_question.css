@@ -1,0 +1,141 @@
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    color: gray;
+    background-color: #f0f5ff;
+    margin: 0;
+    padding: 0;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    color: #fff;
+}
+
+input[type="text"]{
+  padding: 10px;
+  margin: 10px auto;
+  display: block;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  background: none;
+  width: 274px;
+  color: black;
+}
+
+input[type="text"]:focus, textarea:focus{
+  outline: none;
+}
+
+#remove_fields {
+  float: right;
+}
+.controls a i.fa-minus {
+  margin-right: 5px;
+}
+
+
+header {
+    box-sizing: border-box;
+    min-height: 100vh;
+    position: relative;
+    transform-style: inherit;
+    width: 100vw;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+header h1 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+header,
+header:before {
+    background: 50% 50% / cover;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background: url("../images/add_question_background.gif");
+    background-size: cover;
+    transform-origin: center center 0;
+    transform: translateZ(-1px) scale(2);
+    z-index: -1;
+    min-height: 100vh;
+}
+
+.main {
+    z-index: 2;
+    position: absolute;
+    top: 100vh;
+    right: 0;
+    left: 0;
+    background: black;
+    opacity: 1;
+    line-height: 30px;
+    font-weight: lighter;
+    padding: 40px;
+    color: grey;
+}
+
+.controls {
+  width: 294px;
+  margin: 15px auto;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.wrapper {
+  width: 400px;
+  margin: 40px auto;
+  padding: 10px;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 10px 40px 0 rgba(47,47,47,.1);
+}
+
+nav  {
+    color: gray;
+    font-family: cursive;
+}
+
+h1  {
+    color: #DAA520FF;
+    font-family: cursive;
+    text-align: center;
+    font-size: 48px;
+}
+
+em {
+    color: GoldenRod;
+    font-family: cursive;
+}
+
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
