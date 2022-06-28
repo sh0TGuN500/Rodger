@@ -23,11 +23,20 @@
         {% if error_message %}
 		    <p><strong>{{ error_message }} <a href={% url 'account_login' %}>Sign In</a></strong></p>
 	    {% else %}
-            {% for question in page_obj %}
-                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a></li>
-            {% empty %}
-                <p>No questions are available.</p>
-            {% endfor %}
+            {% if my_question_list %}
+                {% for question in my_question_list %}
+                    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a> |
+                    <a href="{% url 'polls:edit_question' question.id %}">{{ question.id }} Edit</a></li>
+                {% empty %}
+                    <p>No questions are available.</p>
+                {% endfor %}
+            {% else %}
+                {% for question in page_obj %}
+                    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a></li>
+                {% empty %}
+                    <p>No questions are available.</p>
+                {% endfor %}
+            {% endif %}
         {% endif %}
     </ul>
 </div>

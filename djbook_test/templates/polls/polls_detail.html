@@ -37,7 +37,6 @@
             </form>
             <hr>
         {% endif %}
-
         <form action="{% url 'polls:leave_comment' question.id %}" method="post" class="mt-4">
             {% csrf_token %}
             {{ form.as_p }}
@@ -67,6 +66,6 @@
 </div>
 
 <header>
-	<h1>{{ question.question_title }}</h1>
+	<h1 contentEditable>{{ question.question_title }}</h1>
 </header>
 {% endblock %}

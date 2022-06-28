@@ -20,7 +20,7 @@ class IndexView(generic.ListView):
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
+        return Question.objects.all().order_by('-pub_date')
 
 
 class DetailMixinView(generic.edit.FormMixin, generic.detail.DetailView):
@@ -88,8 +88,8 @@ def search(request):
 
 def my_questions(request):
     if request.user.is_authenticated:
-        latest_question_list = Question.objects.filter(author_name=request.user)
-        context = {'latest_question_list': latest_question_list}
+        my_question_list = Question.objects.filter(author_name=request.user).order_by('-pub_date')
+        context = {'my_question_list': my_question_list}
     else:
         error_message = 'To view your questions, you must be '
         context = {'error_message': error_message}
@@ -117,23 +117,42 @@ def personal_page(request):
     return render(request, 'polls/personal_page.html')
 
 
-def add_question(request):
+def add_question(request, question_id=None):
     if request.user.is_staff:
-        return render(request, 'polls/add_question.html', {
-            'form': AddQuestionForm
-        })
+        if question_id:
+            question = Question.objects.get(id=question_id)
+            return render(request, 'polls/add_question.html', {
+                'title': question.question_title,
+                'text': question.question_text,
+                'choices': question.choice_set.all(),
+                'question_id': question_id
+            })
+        else:
+            return render(request, 'polls/add_question.html', {
+                'form': AddQuestionForm
+            })
     else:
         return HttpResponseRedirect(reverse('polls:home'))
 
 
-def leave_question(request):
-    form = AddQuestionForm
+def leave_question(request, question_id=None):
+    form = AddQuestionForm if not question_id else None
     data = request.POST
     if not request.user.is_staff or not data:
         return HttpResponseRedirect(reverse('polls:home'))
     title = text_validator(data['question_title'])
     text = text_validator(data['question_text'])
     if title and text and data:
+        if question_id:
+            question = Question.objects.get(id=question_id)
+            question.question_title = title
+            question.question_text = text
+            question.choice_set.all().delete()
+        else:
+            question = Question(question_title=title,
+                                question_text=text,
+                                author_name=request.user,
+                                pub_date=timezone.now())
         if data.get('choice'):
             choice_list = dict(data.lists())['choice']
             count = 0
@@ -145,35 +164,26 @@ def leave_question(request):
                     return render(request, 'polls/add_question.html', {
                         'error_message': 'You input invalid text'
                     })
-            create_question = Question(question_title=title,
-                                       question_text=text,
-                                       author_name=request.user,
-                                       pub_date=timezone.now())
             try:
-                create_question.save()
+                question.save()
             except IntegrityError:
                 return render(request, 'polls/add_question.html', {
                     'error_message': f'Title "{title}" already exist',
                     'form': form,
                 })
-
             for choice in choice_list:
-                create_choice = Choice(question_id=create_question.id,
+                create_choice = Choice(question_id=question.id,
                                        choice_text=choice)
                 create_choice.save()
         else:
-            create_question = Question(question_title=title,
-                                       question_text=text,
-                                       author_name=request.user,
-                                       pub_date=timezone.now())
             try:
-                create_question.save()
+                question.save()
             except IntegrityError:
                 return render(request, 'polls/add_question.html', {
                     'error_message': f'Title "{title}" already exist',
                     'form': form,
                 })
-        return HttpResponseRedirect(reverse('polls:detail', args=(create_question.id,)))
+        return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
 
     else:
         return render(request, 'polls/add_question.html', {

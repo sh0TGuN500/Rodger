@@ -13,6 +13,8 @@ urlpatterns = [
     path('polls/<int:question_id>/vote/', views.vote, name='vote'),
     path('polls/<int:question>/leave_comment/', views.AddComment.as_view(), name='leave_comment'),
     path('polls/add_question/', views.add_question, name='add_question'),
+    path('polls/edit_question/<int:question_id>', views.add_question, name='edit_question'),
     path('polls/add_question/leave_question', views.leave_question, name='leave_question'),
+    path('polls/edit_question/update_question/<int:question_id>', views.leave_question, name='update_question'),
     path('polls/search', views.search, name='search')
 ]
