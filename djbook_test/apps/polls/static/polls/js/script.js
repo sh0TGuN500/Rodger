@@ -9,14 +9,14 @@ add_more_fields.onclick = function(){
 	newField.setAttribute('name','choice');
 	newField.setAttribute('class','survey_options');
 	newField.setAttribute('size',100);
-	newField.setAttribute('placeholder','Another Field');
+	newField.setAttribute('placeholder','Choice field');
 	let elseField = document.createElement('input');
 	elseField.required = true;
 	elseField.setAttribute('type','text');
 	elseField.setAttribute('name','choice');
 	elseField.setAttribute('class','survey_options');
 	elseField.setAttribute('size',100);
-	elseField.setAttribute('placeholder','Another Field');
+	elseField.setAttribute('placeholder','Choice field');
 	let input_tags = survey_options.getElementsByTagName('input');
 	if(input_tags.length === 0) {
 		survey_options.append(newField, elseField);

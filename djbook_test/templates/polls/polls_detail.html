@@ -11,16 +11,22 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
 
 	<em>{% if question.was_published_recently %}
-			NEW QUESTION!<br>
+			<blink>NEW QUESTION!</blink><br>
 		{% endif %}
-        <h2>{{ question.author_name }}</h2><br>
-        {{ question.pub_date }}
+        <h2>{{ question.author_name }}</h2>
+        {% if question.author_name == user.username %}
+            <a href="{% url 'polls:edit_question' question.id %}"> Edit</a> |
+            <a href="{% url 'polls:delete_question' question.id %}"> Delete</a><br>
+        {% endif %}
+        {% if question.up_date %}
+            {{ question.up_date }} Edited
+        {% else %}
+            {{ question.pub_date }}
+        {% endif %}
     </em>
 
-        {% if question.question_text %}
-            <p>{{ question.question_text }}</p>
-            <hr>
-        {% endif %}
+        <article>{{ question.question_text }}</article>
+        <hr>
 
 	{% if user.is_authenticated %}
         {% if error_message %}

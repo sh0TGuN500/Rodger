@@ -14,7 +14,8 @@ class Question(models.Model):
     question_title = models.CharField('question title', max_length=200, unique=True)
     question_text = models.TextField('question text', max_length=9000)
     author_name = models.CharField('author name', max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('publication date')
+    up_date = models.DateTimeField('updating date', default=None, null=True)
 
     def __str__(self):
         return self.question_title
@@ -44,7 +45,8 @@ class Vote(models.Model):
 
 
 class Comment(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # ForeignKey привязка к классу Article, при удалении Article удаляется закрепленный за ним Comment
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # ForeignKey привязка к классу Question,
+    # при удалении Article удаляется закрепленный за ним Comment
     author_name = models.CharField('author name', max_length=50, blank=False)
     comment_text = models.CharField('comment text', max_length=300, blank=False)
 

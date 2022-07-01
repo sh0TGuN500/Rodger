@@ -17,7 +17,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """
-        Return the last five published questions (not including those set to be
+        Return the last published questions (not including those set to be
         published in the future).
         """
         return Question.objects.all().order_by('-pub_date')
@@ -86,27 +86,50 @@ def search(request):
     return render(request, 'polls/polls_list.html', context=context)
 
 
-def my_questions(request):
+'''def my_questions(request):
     if request.user.is_authenticated:
         my_question_list = Question.objects.filter(author_name=request.user).order_by('-pub_date')
         context = {'my_question_list': my_question_list}
     else:
         error_message = 'To view your questions, you must be '
         context = {'error_message': error_message}
+    return render(request, 'polls/polls_list.html', context=context)'''
+
+
+def delete_question(request, question_id):
+    user = request.user
+    if not user.is_authenticated:
+        my_question_list = []
+        error_message = '4 do this u must be '
+    else:
+        my_question_list = Question.objects.filter(author_name=user).order_by('-pub_date')
+        deleting_question = Question.objects.get(id=question_id)
+        if user.username != deleting_question.author_name:
+            error_message = 'U can delete only your questions'
+        else:
+            deleting_question.delete()
+            error_message = f'Question "{deleting_question}" has been deleted'
+    context = {
+        'my_question_list': my_question_list,
+        'error_message': error_message
+    }
     return render(request, 'polls/polls_list.html', context=context)
 
 
-'''def leave_comment(request, question_id):
-    question = get_object_or_404(Question, id=question_id)
+class MyQuestionsView(generic.ListView):
+    paginate_by = 10
+    template_name = 'polls/polls_list.html'
+    context_object_name = 'my_question_list'
 
-    if text_validator(request.POST['text']):
-        question.comment_set.create(author_name=request.user, comment_text=request.POST['text'])
-        return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
-
-    return render(request, 'polls/polls_detail.html', {
-        'question': question,
-        'error_comment': 'You input invalid text'
-    })'''
+    def get_queryset(self):
+        """
+        Return the last published questions (not including those set to be
+        published in the future).
+        """
+        if self.request.user.is_authenticated:
+            return Question.objects.filter(author_name=self.request.user).order_by('-pub_date')
+        else:
+            return []
 
 
 def home(request):
@@ -118,15 +141,18 @@ def personal_page(request):
 
 
 def add_question(request, question_id=None):
-    if request.user.is_staff:
+    if request.user.is_authenticated:
         if question_id:
             question = Question.objects.get(id=question_id)
-            return render(request, 'polls/add_question.html', {
-                'title': question.question_title,
-                'text': question.question_text,
-                'choices': question.choice_set.all(),
-                'question_id': question_id
-            })
+            if question.author_name == request.user.username:
+                return render(request, 'polls/add_question.html', {
+                    'title': question.question_title,
+                    'text': question.question_text,
+                    'choices': question.choice_set.all(),
+                    'question_id': question_id
+                })
+            else:
+                return HttpResponseRedirect(reverse('polls:add_question'))
         else:
             return render(request, 'polls/add_question.html', {
                 'form': AddQuestionForm
@@ -136,23 +162,24 @@ def add_question(request, question_id=None):
 
 
 def leave_question(request, question_id=None):
-    form = AddQuestionForm if not question_id else None
-    data = request.POST
-    if not request.user.is_staff or not data:
+    data = request.POST if request.POST else None
+    get_question = get_object_or_404(Question, id=question_id) if question_id else None
+    if request.user.is_anonymous or data or get_question.author_name != request.user.username:
         return HttpResponseRedirect(reverse('polls:home'))
+    form = AddQuestionForm if not question_id else None
     title = text_validator(data['question_title'])
     text = text_validator(data['question_text'])
-    if title and text and data:
+    if title and text:
         if question_id:
-            question = Question.objects.get(id=question_id)
-            question.question_title = title
-            question.question_text = text
-            question.choice_set.all().delete()
+            get_question.question_title = title
+            get_question.question_text = text
+            get_question.up_date = timezone.now()
+            get_question.choice_set.all().delete()
         else:
-            question = Question(question_title=title,
-                                question_text=text,
-                                author_name=request.user,
-                                pub_date=timezone.now())
+            get_question = Question(question_title=title,
+                                    question_text=text,
+                                    author_name=request.user,
+                                    pub_date=timezone.now())
         if data.get('choice'):
             choice_list = dict(data.lists())['choice']
             count = 0
@@ -165,42 +192,31 @@ def leave_question(request, question_id=None):
                         'error_message': 'You input invalid text'
                     })
             try:
-                question.save()
+                get_question.save()
             except IntegrityError:
                 return render(request, 'polls/add_question.html', {
                     'error_message': f'Title "{title}" already exist',
                     'form': form,
                 })
             for choice in choice_list:
-                create_choice = Choice(question_id=question.id,
+                create_choice = Choice(question_id=get_question.id,
                                        choice_text=choice)
                 create_choice.save()
         else:
             try:
-                question.save()
+                get_question.save()
             except IntegrityError:
                 return render(request, 'polls/add_question.html', {
                     'error_message': f'Title "{title}" already exist',
                     'form': form,
                 })
-        return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
+        return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
 
     else:
         return render(request, 'polls/add_question.html', {
             'error_message': 'You input invalid text',
             'form': form,
         })
-
-
-'''class AddQuestion(View):
-    def post(self, request):
-        print(request.POST)
-        print(id)
-        form = QuestionForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.question_id = pk
-        return redirect('/')'''
 
 
 class AddComment(View):
