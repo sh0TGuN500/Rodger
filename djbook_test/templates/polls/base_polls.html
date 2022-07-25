@@ -53,8 +53,7 @@
                 </li>
             {% endif %}
           </ul>
-          <form class="d-flex" action="{% url 'polls:search' %}" method="post">
-            {% csrf_token %}
+          <form class="d-flex" action="{% url 'polls:search' %}" method="get">
             <input name="search" class="form-control me-2" type="search" minlength="3" placeholder="Search" aria-label="Search" required>
             <button class="btn btn-outline-success" type="submit">Search</button>
               {{ search_message }}

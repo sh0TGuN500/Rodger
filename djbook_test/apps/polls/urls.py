@@ -16,6 +16,6 @@ urlpatterns = [
     path('polls/edit_question/<int:question_id>', views.add_question, name='edit_question'),
     path('polls/add_question/leave_question', views.leave_question, name='leave_question'),
     path('polls/edit_question/update_question/<int:question_id>', views.leave_question, name='update_question'),
-    path('polls/search', views.search, name='search'),
+    path('polls/search', views.SearchView.as_view(), name='search'),
     path('polls/delete_question/<int:question_id>', views.delete_question, name='delete_question')
 ]

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -6,7 +7,7 @@ from django.utils import timezone
 from django.views import generic
 from django.views.generic.base import View
 
-from .forms import CommentForm, AddQuestionForm
+from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice
 
 
@@ -67,15 +68,7 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
-def text_validator(text):
-    splitted_text = text.split()
-    if len(splitted_text) >= 0 and not text.isspace():
-        return ' '.join(splitted_text)
-    else:
-        return None
-
-
-def search(request):
+'''def search(request):
     valid_text = text_validator(request.POST['search'])
     if valid_text:
         latest_question_list = Question.objects.filter(question_title__icontains=valid_text)
@@ -83,17 +76,23 @@ def search(request):
     else:
         search_message = 'You input invalid text'
         context = {'search_message': search_message}
-    return render(request, 'polls/polls_list.html', context=context)
-
-
-'''def my_questions(request):
-    if request.user.is_authenticated:
-        my_question_list = Question.objects.filter(author_name=request.user).order_by('-pub_date')
-        context = {'my_question_list': my_question_list}
-    else:
-        error_message = 'To view your questions, you must be '
-        context = {'error_message': error_message}
     return render(request, 'polls/polls_list.html', context=context)'''
+
+
+class SearchView(generic.ListView):
+    paginate_by = 10
+    template_name = 'polls/polls_list.html'
+
+    def get_queryset(self):
+        """
+        Return the last published questions (not including those set to be
+        published in the future).
+        """
+        valid_search = self.request.GET['search']
+        if valid_search:
+            return Question.objects.filter(question_title__icontains=valid_search).order_by('-pub_date')
+        else:
+            return []
 
 
 def delete_question(request, question_id):
@@ -137,7 +136,10 @@ def home(request):
 
 
 def personal_page(request):
-    return render(request, 'polls/personal_page.html')
+    if request.user.is_authenticated:
+        return render(request, 'polls/personal_page.html')
+    else:
+        return HttpResponseRedirect(reverse('polls:home'))
 
 
 def add_question(request, question_id=None):
@@ -162,9 +164,9 @@ def add_question(request, question_id=None):
 
 
 def leave_question(request, question_id=None):
-    data = request.POST if request.POST else None
     get_question = get_object_or_404(Question, id=question_id) if question_id else None
-    if request.user.is_anonymous or data or get_question.author_name != request.user.username:
+    data = request.POST if request.POST else None
+    if not data or (get_question.author_name != request.user.username if get_question else False):
         return HttpResponseRedirect(reverse('polls:home'))
     form = AddQuestionForm if not question_id else None
     title = text_validator(data['question_title'])

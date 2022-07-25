@@ -8,7 +8,7 @@ from .models import Comment, Question
 def text_validator(text):
     splitted_text = text.split()
     if len(splitted_text) >= 0 and not text.isspace():
-        return ' '.join(splitted_text)
+        return text
     else:
         return None
 

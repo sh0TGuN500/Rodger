@@ -10,6 +10,12 @@ from hashlib import md5
 file_storage = SFTPStorage()'''
 
 
+class Tag(models.Model):
+    name = models.CharField('tag name', max_length=200)
+    description = models.TextField('tag description', max_length=9000)
+    question_count = models.IntegerField()
+
+
 class Question(models.Model):
     question_title = models.CharField('question title', max_length=200, unique=True)
     question_text = models.TextField('question text', max_length=9000)
@@ -29,6 +35,11 @@ class Question(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 
+class QuestionTag(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
@@ -45,8 +56,8 @@ class Vote(models.Model):
 
 
 class Comment(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # ForeignKey привязка к классу Question,
-    # при удалении Article удаляется закрепленный за ним Comment
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # Foreignkey binding to the Question class,
+    # when the Question is removed, the Comment assigned to it is removed
     author_name = models.CharField('author name', max_length=50, blank=False)
     comment_text = models.CharField('comment text', max_length=300, blank=False)
 
