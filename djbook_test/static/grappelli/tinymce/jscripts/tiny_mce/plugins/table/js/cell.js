@@ -102,7 +102,7 @@ function updateAction() {
 					inst.execCommand('mceEndUndoLevel');
 					tinyMCEPopup.close();
 				}
-			};
+			}
 
 			if (ed.getParam("accessibility_warnings", 1)) {
 				if (celltype == "th" && scope == "")

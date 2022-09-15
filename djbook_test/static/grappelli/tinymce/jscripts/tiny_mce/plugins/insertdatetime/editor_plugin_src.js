@@ -55,7 +55,7 @@
 				}
 
 				return value;
-			};
+			}
 
 			fmt = fmt.replace("%D", "%m/%d/%y");
 			fmt = fmt.replace("%r", "%I:%M:%S %p");

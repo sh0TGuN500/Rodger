@@ -81,7 +81,7 @@
 
 			function hasClass(n, c) {
 				return new RegExp('\\b' + c + '\\b', 'g').test(n.className);
-			};
+			}
 
 			each(dom.select('*', el), function(n) {
 				// Replace cdate

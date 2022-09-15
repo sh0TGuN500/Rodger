@@ -28,7 +28,7 @@
 		// Removes any variables since these can't be previewed
 		function removeVars(val) {
 			return val.replace(/%(\w+)/g, '');
-		};
+		}
 
 		// Create block/inline element to use for preview
 		name = fmt.block || fmt.inline || 'span';
@@ -98,7 +98,7 @@
 		dom.remove(previewElm);
 
 		return previewCss;
-	};
+	}
 
 	// Tell it to load theme specific language pack(s)
 	tinymce.ThemeManager.requireLangPack('advanced');
@@ -1027,7 +1027,7 @@
 							height = startHeight + (e.screenY - startY);
 
 							t.resizeTo(width, height);
-						};
+						}
 
 						function endResize(e) {
 							// Stop listening
@@ -1041,7 +1041,7 @@
 							t.resizeTo(width, height, true);
 
 							ed.nodeChanged();
-						};
+						}
 
 						e.preventDefault();
 
@@ -1092,7 +1092,7 @@
 					if (func(parents[i]))
 						return parents[i];
 				}
-			};
+			}
 
 			cm.setActive('visualaid', ed.hasVisual);
 			t._updateUndoStatus(ed);
@@ -1209,7 +1209,7 @@
 							c.displayColor(color);
 						}
 					}
-				};
+				}
 
 				updateColor('forecolor', fc);
 				updateColor('backcolor', bc);

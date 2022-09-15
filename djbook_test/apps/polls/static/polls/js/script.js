@@ -1,60 +1,48 @@
-// show a message with a type of the input
-function showMessage(input, message, type) {
-	// get the small element and set the message
-	const msg = input.parentNode.querySelector("small");
-	msg.innerText = message;
-	// update the class for the input
-	input.className = type ? "success" : "error";
-	return type;
+const ul = document.querySelector(".tag-ul"),
+input = document.querySelector(".tag-input"),
+tagNumb = document.querySelector(".tag-details span");
+let maxTags = 10,
+tags = [];
+countTags();
+createTag();
+function countTags(){
+    tagNumb.innerText = maxTags - tags.length;
 }
-
-function showError(input, message) {
-	return showMessage(input, message, false);
+function createTag(){
+    ul.querySelectorAll("li").forEach(li => li.remove());
+    tags.slice().reverse().forEach(tag =>{
+        let liTag = `<li data-value="tag">${tag} <input name="tag" hidden value="${tag}">
+					 <i class="uit uit-multiply" onclick="remove(this, '${tag}')"></i></li>`;
+        ul.insertAdjacentHTML("afterbegin", liTag);
+    });
+    countTags();
 }
-
-function showSuccess(input) {
-	return showMessage(input, "", true);
+function remove(element, tag){
+    let index  = tags.indexOf(tag);
+    tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
+    element.parentElement.remove();
+    countTags();
 }
-
-function hasValue(input, message) {
-	if (input.value.trim() === "") {
-		return showError(input, message);
-	}
-	return showSuccess(input);
+function addTag(e){
+    if(e.key === " "){
+        let tag = e.target.value.replace(/\s+/g, ' ');
+        if(tag.length > 1 && !tags.includes(tag)){
+            if(tags.length < 10){
+                tag.split(',').forEach(tag => {
+                    tags.push(tag);
+                    createTag();
+                });
+            }
+        }
+        e.target.value = "";
+    }
 }
-
-const form = document.querySelector("#add_question");
-const choiceForm = form.querySelector("#question_form");
-
-const TITLE_REQUIRED = "Please enter your title";
-const TEXT_REQUIRED = "Please enter your question text";
-const CHOICE_REQUIRED = "Please enter your choice";
-
-form.addEventListener("submit", function (event) {
-	// stop form submission
-	event.preventDefault();
-
-	// validate the form
-	let titleValid = hasValue(form.elements["question_title"], TITLE_REQUIRED);
-	let textValid = hasValue(form.elements["question_text"], TEXT_REQUIRED);
-	let elements_length = form.elements.length
-	//console.log(form.elements)
-	if (elements_length >= 6) {
-		let choiceArray = []
-		for (let i = 3; i < elements_length - 1; i++) {
-			var choiceValid = hasValue(form.elements[i], CHOICE_REQUIRED)
-			choiceArray.push(choiceValid)
-		}
-		let everyChoiceValid = choiceArray.every(Boolean)
-		var valid = (titleValid && textValid && everyChoiceValid)
-	}
-	else {
-		var valid = (titleValid && textValid)
-	}
-	// if valid, submit the form.
-	if (valid) {
-		document.getElementById("add_question").submit();
-	}
+input.addEventListener("keyup", addTag);
+const removeBtn = document.querySelector(".tag-details .remove-tag");
+removeBtn.addEventListener("click", () =>{
+    tags.length = 0;
+    ul.querySelectorAll("li").forEach(li => li.remove());
+    countTags();
 });
 
 let survey_options = document.getElementById('survey_options');
@@ -70,6 +58,8 @@ add_more_fields.onclick = function(){
 	newField.setAttribute('class','survey_options');
 	newField.setAttribute('size','100');
 	newField.setAttribute('placeholder','Choice field');
+	newField.setAttribute('minlength', '5')
+	newField.setAttribute('maxlength', '200')
 	let elseField = document.createElement('input');
 	elseField.required = true;
 	elseField.setAttribute('type','text');
@@ -77,6 +67,8 @@ add_more_fields.onclick = function(){
 	elseField.setAttribute('class','survey_options');
 	elseField.setAttribute('size','100');
 	elseField.setAttribute('placeholder','Choice field');
+	elseField.setAttribute('minlength', '5')
+	elseField.setAttribute('maxlength', '200')
 	let newDivField = document.createElement('p')
 	let otherDivField = document.createElement('p')
 	let newSmallField = document.createElement('small')

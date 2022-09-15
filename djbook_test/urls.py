@@ -19,15 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
-#
-#
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('', include('polls.urls')),
     path('admin228/', admin.site.urls, name='admin'),
-    path(r'favicon.ico', RedirectView.as_view(url='/static/polls/images/favicon.ico'), name='favicon'),
+    path('favicon.ico', RedirectView.as_view(url='/static/polls/images/favicon.ico'), name='favicon'),
     path('account/', include('allauth.urls')),
+    path('froala_editor/', include('froala_editor.urls')),
 ]
 
 if settings.DEBUG:

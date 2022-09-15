@@ -89,7 +89,7 @@ var TemplateDialog = {
 			}
 
 			return x;
-		};
+		}
 
 		x = window.ActiveXObject ? g('Msxml2.XMLHTTP') || g('Microsoft.XMLHTTP') : new XMLHttpRequest();
 

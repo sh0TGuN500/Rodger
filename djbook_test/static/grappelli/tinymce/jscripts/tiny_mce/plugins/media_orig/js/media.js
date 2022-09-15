@@ -164,7 +164,7 @@
 				}
 
 				return out;
-			};
+			}
 
 			function setOptions(type, names) {
 				var i, name, formItemName, value, list;

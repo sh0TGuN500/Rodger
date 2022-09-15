@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
+from froala_editor.fields import FroalaField
 
 '''from django.contrib.postgres.fields import ArrayField
 from storages.backends.sftpstorage import SFTPStorage
@@ -12,15 +13,17 @@ file_storage = SFTPStorage()'''
 
 class Tag(models.Model):
     name = models.CharField('tag name', max_length=200)
-    description = models.TextField('tag description', max_length=9000)
-    question_count = models.IntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class Question(models.Model):
     question_title = models.CharField('question title', max_length=200, unique=True)
-    question_text = models.TextField('question text', max_length=9000)
+    question_text = models.TextField('question_text', max_length=9000, default='')
     author_name = models.CharField('author name', max_length=200)
     pub_date = models.DateTimeField('publication date')
+    tag = models.ManyToManyField(Tag)
     up_date = models.DateTimeField('updating date', default=None, null=True)
 
     def __str__(self):
@@ -33,11 +36,6 @@ class Question(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
-
-
-class QuestionTag(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
 class Choice(models.Model):
@@ -84,3 +82,9 @@ class File(models.Model):
 
     def __str__(self):
         return self.file_name'''
+
+
+'''class FroalaModel(models.Model):
+    name = models.CharField('Froala name', max_length=200)
+    content = FroalaField()
+    date = models.DateTimeField('Create data', auto_now=True)'''

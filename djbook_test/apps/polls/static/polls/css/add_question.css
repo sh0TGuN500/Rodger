@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 html {
     margin: 0;
     padding: 0;
@@ -7,6 +13,9 @@ html {
 }
 
 body {
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     color: gray;
     background-color: #f0f5ff;
     margin: 0;
@@ -15,9 +24,18 @@ body {
     transform-style: preserve-3d;
     height: 100%;
     width: 100%;
-    overflow-y: auto;
+    overflow-y: visible;
     overflow-x: hidden;
     color: #fff;
+}
+
+::selection{
+  color: #fff;
+  background: #5372F0;
+}
+
+div.wrapper, button.form {
+    font-family: 'Poppins', sans-serif;
 }
 
 input[type="text"]{
@@ -27,7 +45,6 @@ input[type="text"]{
   border-radius: 5px;
   border: 1px solid lightgrey;
   background: none;
-  width: 274px;
   color: black;
 }
 
@@ -107,12 +124,17 @@ a {
 }
 
 .wrapper {
-  width: 400px;
-  margin: 40px auto;
-  padding: 10px;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 10px 40px 0 rgba(47,47,47,.1);
+    width: 80%;
+    margin: 40px auto;
+    border-radius: 5px;
+    background: white;
+    padding: 18px 25px 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.06);
+}
+
+.wrapper :where(.title, li, li i, .tag-details){
+  display: flex;
+  align-items: center;
 }
 
 nav  {
@@ -136,6 +158,72 @@ textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.wrapper .tags{
+  margin: 10px 0;
+}
+
+.tags p{
+  font-size: 15px;
+}
+
+.tags ul{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 7px;
+  margin: 12px 0;
+  border-radius: 5px;
+  border: 1px solid #a6a6a6;
+}
+
+.tags ul li{
+  color: #333;
+  margin: 4px 3px;
+  list-style: none;
+  border-radius: 5px;
+  background: #F2F2F2;
+  padding: 5px 8px 5px 10px;
+  border: 1px solid #e3e1e1;
+}
+
+.tags ul li i{
+  height: 20px;
+  width: 20px;
+  color: #808080;
+  margin-left: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #dfdfdf;
+  justify-content: center;
+}
+
+.tags ul input{
+  flex: 1;
+  padding: 5px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.wrapper .tag-details{
+  justify-content: space-between;
+}
+
+button.form, button.remove-tag{
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 9px 15px;
+  border-radius: 5px;
+  background: #5372F0;
+  transition: background 0.3s ease;
+}
+button:hover.form, button:hover.remove-tag{
+  background: #2c52ed;
 }
 
 

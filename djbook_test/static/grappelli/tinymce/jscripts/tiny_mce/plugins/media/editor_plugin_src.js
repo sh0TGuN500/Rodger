@@ -49,7 +49,7 @@
 		}
 
 		return obj;
-	};
+	}
 
 	tinymce.create('tinymce.plugins.MediaPlugin', {
 		init : function(ed, url) {
@@ -57,7 +57,7 @@
 
 			function isMediaImg(node) {
 				return node && node.nodeName === 'IMG' && ed.dom.hasClass(node, 'mceItemMedia');
-			};
+			}
 
 			self.editor = ed;
 			self.url = url;
@@ -373,7 +373,7 @@
 						data.params[name] = "" + value;
 					});
 				}
-			};
+			}
 
 			data = node.attr('data-mce-json');
 			if (!data)
@@ -662,7 +662,7 @@
 					inner: true,
 					validate: false
 				}).serialize(node);
-			};
+			}
 
 			function lookupAttribute(o, attr) {
 				return lookup[(o.attr(attr) || '').toLowerCase()];

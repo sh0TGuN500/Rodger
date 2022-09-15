@@ -83,7 +83,7 @@
 				time = /^(\d+)([ms]?)$/.exec('' + time);
 
 				return (time[2] ? multipels[time[2]] : 1) * parseInt(time);
-			};
+			}
 
 			// Default config
 			tinymce.each({

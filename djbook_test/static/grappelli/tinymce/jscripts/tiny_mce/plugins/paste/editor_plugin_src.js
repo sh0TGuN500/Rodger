@@ -221,7 +221,7 @@
 				} else {
 					function block(e) {
 						e.preventDefault();
-					};
+					}
 
 					// Block mousedown and click to prevent selection change
 					dom.bind(ed.getDoc(), 'mousedown', block);
@@ -564,7 +564,7 @@
 						);
 
 						return cls.length ? ' class="' + cls.join(" ") + '"' : '';
-				};
+				}
 
 				h = h.replace(/ class="([^"]+)"/gi, removeClasses);
 				h = h.replace(/ class=([\-\w]+)/gi, removeClasses);
@@ -770,7 +770,7 @@
 					else
 						content = content.replace(v[0], v[1]);
 				});
-			};
+			}
 
 			if ((typeof(content) === "string") && (content.length > 0)) {
 				// If HTML content with line-breaking tags, then remove all cr/lf chars because only tags will break a line

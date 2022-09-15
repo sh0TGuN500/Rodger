@@ -1,4 +1,6 @@
 {% extends 'polls/base_polls.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 	Add question
@@ -11,31 +13,20 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
 
         {% if error_message %}
             <p><strong>{{ error_message }}</strong></p>
         {% endif %}
-        {% if question_id %}
-            <form action="{% url 'polls:update_question' question_id %}" method="post" id="add_question">
-        {% else %}
-            <form action="{% url 'polls:leave_question' %}" method="post" id="add_question">
-        {% endif %}
+        <form method="post" id="add_question">
             {% csrf_token %}
             <br>
             <div class="wrapper">
-            <div id="demo" class="demo"></div>
                 {% if not question_id %}
-                    <p>
-                        <input type="text" name="question_title" placeholder="Question title" maxlength="200" required="" id="id_question_title">
+                    {% for i in form %}
+                        {{ i }}
                         <small></small>
-                    </p>
-                    <p>
-                        <p>
-                            <textarea name="question_text" cols="35" rows="3" minlength="50" placeholder="Question text" maxlength="9000" required="" id="id_question_text"></textarea>
-                            <small></small>
-                        </p>
-                    </p>
-                    <div id="survey_options"></div>
+                    {% endfor %}
                 {% else %}
                     <p>
                         <input value="{{ title }}" type="text" name="question_title" placeholder="Question title" maxlength="200" required="" id="id_question_title">
@@ -45,24 +36,79 @@
                         <textarea name="question_text" cols="35" rows="3" minlength="50" placeholder="Question text" maxlength="9000" required="" id="id_question_text">{{ text }}</textarea>
                         <small></small>
                     </p>
-                    <div id="survey_options">
-                    {% for choice in choices %}
-                        <input value="{{ choice }}" required type="text" name="choice" class="survey_options" size="100" placeholder="Another Field">
-                        <small></small>
-                    {% endfor %}
-                    </div>
                 {% endif %}
-
-                <div class="controls">
-                  <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
-                  <a href="#" id="remove_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                <div class="tags">
+                    <p>Press space after each tag</p>
+                    <ul class="tag-ul"><input type="text" spellcheck="false" class="tag-input"></ul>
                 </div>
-              </div>
-            <button type="submit">Left question</button>
+                <div class="tag-details">
+                    <p><span>10</span> tags are remaining</p>
+                    <button type="button" class="remove-tag">Remove All</button>
+                </div>
+                <div id="survey_options">
+                {% for choice in choices %}
+                    <input value="{{ choice }}" required type="text" name="choice" class="survey_options" size="100" placeholder="Another Field">
+                    <small></small>
+                {% endfor %}
+                </div>
+                <div class="controls">
+                    <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
+                    <a href="#" id="remove_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                </div>
+            </div>
+            <button type="submit" class="form" >Left question</button>
         </form>
     </div>
     <script src="{% static 'polls/js/script.js' %}"></script>
     <header>
         <h1>New question</h1>
     </header>
+{% endblock %}
+{% block script %}
+    <script>
+        // on('action', 'button id or class')
+        const form = document.getElementById('add_question');
+        form.addEventListener("submit", submitHandler);
+        function submitHandler(e){
+            e.preventDefault();
+            $.ajax({
+                // type of form
+                type: 'POST',
+                // url: django url path
+                {% if question_id %}
+                    url: '{% url 'polls:update_question_save' question_id %}',
+                {% else %}
+                    url: '{% url 'polls:create_question_save' %}',
+                {% endif %}
+                data: $('#add_question').serialize(),
+                {% comment %}
+                    {
+                        comment_text: $('#id_comment_text').val(),
+                        // csrf token from hidden html input
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        question_id: '{{ question.id }}'
+                    },
+                {% endcomment %}
+                dataType: 'json',
+                // if django view returned data / if the request succeeds
+                success: function (data){
+                    // for each input span.class-name self data
+                    if (data.success) {
+                        $('span.text-success').html(data.success);
+                        form.setAttribute('value', '');
+                        $('span.text-warning').html("")
+                    }
+                    else {
+                        $('span.text-warning').html(data.error);
+                        $('span.text-success').html("")
+                    }
+                },
+                //error message into h2
+                error: function (error){
+                    $('span.text-warning').html(error.error());
+                    $('span.text-success').html("")
+                }
+            })
+        }
+    </script>
 {% endblock %}

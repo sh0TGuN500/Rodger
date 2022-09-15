@@ -71,7 +71,7 @@
             ed.onBeforeExecCommand.add(function(ed, cmd, ui, val) {
                 if ("mceFullScreen" != cmd) {
                     return;
-                };
+                }
                 if ("mce_fullscreen" == ed.id) {
                     base_ed = tinyMCE.get(ed.settings.fullscreen_editor_id);
                     

@@ -47,7 +47,7 @@
 			else
 				elm.value = value;
 		}
-	};
+	}
 
 	function getVal(id) {
 		var elm = document.getElementById(id);
@@ -59,7 +59,7 @@
 			return elm.checked;
 
 		return elm.value;
-	};
+	}
 
 	window.FullPageDialog = {
 		changedStyle : function() {
@@ -226,7 +226,7 @@
 		updateColor('visited_color_pick', 'visited_color');
 		updateColor('active_color_pick', 'active_color');
 		updateColor('link_color_pick', 'link_color');
-	};
+	}
 
 	tinyMCEPopup.onInit.add(init);
 })();

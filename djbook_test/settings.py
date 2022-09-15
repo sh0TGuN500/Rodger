@@ -46,7 +46,18 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'crispy_forms',
+    'froala_editor',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_FAIL_SILENTLY = not DEBUG
+
+FROALA_EDITOR_PLUGINS = (
+    'align', 'char_counter', 'code_beautifier', 'code_view', 'colors', 'draggable', 'emoticons', 'entities', 'file',
+    'font_family', 'font_size', 'image', 'inline_style', 'line_breaker', 'link', 'lists',
+    'paragraph_format', 'paragraph_style', 'quick_insert', 'quote', 'save', 'table', 'url', 'video'
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -97,7 +108,8 @@ DATABASES = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # Needed to log in by username in Django admin, regardless of `allauth`
     'allauth.account.auth_backends.AuthenticationBackend',
     # `allauth` specific authentication methods, such as login by e-mail
 ]
@@ -142,7 +154,7 @@ USE_TZ = True
 
 LOGIN_REDIRECT_URL = '/'
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/account/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 

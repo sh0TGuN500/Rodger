@@ -1,0 +1,16 @@
+{% extends 'polls/base_polls.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+	Froala template
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'polls:post_froala_form' %}" method="post">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form|crispy }}
+        <button type="submit">Send form</button>
+    </form>
+{% endblock content %}

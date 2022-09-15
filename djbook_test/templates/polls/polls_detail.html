@@ -1,4 +1,6 @@
 {% extends 'polls/base_polls.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 	Question | {{ question.question_title }}
@@ -15,11 +17,17 @@
 		{% endif %}
         <h2>{{ question.author_name }}</h2>
         {% if question.author_name == user.username %}
-            <a href="{% url 'polls:edit_question' question.id %}"> Edit</a> |
+            <a href="{% url 'polls:update_question' question.id %}"> Edit</a> |
             <a href="{% url 'polls:delete_question' question.id %}"> Delete</a><br>
         {% endif %}
+        {% if question.tag.all %}
+            <span>tags: </span>
+            {% for tag in question.tag.all %}
+                <a href="{% url 'polls:home' %}">{{ tag }}</a>
+            {% endfor %}<br>
+        {% endif %}
         {% if question.up_date %}
-            {{ question.up_date }} Edited
+            {{ question.up_date }} * Edited *
         {% else %}
             {{ question.pub_date }}
         {% endif %}
@@ -43,10 +51,15 @@
             </form>
             <hr>
         {% endif %}
-        <form action="{% url 'polls:leave_comment' question.id %}" method="post" class="mt-4">
+        <form method="post" class="mt-4" id="comment-form">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Left comment</button>
+            {{ form|crispy }}
+            {% comment %}
+            <input hidden name="question_id" value="{{ question.id }}">
+            {% endcomment %}
+            <button type="submit" class="btn btn-primary">Left comment</button>
+             <span class="text-success"></span>
+             <span class="text-warning"></span>
         </form>
 	{% else %}
 		<p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
@@ -74,4 +87,48 @@
 <header>
 	<h1 contentEditable>{{ question.question_title }}</h1>
 </header>
+{% endblock %}
+{% block script %}
+    <script>
+        // on('action', 'button id or class')
+        const form = document.getElementById('comment-form');
+        form.addEventListener("submit", submitHandler);
+        function submitHandler(e){
+            e.preventDefault();
+            $.ajax({
+                // type of form
+                type: 'POST',
+                // url: django url path
+                url: '{% url 'polls:comment_create' question.id %}',
+                data: $('#comment-form').serialize(),
+                {% comment %}
+                    {
+                        comment_text: $('#id_comment_text').val(),
+                        // csrf token from hidden html input
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        question_id: '{{ question.id }}'
+                    },
+                {% endcomment %}
+                dataType: 'json',
+                // if django view returned data / if the request succeeds
+                success: function (data){
+                    // for each input span.class-name self data
+                    if (data.success) {
+                        $('span.text-success').html(data.success);
+                        form.reset()
+                        $('span.text-warning').html("")
+                    }
+                    else {
+                        $('span.text-warning').html(data.error);
+                        $('span.text-success').html("")
+                    }
+                },
+                //error message into h2
+                error: function (error){
+                    $('span.text-warning').html(error.error());
+                    $('span.text-success').html("")
+                }
+            })
+        }
+    </script>
 {% endblock %}

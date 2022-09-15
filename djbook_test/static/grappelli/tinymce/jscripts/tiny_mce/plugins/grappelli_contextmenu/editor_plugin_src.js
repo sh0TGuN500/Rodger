@@ -24,7 +24,7 @@
                     t._menu.destroy();
                     Event.remove(ed.getDoc(), 'click', hide);
                 }
-            };
+            }
             
             ed.onMouseDown.add(hide);
             ed.onKeyDown.add(hide);

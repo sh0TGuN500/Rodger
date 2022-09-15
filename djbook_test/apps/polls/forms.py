@@ -1,16 +1,22 @@
-from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django import forms
 
 from .models import Comment, Question
 
 
-def text_validator(text):
-    splitted_text = text.split()
-    if len(splitted_text) >= 0 and not text.isspace():
+def text_validator(text: str, min_length: int = 0, max_length: int = 0):
+    splitted_text: list = text.split()
+    text = ' '.join(splitted_text)
+    if min_length:
+        if not len(text) >= min_length:
+            return ''
+    if max_length:
+        if not len(text) <= max_length:
+            return ''
+    if len(splitted_text) > 0 and not text.isspace():
         return text
     else:
-        return None
+        return ''
 
 
 class CommentForm(forms.ModelForm):
@@ -41,39 +47,26 @@ class CommentForm(forms.ModelForm):
 
 
 class AddQuestionForm(forms.ModelForm):
-    """Add auestion form"""
+    """Add question form"""
 
     class Meta:
         model = Question
         fields = ('question_title', 'question_text')
-        widgets = {
-            'question_title': forms.TextInput(attrs={'placeholder': 'Question title'}),
-            'question_text': forms.Textarea(attrs={'cols': 35,
-                                                   'rows': 3,
-                                                   'minlength': 50,
-                                                   'placeholder': 'Question text'})
-        }
         labels = {
             'question_title': '',
-            'question_text': ''
+            'question_text': '',
         }
 
     def clean_question_title(self):
         data = text_validator(self.cleaned_data['question_title'])
-        if data:
-            return data
-
+        return data if data else ValidationError('This field must contain the text!')
         # Always return a value to use as the new cleaned data, even if
         # this method didn't change it.
-        else:
-            raise ValidationError('This field must contain the text!')
 
-    def clean_question_text(self):
-        data = text_validator(self.cleaned_data['question_text'])
-        if data:
-            return data
 
-        # Always return a value to use as the new cleaned data, even if
-        # this method didn't change it.
-        else:
-            raise ValidationError('This field must contain the text!')
+'''class FroalaModelForm(forms.ModelForm):
+    content = forms.CharField(widget=FroalaEditor)
+
+    class Meta:
+        model = FroalaModel
+        fields = ('name', 'content')'''

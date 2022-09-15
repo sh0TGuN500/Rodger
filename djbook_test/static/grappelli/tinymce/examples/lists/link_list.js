@@ -2,9 +2,6 @@
 // There links will be displayed as a dropdown in all link dialogs if the "external_link_list_url"
 // option is defined in TinyMCE init.
 
-var tinyMCELinkList = new Array(
-	// Name, URL
-	["Moxiecode", "http://www.moxiecode.com"],
+var tinyMCELinkList = [["Moxiecode", "http://www.moxiecode.com"],
 	["Freshmeat", "http://www.freshmeat.com"],
-	["Sourceforge", "http://www.sourceforge.com"]
-);
+	["Sourceforge", "http://www.sourceforge.com"]];
