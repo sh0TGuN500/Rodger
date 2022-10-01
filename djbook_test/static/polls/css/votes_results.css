@@ -1,0 +1,31 @@
+div {
+    margin-left: 10px
+}
+
+h1  {
+    color: GoldenRod;
+    font-family: cursive;
+}
+
+li {
+    color: GoldenRod;
+    font-family: cursive;
+}
+
+body {
+    background: white url("../images/background.gif") no-repeat;
+    background-size: cover;
+    min-width: 100vh;
+    min-height: 97.9vh
+}
+
+a {
+    font-family: cursive;
+	color: LimeGreen;
+	margin-left: 10px;
+}
+
+nav  {
+    color: gray;
+    font-family: cursive;
+}
