@@ -26,7 +26,7 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Application definition
 
