@@ -175,7 +175,7 @@ else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = environ['SECRET_KEY']
 
-    ALLOWED_HOSTS = ['www.rodger.herokuapp.com', 'rodger.herokuapp.com']
+    ALLOWED_HOSTS = ['www.rodger-dj.herokuapp.com/', 'rodger-dj.herokuapp.com']
 
     SECURE_HSTS_SECONDS = 60
 
