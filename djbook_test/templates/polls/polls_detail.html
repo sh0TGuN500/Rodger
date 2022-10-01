@@ -3,77 +3,80 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-	Question | {{ question.question_title }}
+    Question | {{ question.question_title }}
 {% endblock %}
 
 {% block content %}
-<div class="main">
-	{% load static %}
+    <div class="main">
+        {% load static %}
 
-	<link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
 
-	<em>{% if question.was_published_recently %}
-			<blink>NEW QUESTION!</blink><br>
-		{% endif %}
-        <h2>{{ question.author_name }}</h2>
-        {% if question.author_name == user.username %}
-            <a href="{% url 'polls:update_question' question.id %}"> Edit</a> |
-            <a href="{% url 'polls:delete_question' question.id %}"> Delete</a><br>
+        <em>{% if question.was_published_recently %}
+            <blink>NEW QUESTION!</blink><br>
         {% endif %}
-        {% if question.tag.all %}
-            <span>tags: </span>
-            {% for tag in question.tag.all %}
-                <a href="{% url 'polls:home' %}">{{ tag }}</a>
-            {% endfor %}<br>
-        {% endif %}
-        {% if question.up_date %}
-            {{ question.up_date }} * Edited *
-        {% else %}
-            {{ question.pub_date }}
-        {% endif %}
-    </em>
+            <h2>{{ question.author_name }}</h2>
+            {% if question.author_name == user.username %}
+                <a href="{% url 'polls:update_question' question.id %}"> Edit</a> |
+                <a href="{% url 'polls:delete_question' question.id %}"> Delete</a><br>
+            {% endif %}
+            {% if question.tag.all %}
+                <span>tags: </span>
+                {% for tag in question.tag.all %}
+                    <a href="{% url 'polls:home' %}">{{ tag }}</a>
+                {% endfor %}<br>
+            {% endif %}
+            {% if question.up_date %}
+                {{ question.up_date }} * Edited *
+            {% else %}
+                {{ question.pub_date }}
+            {% endif %}
+        </em>
 
-        <article>{{ question.question_text }}</article>
+        <hr>
+        <em style="white-space: break-spaces">{{ question.question_text }}</em>
         <hr>
 
-	{% if user.is_authenticated %}
-        {% if error_message %}
-		    <p><strong>{{ error_message }}</strong></p>
-	    {% endif %}
-        {% if question.choice_set.all %}
-            <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% if user.is_authenticated %}
+            {% if error_message %}
+                <p><strong>{{ error_message }}</strong></p>
+            {% endif %}
+            {% if question.choice_set.exists %}
+                <form id="vote-form" method="post">
+                    {% csrf_token %}
+                    {% for choice in question.choice_set.all %}
+                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+                    {% endfor %}
+                    <br><input type="submit" value="Vote" class="vote">
+                    <small class="vote-success"></small>
+                    <small class="vote-warning"></small>
+                </form>
+                <hr>
+            {% endif %}
+            <form method="post" class="mt-4" id="comment-form">
                 {% csrf_token %}
-                {% for choice in question.choice_set.all %}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-                {% endfor %}
-                <br><input type="submit" value="Vote" class="vote">
-            </form>
-            <hr>
-        {% endif %}
-        <form method="post" class="mt-4" id="comment-form">
-            {% csrf_token %}
-            {{ form|crispy }}
-            {% comment %}
+                {{ form|crispy }}
+                {% comment %}
             <input hidden name="question_id" value="{{ question.id }}">
             {% endcomment %}
-            <button type="submit" class="btn btn-primary">Left comment</button>
-             <span class="text-success"></span>
-             <span class="text-warning"></span>
-        </form>
-	{% else %}
-		<p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
-	{% endif %}
-	<hr>
-	{% for comment in question.comment_set.all %}
-		<p class="comment_autor">
-			<strong>{{comment.author_name}}:</strong>
-			<p class="comment_text">{{comment.comment_text}}</p>
-	{% empty %}
-		<p>Comments not found! Be the first ;)</p>
-	{% endfor %}
-	<hr>
-    {% comment %}
+                <button type="submit" class="btn btn-primary">Left comment</button>
+                <small class="comment-success"></small>
+                <small class="comment-warning"></small>
+            </form>
+        {% else %}
+            <p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
+        {% endif %}
+        <hr>
+        {% for comment in question.comment_set.all %}
+            <p class="comment_autor">
+                <strong>{{ comment.author_name }}:</strong>
+            <p class="comment_text">{{ comment.comment_text }}</p>
+        {% empty %}
+            <p>Comments not found! Be the first ;)</p>
+        {% endfor %}
+        <hr>
+        {% comment %}
 	{% if form.errors %}
 		<p><strong>{{ form.errors }}error</strong></p>
     {% else %}
@@ -82,18 +85,20 @@
         {% endfor %}
 	{% endif %}
 	{% endcomment %}
-</div>
+    </div>
 
-<header>
-	<h1 contentEditable>{{ question.question_title }}</h1>
-</header>
+    <header>
+        <h1>{{ question.question_title }}</h1>
+    </header>
 {% endblock %}
 {% block script %}
     <script>
+        // comment part
         // on('action', 'button id or class')
-        const form = document.getElementById('comment-form');
-        form.addEventListener("submit", submitHandler);
-        function submitHandler(e){
+        const comment_form = document.getElementById('comment-form');
+        comment_form.addEventListener("submit", submitCommentHandler);
+
+        function submitCommentHandler(e) {
             e.preventDefault();
             $.ajax({
                 // type of form
@@ -101,34 +106,61 @@
                 // url: django url path
                 url: '{% url 'polls:comment_create' question.id %}',
                 data: $('#comment-form').serialize(),
-                {% comment %}
-                    {
-                        comment_text: $('#id_comment_text').val(),
-                        // csrf token from hidden html input
-                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                        question_id: '{{ question.id }}'
-                    },
-                {% endcomment %}
                 dataType: 'json',
                 // if django view returned data / if the request succeeds
-                success: function (data){
+                success: function (data) {
                     // for each input span.class-name self data
                     if (data.success) {
-                        $('span.text-success').html(data.success);
-                        form.reset()
-                        $('span.text-warning').html("")
-                    }
-                    else {
-                        $('span.text-warning').html(data.error);
-                        $('span.text-success').html("")
+                        $('small.comment-success').html(data.success);
+                        comment_form.reset()
+                        $('small.comment-warning').html("")
+                        //document.getElementById("id_comment_text").value = 'dddqwdwq'
+                    } else {
+                        $('small.comment-warning').html(data.error);
+                        $('small.comment-success').html("")
                     }
                 },
-                //error message into h2
-                error: function (error){
-                    $('span.text-warning').html(error.error());
-                    $('span.text-success').html("")
+                //error message into small
+                error: function (){
+                    $('small').html("")
+                    $('small.comment-warning').html('Bad client request');
                 }
             })
         }
+
+        // vote part
+        {% if question.choice_set.exists %}
+            const vote_form = document.getElementById('vote-form');
+            vote_form.addEventListener("submit", submitVoteHandler);
+
+            function submitVoteHandler(e) {
+                e.preventDefault();
+                $.ajax({
+                    // type of form
+                    type: 'POST',
+                    // url: django url path
+                    url: '{% url 'polls:vote' question.id %}',
+                    data: $('#vote-form').serialize(),
+                    dataType: 'json',
+                    // if django view returned data / if the request succeeds
+                    success: function (data) {
+                        // for each input span.class-name self data
+                        if (data.success) {
+                            $('small.vote-success').html(data.success);
+                            vote_form.reset()
+                            $('small.vote-warning').html("")
+                        } else {
+                            $('small.vote-warning').html(data.error);
+                            $('small.vote-success').html("")
+                        }
+                    },
+                    //error message into h2
+                    error: function (error) {
+                        $('small.vote-warning').html('Bad client request');
+                        $('small.vote-success').html("")
+                    }
+                })
+            }
+        {% endif %}
     </script>
 {% endblock %}

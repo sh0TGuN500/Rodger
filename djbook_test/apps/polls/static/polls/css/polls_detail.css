@@ -116,6 +116,6 @@ label[for=id_comment_text] {
     line-height: 1;
 }
 
-span.text-success, span.text-warning {
-    margin-left: 10px;
+small {
+    margin-left: 7px;
 }

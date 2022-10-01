@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 html {
     margin: 0;
@@ -30,33 +30,34 @@ body {
 }
 
 ::selection{
-  color: #fff;
-  background: #5372F0;
+    color: #fff;
+    background: #5372F0;
 }
 
 div.wrapper, button.form {
     font-family: 'Poppins', sans-serif;
 }
 
-input[type="text"]{
-  padding: 10px;
-  margin: 10px auto;
-  display: block;
-  border-radius: 5px;
-  border: 1px solid lightgrey;
-  background: none;
-  color: black;
+input[type="text"], textarea{
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    background: none;
+    color: black;
+    width: -webkit-fill-available;
 }
 
 input[type="text"]:focus, textarea:focus{
-  outline: none;
+    outline: none;
 }
 
-#remove_fields {
-  float: right;
+#remove_choice_fields, #remove_tag_fields {
+    float: right;
 }
-.controls a i.fa-minus {
-  margin-right: 5px;
+.fa-minus, .fa-plus {
+    margin-right: 5px;
 }
 
 
@@ -76,7 +77,10 @@ header h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
+    #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
 }
+
 
 header,
 header:before {
@@ -113,14 +117,14 @@ header::before {
     color: grey;
 }
 
-.controls {
-  width: 294px;
-  margin: 15px auto;
+.choice-controls, .tag-controls {
+    width: 294px;
+    margin: 15px auto;
 }
 
 a {
-  color: black;
-  text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 .wrapper {
@@ -128,13 +132,13 @@ a {
     margin: 40px auto;
     border-radius: 5px;
     background: white;
-    padding: 18px 25px 20px;
+    padding: 20px 28px 22px;
     box-shadow: 0 0 30px rgba(0,0,0,0.06);
 }
 
 .wrapper :where(.title, li, li i, .tag-details){
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 nav  {
@@ -154,76 +158,70 @@ em {
     font-family: cursive;
 }
 
-textarea {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .wrapper .tags{
-  margin: 10px 0;
+    margin: 10px 0;
 }
 
 .tags p{
-  font-size: 15px;
+    font-size: 15px;
 }
 
 .tags ul{
-  display: flex;
-  flex-wrap: wrap;
-  padding: 7px;
-  margin: 12px 0;
-  border-radius: 5px;
-  border: 1px solid #a6a6a6;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 7px;
+    margin: 12px 0;
+    border-radius: 5px;
+    border: 1px solid #a6a6a6;
 }
 
 .tags ul li{
-  color: #333;
-  margin: 4px 3px;
-  list-style: none;
-  border-radius: 5px;
-  background: #F2F2F2;
-  padding: 5px 8px 5px 10px;
-  border: 1px solid #e3e1e1;
+    color: #333;
+    margin: 4px 3px;
+    list-style: none;
+    border-radius: 5px;
+    background: #F2F2F2;
+    padding: 5px 8px 5px 10px;
+    border: 1px solid #e3e1e1;
 }
 
 .tags ul li i{
-  height: 20px;
-  width: 20px;
-  color: #808080;
-  margin-left: 8px;
-  font-size: 12px;
-  cursor: pointer;
-  border-radius: 50%;
-  background: #dfdfdf;
-  justify-content: center;
+    height: 20px;
+    width: 20px;
+    color: #808080;
+    margin-left: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #dfdfdf;
+    justify-content: center;
 }
 
 .tags ul input{
-  flex: 1;
-  padding: 5px;
-  border: none;
-  outline: none;
-  font-size: 16px;
+    flex: 1;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
 }
 
 .wrapper .tag-details{
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 button.form, button.remove-tag{
-  border: none;
-  outline: none;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 9px 15px;
-  border-radius: 5px;
-  background: #5372F0;
-  transition: background 0.3s ease;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 9px 15px;
+    border-radius: 5px;
+    background: #5372F0;
+    transition: background 0.3s ease;
 }
 button:hover.form, button:hover.remove-tag{
-  background: #2c52ed;
+    background: #2c52ed;
 }
 
 

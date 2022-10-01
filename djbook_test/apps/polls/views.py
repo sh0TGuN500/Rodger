@@ -1,3 +1,4 @@
+import requests
 from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -6,6 +7,7 @@ from django.utils import timezone
 from django.views import generic
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag
@@ -51,11 +53,10 @@ class QuestionDetailMixinView(generic.edit.FormMixin, generic.detail.DetailView)
     form_class = CommentForm
 
 
-class QuestionSearchView(generic.ListView):
+class QuestionSearchView(LoginRequiredMixin, generic.ListView):
     paginate_by = 16
     template_name = 'polls/polls_list.html'
 
-    @login_required()
     def get_queryset(self):
         """
         Return the last published questions (not including those set to be
@@ -85,12 +86,11 @@ def question_delete(request, question_id):
     return render(request, 'polls/polls_list.html', context=context)
 
 
-class MyQuestionsView(generic.ListView):
+class MyQuestionsView(LoginRequiredMixin, generic.ListView):
     paginate_by = 16
     template_name = 'polls/polls_list.html'
     context_object_name = 'my_question_list'
 
-    @login_required()
     def get_queryset(self):
         """
         Return the last published questions (not including those set to be
@@ -108,6 +108,7 @@ def question_create_update_form(request, question_id=None):
                 'title': question.question_title,
                 'text': question.question_text,
                 'choices': question.choice_set.all(),
+                'tags': question.tag.all(),
                 'question_id': question_id
             })
         else:
@@ -118,57 +119,94 @@ def question_create_update_form(request, question_id=None):
         })
 
 
-# INJECT AJAX
 @login_required()
 def question_db_save(request, question_id=None):
-    print(question_id)
-    get_question = get_object_or_404(Question, id=question_id) if question_id else None
-    print(get_question)
+    try:
+        get_question = Question.objects.get(id=question_id)
+    except Question.DoesNotExist:
+        get_question = None
+    user_ok = get_question.author_name == request.user.username if get_question else True
+
     # request validation
     is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
     data = request.POST if request.POST else None
-    if not data or not is_ajax or (get_question.author_name != request.user.username if get_question else False):
+    if not data or not is_ajax or not user_ok:
         return HttpResponseRedirect(reverse('polls:create_question'))
-    # question data validation
-    title = text_validator(data['question_title'])
-    text = text_validator(data['question_text'])
-    if title and text:
+
+    # constants
+    no_errors = True
+    response_dict = {'title_info': '✔️',
+                     'text_info': '✔️'}
+
+    # title data validation
+    title = text_validator(data['question_title'], min_length=5, max_length=200)
+    if not get_question:
+        try:
+            Question.objects.get(question_title=title)
+        except Question.DoesNotExist:
+            pass
+        else:
+            response_dict.update({'title_info': f' • Title "{title}" already exist'})
+            no_errors = False
+    if not title:
+        response_dict.update({'title_info': ' • Title should be the length between 5 and 200'})
+        no_errors = False
+
+    # text data validation
+    text = text_validator(data['question_text'], min_length=50, max_length=9000)
+    if not text:
+        response_dict.update({'text_info': ' • Text should be the length between 50 and 9000'})
+        no_errors = False
+
+    # tags data validation
+    tag_list, tag_status = add_question_list_validation(request, data, 'tag')
+    if tag_list:
+        if 'error' in tag_status:
+            response_dict.update({'tag_info': ' • An error in tags'})
+            no_errors = False
+        else:
+            response_dict.update({'tag_info': '✔️'})
+
+    # choices data validation
+    choice_list, choice_status = add_question_list_validation(request, data, 'choice')
+    if choice_list:
+        if 'error' in choice_status:
+            response_dict.update({'choice_info': ' • An error in choices'})
+            no_errors = False
+        else:
+            response_dict.update({'choice_info': '✔️'})
+
+    # save data into DB
+    if no_errors:
+
         # if question exist
         if get_question:
             get_question.question_title = title
             get_question.question_text = text
             get_question.up_date = timezone.now()
             get_question.choice_set.all().delete()
+            get_question.tag.all().delete()
         else:
             get_question = Question(question_title=title,
-                                    question_text=data['question_text'],
+                                    question_text=text,
                                     author_name=request.user,
                                     pub_date=timezone.now())
-        # save question in db
-        try:
-            get_question.save()
-        except IntegrityError:
-            # Error jsonRequest
-            '''return render(request, 'polls/add_question.html', {
-                            'error_message': f'Title "{title}" already exist'
-                        })'''
-            return JsonResponse({'error': f' • Title "{title}" already exist'})
+        get_question.save()
 
-        # tags data validation
-        tag_list: list = add_question_list_validation(request, data, 'tag')
         # save tags if exist
         if tag_list:
             for tag in tag_list:
+
                 # get tag or create new
                 try:
                     add_tag = Tag.objects.get(name=tag)
                 except Tag.DoesNotExist:
                     add_tag = Tag(name=tag)
                     add_tag.save()
+
                 # create connection tag-question
                 get_question.tag.add(add_tag)
-        # choices data validation
-        choice_list: list = add_question_list_validation(request, data, 'choice')
+
         # save choices if exist
         if choice_list:
             for choice in choice_list:
@@ -178,15 +216,12 @@ def question_db_save(request, question_id=None):
 
         # Success jsonResponse
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
-        return JsonResponse({'success': f' • Question "{get_question.question_title}" successfully posted',
-                             'question': get_question.id})
-
-    else:
-        # Error jsonResponse
-        '''return render(request, 'polls/add_question.html', {
-            'error_message': 'You input invalid text'
-        })'''
-        return JsonResponse({'error': ' • You input invalid text'})
+        question_url = reverse('polls:detail', args=(get_question.id,))
+        response_dict.update({
+            'success': f' • Question "<a href="{question_url}">{get_question.question_title}</a>" successfully posted'
+        })
+    print(response_dict)
+    return JsonResponse(response_dict)
 
 
 ########################################################################################################################
@@ -203,12 +238,12 @@ class CommentCreate(View):
 
     @staticmethod
     @login_required()
-    def post(request, question):
+    def post(request, question_id):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            question = get_object_or_404(Question, id=question)
+            question = get_object_or_404(Question, id=question_id)
             form = CommentForm(request.POST)
-            comment_text = text_validator(form['comment_text'].value())
-            if form.is_valid() and len(comment_text) > 4:
+            comment_text = text_validator(form['comment_text'].value(), min_length=4, max_length=300)
+            if comment_text:
                 form = form.save(commit=False)
                 form.question = question
                 form.author_name = request.user
@@ -231,7 +266,7 @@ class CommentCreate(View):
 
 
 # ajax
-class VoteResultView(generic.DetailView):
+class VoteResultView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = 'polls/votes_results.html'
 
@@ -239,29 +274,25 @@ class VoteResultView(generic.DetailView):
 # ajax
 @login_required()
 def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+    try:
+        question = Question.objects.get(id=question_id)
+    except Question.DoesNotExist:
+        return JsonResponse({'error': ' • Question does not exist'})
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, 'polls/polls_detail.html', {
-            'question': question,
-            'form': CommentForm(),
-            'error_message': 'You didn\'t select a choice'
-        })
+        return JsonResponse({'error': ' • You didn\'t select a choice'})
     else:
+        results_url = reverse('polls:results', args=(question_id,))
         if question.vote_set.filter(user=request.user.id):
-            return render(request, 'polls/polls_detail.html', {
-                'question': question,
-                'form': CommentForm(),
-                'error_message': 'You have already voted'
-            })
+            return JsonResponse({'error': f' • You have already voted. <a href="{results_url}">Results</a>'})
         add_vote = question.vote_set.create(choice_id=request.POST['choice'],
                                             user=request.user.id)
         add_vote.save()
         selected_choice.votes += 1
         selected_choice.save()
 
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return JsonResponse({'success': f' • Voting was successful. <a href="{results_url}">Results</a>'})
 
 
 ########################################################################################################################
@@ -274,19 +305,20 @@ def add_question_list_validation(request, data, element_name: str):
     if data.get(element_name):
         request_list = dict(data.lists())[element_name]
         count = 0
+        status_list = []
         for element in request_list:
             text = text_validator(element)
             if text:
                 request_list[count] = text
-                count += 1
+
+                status_list.append('ok')
             else:
                 # jsonResponse
-                return render(request, 'polls/add_question.html', {
-                    'error_message': 'You input invalid text'
-                })
-        return request_list
+                status_list.append('error')
+            count += 1
+        return request_list, status_list
     else:
-        return []
+        return [], []
 
 
 ########################################################################################################################

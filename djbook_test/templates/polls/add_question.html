@@ -3,7 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-	Add question
+    {% if question_id %}
+        Editing "{{ title }}" question
+    {% else %}
+        New question
+    {% endif %}
+
 {% endblock %}
 
 {% block content %}
@@ -15,53 +20,66 @@
         <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
 
-        {% if error_message %}
-            <p><strong>{{ error_message }}</strong></p>
-        {% endif %}
         <form method="post" id="add_question">
             {% csrf_token %}
             <br>
             <div class="wrapper">
-                {% if not question_id %}
-                    {% for i in form %}
-                        {{ i }}
-                        <small></small>
+                <p>
+                    <input value="{{ title }}" type="text" name="question_title" placeholder="Question title" minlength="5" maxlength="200" required="" id="id_question_title">
+                    <small class="title-error"></small>
+                </p>
+                <p>
+                    <textarea name="question_text" cols="35" rows="3" minlength="50" placeholder="Question text" maxlength="9000" required="" id="id_question_text">{{ text }}</textarea>
+                    <small class="text-error"></small>
+                </p>
+
+                <div id="tags_id">
+                    <h3>Tags:</h3>
+                    {% for tag in tags %}
+                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="5" maxlength="200" placeholder="Tag field">
                     {% endfor %}
-                {% else %}
-                    <p>
-                        <input value="{{ title }}" type="text" name="question_title" placeholder="Question title" maxlength="200" required="" id="id_question_title">
-                        <small></small>
-                    </p>
-                    <p>
-                        <textarea name="question_text" cols="35" rows="3" minlength="50" placeholder="Question text" maxlength="9000" required="" id="id_question_text">{{ text }}</textarea>
-                        <small></small>
-                    </p>
-                {% endif %}
-                <div class="tags">
+                </div>
+                <small class="tag-error"></small>
+                <div class="tag-controls">
+                    <a href="#" id="add_tag_fields"><i class="fa fa-plus"></i>Add More</a>
+                    <a href="#" id="remove_tag_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                </div>
+                {% comment %}
                     <p>Press space after each tag</p>
                     <ul class="tag-ul"><input type="text" spellcheck="false" class="tag-input"></ul>
+                    <div class="tag-details">
+                        <p><span>10</span> tags are remaining</p>
+                        <button type="button" class="remove-tag">Remove All</button>
+                    </div>
+                {% endcomment %}
+                <div id="choices_id">
+                    <h3>Choices:</h3>
+                    {% for choice in choices %}
+                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="5" maxlength="200" placeholder="Choice field">
+
+                    {% endfor %}
                 </div>
-                <div class="tag-details">
-                    <p><span>10</span> tags are remaining</p>
-                    <button type="button" class="remove-tag">Remove All</button>
+                <small class="choice-error"></small>
+                {% if question_id %}
+                    <span class="text-warning">When updating the question, voting results are reset</span>
+                {% endif %}
+                <div class="choice-controls">
+                    <a href="#" id="add_choice_fields"><i class="fa fa-plus"></i>Add More</a>
+                    <a href="#" id="remove_choice_fields"><i class="fa fa-minus"></i>Remove Field</a>
                 </div>
-                <div id="survey_options">
-                {% for choice in choices %}
-                    <input value="{{ choice }}" required type="text" name="choice" class="survey_options" size="100" placeholder="Another Field">
-                    <small></small>
-                {% endfor %}
-                </div>
-                <div class="controls">
-                    <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
-                    <a href="#" id="remove_fields"><i class="fa fa-minus"></i>Remove Field</a>
-                </div>
+                <button type="submit" class="form" >Left question</button>
+                <small class="text-success"></small>
+                <small class="text-warning"></small>
             </div>
-            <button type="submit" class="form" >Left question</button>
         </form>
     </div>
     <script src="{% static 'polls/js/script.js' %}"></script>
     <header>
+        {% if question_id %}
+            <h1>Editing "{{ title }}" question</h1>
+        {% else %}
         <h1>New question</h1>
+        {% endif %}
     </header>
 {% endblock %}
 {% block script %}
@@ -92,21 +110,25 @@
                 dataType: 'json',
                 // if django view returned data / if the request succeeds
                 success: function (data){
-                    // for each input span.class-name self data
+                    // for each input small.class-name self data
                     if (data.success) {
-                        $('span.text-success').html(data.success);
-                        form.setAttribute('value', '');
-                        $('span.text-warning').html("")
+                        $('small').html("")
+                        $('small.text-success').html(data.success);
+                        form.reset()
                     }
                     else {
-                        $('span.text-warning').html(data.error);
-                        $('span.text-success').html("")
+                        $('small').html("")
+                        $('small.title-error').html(data.title_info);
+                        $('small.text-error').html(data.text_info);
+                        if (data.tag_info){$('small.tag-error').html(data.tag_info);}
+                        if (data.choice_info){$('small.choice-error').html(data.choice_info);}
                     }
                 },
                 //error message into h2
-                error: function (error){
-                    $('span.text-warning').html(error.error());
-                    $('span.text-success').html("")
+                error: function (){
+                    $('small').html("")
+                    $('small.text-warning').html('Bad client request');
+
                 }
             })
         }

@@ -4,17 +4,17 @@ from django import forms
 from .models import Comment, Question
 
 
-def text_validator(text: str, min_length: int = 0, max_length: int = 0):
-    splitted_text: list = text.split()
-    text = ' '.join(splitted_text)
+def text_validator(origin_text: str, min_length: int = 0, max_length: int = 0):
+    splitted_text: list = origin_text.split()
+    formated_text = ' '.join(splitted_text)
     if min_length:
-        if not len(text) >= min_length:
+        if not len(formated_text) >= min_length:
             return ''
     if max_length:
-        if not len(text) <= max_length:
+        if not len(formated_text) <= max_length:
             return ''
-    if len(splitted_text) > 0 and not text.isspace():
-        return text
+    if len(splitted_text) > 0 and not formated_text.isspace():
+        return origin_text
     else:
         return ''
 
@@ -36,7 +36,7 @@ class CommentForm(forms.ModelForm):
         }
 
     def clean_comment_text(self):
-        data = text_validator(self.cleaned_data['comment_text'])
+        data = text_validator(self.cleaned_data['comment_text'], min_length=4, max_length=300)
         if data:
             return data
 

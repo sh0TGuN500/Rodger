@@ -1,96 +1,71 @@
-const ul = document.querySelector(".tag-ul"),
-input = document.querySelector(".tag-input"),
-tagNumb = document.querySelector(".tag-details span");
-let maxTags = 10,
-tags = [];
-countTags();
-createTag();
-function countTags(){
-    tagNumb.innerText = maxTags - tags.length;
-}
-function createTag(){
-    ul.querySelectorAll("li").forEach(li => li.remove());
-    tags.slice().reverse().forEach(tag =>{
-        let liTag = `<li data-value="tag">${tag} <input name="tag" hidden value="${tag}">
-					 <i class="uit uit-multiply" onclick="remove(this, '${tag}')"></i></li>`;
-        ul.insertAdjacentHTML("afterbegin", liTag);
-    });
-    countTags();
-}
-function remove(element, tag){
-    let index  = tags.indexOf(tag);
-    tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
-    element.parentElement.remove();
-    countTags();
-}
-function addTag(e){
-    if(e.key === " "){
-        let tag = e.target.value.replace(/\s+/g, ' ');
-        if(tag.length > 1 && !tags.includes(tag)){
-            if(tags.length < 10){
-                tag.split(',').forEach(tag => {
-                    tags.push(tag);
-                    createTag();
-                });
-            }
-        }
-        e.target.value = "";
-    }
-}
-input.addEventListener("keyup", addTag);
-const removeBtn = document.querySelector(".tag-details .remove-tag");
-removeBtn.addEventListener("click", () =>{
-    tags.length = 0;
-    ul.querySelectorAll("li").forEach(li => li.remove());
-    countTags();
-});
-
-let survey_options = document.getElementById('survey_options');
-let add_more_fields = document.getElementById('add_more_fields');
-let remove_fields = document.getElementById('remove_fields');
+let choices = document.getElementById('choices_id');
+let add_choice_fields = document.getElementById('add_choice_fields');
+let remove_choice_fields = document.getElementById('remove_choice_fields');
 
 
-add_more_fields.onclick = function(){
+add_choice_fields.onclick = function(){
 	let newField = document.createElement('input');
 	newField.required = true;
 	newField.setAttribute('type','text');
 	newField.setAttribute('name','choice');
-	newField.setAttribute('class','survey_options');
+	newField.setAttribute('class','choices');
 	newField.setAttribute('size','100');
 	newField.setAttribute('placeholder','Choice field');
-	newField.setAttribute('minlength', '5')
-	newField.setAttribute('maxlength', '200')
-	let elseField = document.createElement('input');
-	elseField.required = true;
-	elseField.setAttribute('type','text');
-	elseField.setAttribute('name','choice');
-	elseField.setAttribute('class','survey_options');
-	elseField.setAttribute('size','100');
-	elseField.setAttribute('placeholder','Choice field');
-	elseField.setAttribute('minlength', '5')
-	elseField.setAttribute('maxlength', '200')
-	let newDivField = document.createElement('p')
-	let otherDivField = document.createElement('p')
-	let newSmallField = document.createElement('small')
-	let elseSmallField = document.createElement('small')
-	newDivField.append(newField, newSmallField)
-	otherDivField.append(elseField, elseSmallField)
-	let input_tags = survey_options.getElementsByTagName('input');
+	newField.setAttribute('minlength', '5');
+	newField.setAttribute('maxlength', '200');
+	let otherField = document.createElement('input');
+	otherField.required = true;
+	otherField.setAttribute('type','text');
+	otherField.setAttribute('name','choice');
+	otherField.setAttribute('class','choices');
+	otherField.setAttribute('size','100');
+	otherField.setAttribute('placeholder','Choice field');
+	otherField.setAttribute('minlength', '5');
+	otherField.setAttribute('maxlength', '200');
+	let input_tags = choices.getElementsByTagName('input');
 	if(input_tags.length === 0) {
-		survey_options.append(newDivField, otherDivField);
+		choices.append(newField);
+		choices.append(otherField)
 	}
 	else if(input_tags.length < 10) {
-		survey_options.append(newDivField);
+		choices.append(newField);
+	}
+};
+
+remove_choice_fields.onclick = function(){
+	let input_tags = choices.getElementsByTagName('input');
+	if(input_tags.length === 2) {
+		choices.removeChild(input_tags[(input_tags.length) - 1]);
+		choices.removeChild(input_tags[(input_tags.length) - 1]);
+	}
+	else if(input_tags.length > 2) {
+		choices.removeChild(input_tags[(input_tags.length) - 1]);
 	}
 }
 
-remove_fields.onclick = function(){
-	let input_tags = survey_options.getElementsByTagName('p');
-	if(input_tags.length === 2) {
-		survey_options.removeChild(input_tags[(input_tags.length) - 1]);
-		survey_options.removeChild(input_tags[(input_tags.length) - 1]);
+let tags = document.getElementById('tags_id');
+let add_tag_fields = document.getElementById('add_tag_fields');
+let remove_tag_fields = document.getElementById('remove_tag_fields');
+
+
+add_tag_fields.onclick = function(){
+	let newField = document.createElement('input');
+	newField.required = true;
+	newField.setAttribute('type','text');
+	newField.setAttribute('name','tag');
+	newField.setAttribute('class','tags');
+	newField.setAttribute('size','100');
+	newField.setAttribute('placeholder','Tag field');
+	newField.setAttribute('minlength', '5');
+	newField.setAttribute('maxlength', '200');
+	let input_tags = tags.getElementsByTagName('input');
+	if(input_tags.length < 10) {
+		tags.append(newField);
 	}
-	else if(input_tags.length > 2) {
-		survey_options.removeChild(input_tags[(input_tags.length) - 1]);
-	}
+};
+
+remove_tag_fields.onclick = function(){
+	let input_tags = tags.getElementsByTagName('input');
+	tags.removeChild(input_tags[(input_tags.length) - 1]);
 }
+

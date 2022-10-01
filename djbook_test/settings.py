@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from djbook_test.apps.polls.apps import PollsConfig
@@ -23,15 +23,10 @@ BASE_DIR = PROJECT_ROOT.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$o8xj9+uhuxbof!$-e8-7ei__b%9qm_*^7o_vl$11%5wipzyw9'
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -47,17 +42,19 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'crispy_forms',
-    'froala_editor',
+    # 'froala_editor',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
+'''
 FROALA_EDITOR_PLUGINS = (
     'align', 'char_counter', 'code_beautifier', 'code_view', 'colors', 'draggable', 'emoticons', 'entities', 'file',
     'font_family', 'font_size', 'image', 'inline_style', 'line_breaker', 'link', 'lists',
     'paragraph_format', 'paragraph_style', 'quick_insert', 'quote', 'save', 'table', 'url', 'video'
 )
+'''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,20 +87,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djbook_test.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djschool_db',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -165,27 +148,79 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = PROJECT_ROOT / 'static'  # GRAPPELLI
 
-MEDIA_URL = '/media/'
-
 MEDIA_ROOT = PROJECT_ROOT / 'media'
 
 # GRAPPELLI settings
 
-# GRAPPELLI_ADMIN_TITLE = "DJBOOK TEST"
+# GRAPPELLI_ADMIN_TITLE = "RODGER"
 
-SITE_ID = 1
+SITE_ID = 2
 
-# SFTP
+if DEBUG:
+    try:
+        from djbook_test.local_settings import *
+    except ImportError:
+        pass
+else:
+    import dj_database_url
+    from os import environ
+    import django_heroku
 
-DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
+    DATABASES = {
+        'default': dj_database_url.config(default=environ['DATABASE_URL'])
+    }
 
-SFTP_STORAGE_HOST = '127.0.0.1'
-SFTP_STORAGE_ROOT = '/var/www/media/'
-SFTP_STORAGE_PARAMS = {
-    'username': 'root',
-    'password': 'password',
-    'allow_agent': False,
-    'look_for_keys': False,
-}
-# SFTP_KNOWN_HOST_FILE = '~/.ssh/known_hosts'
-SFTP_STORAGE_INTERACTIVE = False
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = environ['SECRET_KEY']
+
+    ALLOWED_HOSTS = ['www.rodger.herokuapp.com', 'rodger.herokuapp.com']
+
+    SECURE_HSTS_SECONDS = 60
+
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    SECURE_HSTS_PRELOAD = True
+
+    ADMINS = (
+        ('stepanJo', 'grandma7ter500@gmail.com'),
+    )
+
+    MANAGERS = ADMINS
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        }
+    }
+
+    AWS_STORAGE_BUCKET_NAME = environ['AWS_STORAGE_BUCKET_NAME']
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 static settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
+
+    # Configure Django App for Heroku.
+    django_heroku.settings(locals())

@@ -2,13 +2,15 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
-from froala_editor.fields import FroalaField
+# from froala_editor.fields import FroalaField
 
-'''from django.contrib.postgres.fields import ArrayField
+'''
+from django.contrib.postgres.fields import ArrayField
 from storages.backends.sftpstorage import SFTPStorage
 from hashlib import md5
 
-file_storage = SFTPStorage()'''
+file_storage = SFTPStorage()
+'''
 
 
 class Tag(models.Model):
