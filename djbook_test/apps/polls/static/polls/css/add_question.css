@@ -148,14 +148,14 @@ nav  {
 
 h1  {
     color: #DAA520FF;
-    font-family: cursive;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
     text-align: center;
     font-size: 48px;
 }
 
 em {
     color: GoldenRod;
-    font-family: cursive;
+    font-family: 'Comic Sans MS', cursive;
 }
 
 .wrapper .tags{
