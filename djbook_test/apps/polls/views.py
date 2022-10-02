@@ -153,9 +153,9 @@ def question_db_save(request, question_id=None):
         no_errors = False
 
     # text data validation
-    text = text_validator(data['question_text'], min_length=50, max_length=9000)
+    text = text_validator(data['question_text'], min_length=10, max_length=9000)
     if not text:
-        response_dict.update({'text_info': ' • Text should be the length between 50 and 9000'})
+        response_dict.update({'text_info': ' • Text should be the length between 10 and 9000'})
         no_errors = False
 
     # tags data validation
