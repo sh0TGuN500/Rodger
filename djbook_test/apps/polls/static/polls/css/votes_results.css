@@ -4,12 +4,12 @@ div {
 
 h1  {
     color: GoldenRod;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 li {
     color: GoldenRod;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 body {
@@ -20,12 +20,12 @@ body {
 }
 
 a {
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 	color: LimeGreen;
 	margin-left: 10px;
 }
 
 nav  {
     color: gray;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }

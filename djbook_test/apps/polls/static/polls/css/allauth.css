@@ -1,0 +1,61 @@
+h1 {
+    text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
+    #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+    color: #DAA520FF;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+nav, p  {
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+nav {
+    color: grey;
+}
+
+a, p {
+    text-shadow: 0px 0px 9px black;
+}
+
+p {
+    color: #006b1b;
+}
+
+a {
+    color: #4ad939;
+}
+
+
+
+button {
+background: #016ABC;
+color: #fff;
+border: 1px solid black;
+border-radius: 6px;
+box-shadow: 1px 1px 1px black;
+text-shadow: none;
+}
+
+button:hover {
+background: #016ABC;
+color: #fff;
+border: 1px solid black;
+border-radius: 6px;
+box-shadow: 0 0 0 black;
+text-shadow: none;
+}
+
+body {
+    background-image: url("../images/login.webp");
+    background-repeat: no-repeat;
+    background-color: #bdc8c9;
+}
+
+input{
+    padding: 5px;
+    margin: 5px auto;
+    border-radius: 5px;
+    border: 2px solid limegreen;
+    background: rgba(255,255,255,0.3);
+    color: black;
+}

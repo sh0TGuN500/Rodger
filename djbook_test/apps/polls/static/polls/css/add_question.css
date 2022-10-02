@@ -79,6 +79,9 @@ header h1 {
     transform: translate(-50%, -50%);
     text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
     #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+    color: #DAA520FF;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+    text-align: center;
 }
 
 
@@ -143,19 +146,13 @@ a {
 
 nav  {
     color: gray;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
-h1  {
-    color: #DAA520FF;
-    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-    text-align: center;
-    font-size: 48px;
-}
 
 em {
     color: GoldenRod;
-    font-family: 'Comic Sans MS', cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 .wrapper .tags{

@@ -1,21 +1,21 @@
 li a {
     color: CadetBlue;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 li {
     color: CadetBlue;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 h3, .current {
     color: gray;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 .add_question {
     color: #4ad939;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 body {
@@ -27,7 +27,7 @@ body {
 
 nav  {
     color: gray;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
 p {

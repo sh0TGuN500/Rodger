@@ -1,6 +1,6 @@
 h1 {
     color: darkblue;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
     text-shadow: #8f8f8f 0.1vw 0.1vw 0, #8f8f8f -0.1vw -0.1vw 0,
                  #8f8f8f -0.1vw 0.1vw 0, #8f8f8f 0.1vw -0.1vw 0;
 }
@@ -14,5 +14,5 @@ body {
 
 nav  {
     color: gray;
-    font-family: cursive;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
