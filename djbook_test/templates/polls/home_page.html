@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/home_style.css' %}">
 
     <a href="{% url 'polls:index' %}"><h1>Questions</h1></a>
-    <a href="https://github.com/sh0TGuN500"><h1>My GitHub</h1></a>
+    <a href="{% url 'polls:info_for_customers' %}"><h1>My GitHub</h1></a>
 
 </div>
 {% endblock %}

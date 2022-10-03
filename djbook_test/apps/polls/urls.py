@@ -18,11 +18,12 @@ urlpatterns = [
     path('polls/edit_question/<int:question_id>/update_question/', views.question_db_save, name='update_question_save'),
     path('polls/search', views.QuestionSearchView.as_view(), name='search'),
     path('polls/delete_question/<int:question_id>', views.question_delete, name='delete_question'),
+    path('info_for_customers/', views.info_for_customers, name='info_for_customers')
     # path('polls/froala_form', views.froala_form, name='froala_form'),
     # path('polls/post_froala_form', views.post_froala_form, name='post_froala_form'),
     # path('polls/froala_index', views.FroalaIndexView.as_view(), name='froala_index'),
     # path('polls/froala/<int:pk>/', views.FroalaDetailMixinView.as_view(), name='froala_detail'),
     # path('ajax_demo/', views.AjaxHandlerView.as_view(), name='ajax_demo'),
-    path('ajax_page/', views.ajax_page, name='ajax_page'),
-    path('ajax_check/', views.AjaxDataCheck.as_view(), name='ajax_check')
+    # path('ajax_page/', views.ajax_page, name='ajax_page'),
+    # path('ajax_check/', views.AjaxDataCheck.as_view(), name='ajax_check')
 ]

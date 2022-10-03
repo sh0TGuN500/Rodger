@@ -1,0 +1,26 @@
+{% extends "polls/base_polls.html" %}
+
+
+{% block title %}
+	R | Information for customers
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/css/customers.css' %}">
+
+    <h2>Technologies:</h2>
+    <dl>
+      <dt>Python/Django</dt>
+      <dd>allauth, crispy, argon2, AWS boto3, whitenoise</dd>
+      <dt>AJAX</dt>
+      <dd>Just AJAX with JSON</dd>
+      <dt>PostgreSQL</dt>
+      <dd>Just PostgreSQL DB</dd>
+    </dl>
+    <h2>To view the source code on GitHub, please write the username, full name or email of your GitHub account on my mailbox | grandma7ter500@gmail.com |</h2>
+
+</div>
+{% endblock %}
