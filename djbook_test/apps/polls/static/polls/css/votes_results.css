@@ -14,9 +14,7 @@ li {
 
 body {
     background: white url("../images/background.gif") no-repeat;
-    background-size: cover;
-    min-width: 100vh;
-    min-height: 97.9vh
+    background-size: auto;
 }
 
 a {

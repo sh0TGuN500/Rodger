@@ -7,9 +7,7 @@ h1 {
 
 body {
     background: white url("../images/customers.gif") no-repeat;
-    background-size: cover;
-    min-width: 100vh;
-    min-height: 97.9vh
+    background-size: auto;
 }
 
 h1, h2, dl, nav, p {
@@ -24,4 +22,10 @@ a {
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
     text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
                  #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+}
+
+.main {
+    margin-left: 5px;
+    text-align: left;
+    width: min-content;
 }

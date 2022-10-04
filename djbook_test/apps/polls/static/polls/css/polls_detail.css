@@ -49,13 +49,11 @@ header::before {
     right: 0;
     bottom: 0;
     display: block;
-    background: url("../images/choice_background.gif");
+    background: url("../images/choice_background.gif") no-repeat;
     background-size: cover;
     transform-origin: center center 0;
     transform: translateZ(-1px) scale(2);
     z-index: -1;
-    min-width: 100vh;
-    min-height: 100vh
 }
 
 .main {
