@@ -1,8 +1,8 @@
 h1 {
     color: darkblue;
     font-family: cursive;
-    text-shadow: #8f8f8f 0.1vw 0.1vw 0, #8f8f8f -0.1vw -0.1vw 0,
-                 #8f8f8f -0.1vw 0.1vw 0, #8f8f8f 0.1vw -0.1vw 0;
+    text-shadow: #8f8f8f 0.7px 0.7px 0, #8f8f8f -0.7px -0.7px 0,
+                 #8f8f8f -0.7px 0.7px 0, #8f8f8f 0.7px -0.7px 0;
 }
 
 body {
