@@ -1,8 +1,7 @@
 h1 {
     color: darkblue;
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-    text-shadow: #8f8f8f 0.1vw 0.1vw 0, #8f8f8f -0.1vw -0.1vw 0,
-                 #8f8f8f -0.1vw 0.1vw 0, #8f8f8f 0.1vw -0.1vw 0;
+    text-shadow: 0 0 0.5px black;
 }
 
 body {
@@ -13,19 +12,16 @@ body {
 h1, h2, dl, nav, p {
     color: GoldenRod;
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-    text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
-                 #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+    text-shadow: 0 0 0.5px black;
 }
 
 a {
     color: #d94800;
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-    text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
-                 #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+    text-shadow: 0 0 0.5px black;
 }
 
 .main {
     margin-left: 5px;
     text-align: left;
-    width: min-content;
 }
