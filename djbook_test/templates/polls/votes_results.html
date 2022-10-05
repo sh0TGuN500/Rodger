@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div>
+<div class="content">
 	{% load static %}
 
 	<link rel="stylesheet" type="text/css" href="{% static 'polls/css/votes_results.css' %}">
@@ -17,6 +17,6 @@
 			<li>{{ choice.choice_text }} have {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
 		{% endfor %}
 	</ul>
-	{% block nav-results %}<a href="{% url 'polls:detail' question.id %}">Vote again?</a>{% endblock %}
+	{% block nav-results %}<a href="{% url 'polls:detail' question.id %}" class="again">Vote again?</a>{% endblock %}
 </div>
 {% endblock %}

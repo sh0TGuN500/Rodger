@@ -1,4 +1,4 @@
-div {
+div.content {
     margin-left: 10px
 }
 
@@ -17,10 +17,9 @@ body {
     background-size: auto;
 }
 
-a {
+a.again {
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 	color: LimeGreen;
-	margin-left: 10px;
 }
 
 nav  {
