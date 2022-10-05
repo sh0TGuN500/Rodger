@@ -6,7 +6,7 @@ h1 {
 
 body {
     background: white url("../images/customers.gif") no-repeat;
-    background-size: auto;
+    background-size: 100vmax 100vh;
 }
 
 h1, h2, dl, nav, p {

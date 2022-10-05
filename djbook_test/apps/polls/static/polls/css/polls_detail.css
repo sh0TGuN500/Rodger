@@ -50,7 +50,7 @@ header::before {
     bottom: 0;
     display: block;
     background: url("../images/choice_background.gif") no-repeat;
-    background-size: cover;
+    background-size: 100vmax 100vh;
     transform-origin: center center 0;
     transform: translateZ(-1px) scale(2);
     z-index: -1;
