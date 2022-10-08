@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape
 from django.views import generic
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
@@ -150,7 +151,7 @@ def question_db_save(request, question_id=None):
         except Question.DoesNotExist:
             pass
         else:
-            response_dict.update({'title_info': f' • Title "{title}" already exist'})
+            response_dict.update({'title_info': f' • Title "{escape(title)}" already exist'})
             no_errors = False
     if not title:
         response_dict.update({'title_info': ' • Title should be the length between 5 and 200'})
@@ -222,7 +223,9 @@ def question_db_save(request, question_id=None):
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
         question_url = reverse('polls:detail', args=(get_question.id,))
         response_dict.update({
-            'success': f' • Question "<a href="{question_url}">{get_question.question_title}</a>" successfully posted'
+            'success': f' • Question "<a href="{question_url}">'
+                       f'{escape(get_question.question_title)}'
+                       '</a>" successfully posted'
         })
     print(response_dict)
     return JsonResponse(response_dict)
