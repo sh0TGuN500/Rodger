@@ -1,7 +1,5 @@
-import requests
-from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import escape
@@ -9,9 +7,10 @@ from django.views import generic
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 
 from .forms import CommentForm, AddQuestionForm, text_validator
-from .models import Question, Choice, Tag
+from .models import Question, Choice, Tag, Comment
 
 
 ########################################################################################################################
@@ -61,6 +60,7 @@ class QuestionDetailMixinView(generic.edit.FormMixin, generic.detail.DetailView)
 class QuestionSearchView(LoginRequiredMixin, generic.ListView):
     paginate_by = 16
     template_name = 'polls/polls_list.html'
+    context_object_name = 'search_list'
 
     def get_queryset(self):
         """
@@ -77,13 +77,14 @@ class QuestionSearchView(LoginRequiredMixin, generic.ListView):
 @login_required()
 def question_delete(request, question_id):
     user = request.user
-    my_question_list = Question.objects.filter(author_name=user).order_by('-pub_date')
-    deleting_question = Question.objects.get(id=question_id)
-    if user.username != deleting_question.author_name:
-        error_message = 'U can delete only your questions'
+    try:
+        deleting_question = Question.objects.get(id=question_id, author_name=user)
+    except Question.DoesNotExist:
+        error_message = 'Question does not exist'
     else:
         deleting_question.delete()
         error_message = f'Question "{deleting_question}" has been deleted'
+    my_question_list = Question.objects.filter(author_name=user).order_by('-pub_date')
     context = {
         'my_question_list': my_question_list,
         'error_message': error_message
@@ -109,16 +110,19 @@ def question_create_update_form(request, question_id=None):
     if question_id:
         question = Question.objects.get(id=question_id)
         if question.author_name == request.user.username:
+            form = AddQuestionForm(instance=question)
             return render(request, 'polls/add_question.html', {
                 'title': question.question_title,
-                'text': question.question_text,
                 'choices': question.choice_set.all(),
                 'tags': question.tag.all(),
-                'question_id': question_id
+                'question_id': question_id,
+                'form': form
+
             })
         else:
             return HttpResponseRedirect(reverse('polls:create_question'))
     else:
+        print('must be form')
         return render(request, 'polls/add_question.html', {
             'form': AddQuestionForm
         })
@@ -126,25 +130,30 @@ def question_create_update_form(request, question_id=None):
 
 @login_required()
 def question_db_save(request, question_id=None):
-    try:
-        get_question = Question.objects.get(id=question_id)
-    except Question.DoesNotExist:
-        get_question = None
-    user_ok = get_question.author_name == request.user.username if get_question else True
+    if question_id:
+        try:
+            get_question = Question.objects.get(id=question_id)
+        except Question.DoesNotExist:
+            get_question = Question(author_name=request.user)
+        else:
+            get_question.up_date = timezone.now()
+    else:
+        get_question = Question(author_name=request.user)
+    user_ok = get_question.author_name == request.user.username if question_id else True
 
     # request validation
     is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
-    data = request.POST if request.POST else None
+    data = AddQuestionForm(request.POST, instance=get_question) if request.POST else None
     if not data or not is_ajax or not user_ok:
         return HttpResponseRedirect(reverse('polls:create_question'))
 
     # constants
     no_errors = True
-    response_dict = {'title_info': '✔️',
-                     'text_info': '✔️'}
+    response_dict = {'title_info': 'Title ✔️',
+                     'text_info': 'Text ✔️'}
 
     # title data validation
-    title = text_validator(data['question_title'], min_length=5, max_length=200)
+    title = data['question_title']
     if not get_question:
         try:
             Question.objects.get(question_title=title)
@@ -153,18 +162,21 @@ def question_db_save(request, question_id=None):
         else:
             response_dict.update({'title_info': f' • Title "{escape(title)}" already exist'})
             no_errors = False
-    if not title:
+    try:
+        data.clean_question_title()
+    except ValidationError:
         response_dict.update({'title_info': ' • Title should be the length between 5 and 200'})
         no_errors = False
 
     # text data validation
-    text = text_validator(data['question_text'], min_length=10, max_length=9000)
-    if not text:
+    try:
+        data.clean_question_text()
+    except ValidationError:
         response_dict.update({'text_info': ' • Text should be the length between 10 and 9000'})
         no_errors = False
 
     # tags data validation
-    tag_list, tag_status = add_question_list_validation(request, data, 'tag')
+    tag_list, tag_status = add_question_list_validation(request, 'tag')
     if tag_list:
         if 'error' in tag_status:
             response_dict.update({'tag_info': ' • An error in tags'})
@@ -173,7 +185,7 @@ def question_db_save(request, question_id=None):
             response_dict.update({'tag_info': '✔️'})
 
     # choices data validation
-    choice_list, choice_status = add_question_list_validation(request, data, 'choice')
+    choice_list, choice_status = add_question_list_validation(request, 'choice')
     if choice_list:
         if 'error' in choice_status:
             response_dict.update({'choice_info': ' • An error in choices'})
@@ -183,20 +195,18 @@ def question_db_save(request, question_id=None):
 
     # save data into DB
     if no_errors:
-
+        get_question.choice_set.all().delete()
+        data.save()
         # if question exist
-        if get_question:
-            get_question.question_title = title
-            get_question.question_text = text
-            get_question.up_date = timezone.now()
-            get_question.choice_set.all().delete()
-            get_question.tag.all().delete()
+        '''if not get_question:
+            get_question = Question(author_name=request.user)'''
+        '''if get_question:
+            form_data = AddQuestionForm(request.POST, instance=get_question)
+            # get_question.choice_set.all().delete()
+            # get_question.tag.all().delete()
         else:
-            get_question = Question(question_title=title,
-                                    question_text=text,
-                                    author_name=request.user,
-                                    pub_date=timezone.now())
-        get_question.save()
+            form_data = AddQuestionForm(request.POST)
+            get_question = Question(author_name=request.user)'''
 
         # save tags if exist
         if tag_list:
@@ -232,40 +242,110 @@ def question_db_save(request, question_id=None):
 
 
 ########################################################################################################################
-################################################ COMMENT SECTION #######################################################
+################################################ COMMENT CRUD ##########################################################
 ########################################################################################################################
 
 
-# AJAX
-class CommentCreate(View):
+class CommentCreate(LoginRequiredMixin, View):
     @staticmethod
-    @login_required()
-    def get(*args, **kwargs):
-        return HttpResponseRedirect(reverse('polls:home'))
+    def get(request, question_id, comment_id):
+        try:
+            comment = Comment.objects.get(id=comment_id, author_name=request.user)
+        except Comment.DoesNotExist:
+            return JsonResponse({'error': ' • Comment does not exist'})
+        else:
+            try:
+                question = Question.objects.get(id=question_id)
+            except Question.DoesNotExist:
+                return JsonResponse({'error': ' • Question does not exist'})
+            form = CommentForm(instance=comment)
+            return render(request, 'polls/polls_detail.html', {
+                'question': question,
+                'comment': comment,
+                'editing_comment': comment_id,
+                'form': form
+            })
 
     @staticmethod
-    @login_required()
-    def post(request, question_id):
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            question = get_object_or_404(Question, id=question_id)
-            form = CommentForm(request.POST)
-            comment_text = text_validator(form['comment_text'].value(), min_length=4, max_length=300)
-            if comment_text:
-                form = form.save(commit=False)
-                form.question = question
-                form.author_name = request.user
-                form.save()
-                return JsonResponse({'success': ' • Comment successful posted'})
-                # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
+    # is ugly
+    def post(request, question_id, comment_id=None):
+        if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+            return HttpResponseRedirect(reverse('polls:home'))
+        else:
+            try:
+                question = Question.objects.get(id=question_id)
+            except Question.DoesNotExist:
+                return JsonResponse({'error': ' • Question does not exist'})
+            if comment_id:
+                try:
+                    comment = Comment.objects.get(id=comment_id)
+                except Comment.DoesNotExist:
+                    return JsonResponse({'error': ' • Comment does not exist'})
+                else:
+                    form = CommentForm(request.POST, instance=comment)
+                    if form.is_valid():
+                        form.save()
+                    else:
+                        return JsonResponse({'error': ' • Symbols less than 3'})
+
             else:
-                '''print('error')
-                return render(request, 'polls/polls_detail.html', {
-                    'question': question,
-                    'form': form
-                })'''
-                return JsonResponse({'error': ' • Symbols less than 3'})
+                form = CommentForm(request.POST)
+                if form.is_valid():
+                    form = form.save(commit=False)
+                    form.author_name = request.user
+                    form.question = question
+                    form.save()
+                else:
+                    return JsonResponse({'error': ' • Symbols less than 3'})
+            return JsonResponse({'success': ' • Comment successful posted'})
+            # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
+
+
+@login_required()
+def comment_delete(request, question_id, comment_id):
+    try:
+        comment = Comment.objects.get(id=comment_id, author_name=request.user)
+    except Comment.DoesNotExist:
+        comment_message = ' • Comment does not exist'
+    else:
+        comment.delete()
+        comment_message = ' • Comment has been deleted'
+    try:
+        question = Question.objects.get(id=question_id)
+    except Question.DoesNotExist:
+        return HttpResponseRedirect(reverse('polls:index'))
+    form = CommentForm()
+    context = {
+        'question': question,
+        'form': form,
+        'comment_message': comment_message
+    }
+    return render(request, 'polls/polls_detail.html', context=context)
+
+
+########################################################################################################################
+################################################ TAGS SECTION ##########################################################
+########################################################################################################################
+
+
+class TagListView(LoginRequiredMixin, generic.ListView):
+    paginate_by = 16
+    template_name = 'polls/polls_list.html'
+    context_object_name = 'tags_list'
+
+    def get_queryset(self):
+        """
+        Return the last published questions (not including those set to be
+        published in the future).
+        """
+        tag = self.kwargs['tag_id']
+        tag_name = Tag.objects.get(id=tag).name
+        print(tag_name)
+        if tag:
+            return Question.objects.filter(tag=tag).order_by('-pub_date')
         else:
             return HttpResponseRedirect(reverse('polls:home'))
+
 
 ########################################################################################################################
 ################################################ VOTE SECTION ##########################################################
@@ -308,7 +388,8 @@ def vote(request, question_id):
 
 
 # AJAX
-def add_question_list_validation(request, data, element_name: str):
+def add_question_list_validation(request, element_name: str):
+    data = request.POST
     if data.get(element_name):
         request_list = dict(data.lists())[element_name]
         count = 0
@@ -389,7 +470,7 @@ class FroalaDetailMixinView(generic.edit.FormMixin, generic.detail.DetailView):
         result = f'i\'ve got: {card_text}'
         return JsonResponse({'data': result}, status=200)'''
 
-
+'''
 # test1 ajax page
 def ajax_page(request):
     return render(request, 'polls/ajax_page.html')
@@ -418,3 +499,4 @@ class AjaxDataCheck(View):
             return JsonResponse(error_dict)
 
         return render(request, 'polls/ajax_page.html')
+'''

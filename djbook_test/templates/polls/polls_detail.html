@@ -23,7 +23,7 @@
             {% if question.tag.all %}
                 <span>tags: </span>
                 {% for tag in question.tag.all %}
-                    <a href="{% url 'polls:home' %}">{{ tag }}</a>
+                    <a href="{% url 'polls:tag' tag.id %}">#{{ tag }}</a>
                 {% endfor %}<br>
             {% endif %}
             {% if question.up_date %}
@@ -58,24 +58,31 @@
                 {% csrf_token %}
                 {{ form|crispy }}
                 {% comment %}
-            <input hidden name="question_id" value="{{ question.id }}">
-            {% endcomment %}
+                    <input hidden name="question_id" value="{{ question.id }}">
+                {% endcomment %}
                 <button type="submit" class="btn btn-primary">Left comment</button>
                 <small class="comment-success"></small>
-                <small class="comment-warning"></small>
+                <small class="comment-warning">{{ comment_message }}</small>
             </form>
         {% else %}
             <p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
         {% endif %}
         <hr>
+        <ul>
         {% for comment in question.comment_set.all %}
-            <p class="comment_autor">
-                <strong>{{ comment.author_name }}:</strong>
-            <p class="comment_text">{{ comment.comment_text }}</p>
-        {% empty %}
-            <p>Comments not found! Be the first ;)</p>
+                <li><strong class="comment_autor">{{ comment.author_name }}:</strong>
+                    <p class="comment_text">{{ comment }}
+                        {% if comment.author_name == user.username %}
+                            | <a href="{% url 'polls:comment_edit' question.id comment.id %}">Edit</a>
+                            | <a href="{% url 'polls:comment_delete' question.id comment.id %}">Delete</a>
+                        {% endif %}
+                    </p>
+                </li>
+                <hr>
+                {% empty %}
+                <p>Comments not found! Be the first ;)</p>
         {% endfor %}
-        <hr>
+        </ul>
         {% comment %}
 	{% if form.errors %}
 		<p><strong>{{ form.errors }}error</strong></p>
@@ -104,7 +111,11 @@
                 // type of form
                 type: 'POST',
                 // url: django url path
-                url: '{% url 'polls:comment_create' question.id %}',
+                {% if editing_comment %}
+                    url: '{% url 'polls:comment_edit' question.id editing_comment %}',
+                {% else %}
+                    url: '{% url 'polls:comment_create' question.id %}',
+                {% endif %}
                 data: $('#comment-form').serialize(),
                 dataType: 'json',
                 // if django view returned data / if the request succeeds
@@ -123,7 +134,7 @@
                 //error message into small
                 error: function (){
                     $('small').html("")
-                    $('small.comment-warning').html('Bad client request');
+                    $('small.comment-warning').html(' • Bad client request');
                 }
             })
         }
@@ -155,8 +166,8 @@
                         }
                     },
                     //error message into h2
-                    error: function (error) {
-                        $('small.vote-warning').html('Bad client request');
+                    error: function () {
+                        $('small.vote-warning').html(' • Bad client request');
                         $('small.vote-success').html("")
                     }
                 })

@@ -1,4 +1,4 @@
-django==4.1.1
+django
 argon2-cffi
 django-heroku
 django-storages
@@ -6,3 +6,5 @@ django-allauth
 django-crispy-forms
 gunicorn
 whitenoise
+requests
+celery

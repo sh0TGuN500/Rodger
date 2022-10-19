@@ -125,3 +125,7 @@ small {
 .btn-primary {
     margin-top: 12px;
 }
+
+li {
+    marker: none;
+}

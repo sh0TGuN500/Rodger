@@ -22,11 +22,11 @@ class Tag(models.Model):
 
 class Question(models.Model):
     question_title = models.CharField('question title', max_length=200, unique=True)
-    question_text = models.TextField('question_text', max_length=9000, default='')
+    question_text = models.TextField('question text', max_length=9000, default='')
     author_name = models.CharField('author name', max_length=200)
-    pub_date = models.DateTimeField('publication date')
+    pub_date = models.DateTimeField('publication date', auto_now_add=True)
     tag = models.ManyToManyField(Tag)
-    up_date = models.DateTimeField('updating date', default=None, null=True)
+    up_date = models.DateTimeField('updating date', null=True, default=None)
 
     def __str__(self):
         return self.question_title
@@ -62,7 +62,7 @@ class Comment(models.Model):
     comment_text = models.CharField('comment text', max_length=300, blank=False)
 
     def __str__(self):
-        return self.author_name  # для отображения названия статьи
+        return self.comment_text
 
 
 '''class Folder(models.Model):

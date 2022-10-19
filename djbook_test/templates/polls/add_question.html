@@ -20,6 +20,8 @@
             {% csrf_token %}
             <br>
             <div class="wrapper">
+                {{ form|crispy }}
+                {% comment %}
                 <p>
                     <input value="{{ title }}" type="text" name="question_title" placeholder="Question title" minlength="5" maxlength="200" required="" id="id_question_title">
                     <small class="title-error"></small>
@@ -28,7 +30,7 @@
                     <textarea name="question_text" cols="35" rows="3" minlength="10" placeholder="Question text" maxlength="9000" required="" id="id_question_text">{{ text }}</textarea>
                     <small class="text-error"></small>
                 </p>
-
+                {% endcomment %}
                 <div id="tags_id">
                     <h3>Tags:</h3>
                     {% for tag in tags %}
@@ -66,6 +68,8 @@
                 <button type="submit" class="form" >Left question</button>
                 <small class="text-success"></small>
                 <small class="text-warning"></small>
+                <small class="title-error"></small>
+                <small class="text-error"></small>
             </div>
         </form>
     </div>

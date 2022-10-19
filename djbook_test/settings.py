@@ -26,7 +26,10 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+try:
+    from djbook_test.local_settings import *
+except ImportError:
+    DEBUG = False
 
 # Application definition
 
@@ -42,7 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'crispy_forms',
-    # 'froala_editor',
+    # 'froala_editor'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -156,12 +159,9 @@ MEDIA_ROOT = PROJECT_ROOT / 'media'
 
 SITE_ID = 2
 
-if DEBUG:
-    try:
-        from djbook_test.local_settings import *
-    except ImportError:
-        pass
-else:
+EMAIL_USE_TLS = True
+
+if not DEBUG:
     import dj_database_url
     from os import environ
     import django_heroku
@@ -221,6 +221,11 @@ else:
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
+
+    EMAIL_HOST = environ['EMAIL_HOST']
+    EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
+    EMAIL_PORT = int(environ['EMAIL_PORT'])
 
     # Configure Django App for Heroku.
     django_heroku.settings(locals())

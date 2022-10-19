@@ -19,6 +19,10 @@
 
     {% if my_question_list %}
         <h3>My questions:</h3>
+    {% elif search_list %}
+        <h3>Search results:</h3>
+    {% elif tags_list %}
+        <h3>Tag results:</h3>
     {% else %}
         <h3>Questions:</h3>
     {% endif %}
