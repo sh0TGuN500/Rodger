@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -11,6 +12,7 @@ from django.core.exceptions import ValidationError
 
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag, Comment
+from .service import send, admin_send
 
 
 ########################################################################################################################
@@ -195,7 +197,8 @@ def question_db_save(request, question_id=None):
 
     # save data into DB
     if no_errors:
-        get_question.choice_set.all().delete()
+        if question_id:
+            get_question.choice_set.all().delete()
         data.save()
         # if question exist
         '''if not get_question:
@@ -232,12 +235,12 @@ def question_db_save(request, question_id=None):
         # Success jsonResponse
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
         question_url = reverse('polls:detail', args=(get_question.id,))
+        question_url_message = f' • Question "<a href="{question_url}">{escape(get_question.question_title)}</a>" successfully posted'
+        admin_send('New question',
+                   question_url_message)
         response_dict.update({
-            'success': f' • Question "<a href="{question_url}">'
-                       f'{escape(get_question.question_title)}'
-                       '</a>" successfully posted'
+            'success': question_url_message
         })
-    print(response_dict)
     return JsonResponse(response_dict)
 
 
@@ -297,6 +300,13 @@ class CommentCreate(LoginRequiredMixin, View):
                     form.save()
                 else:
                     return JsonResponse({'error': ' • Symbols less than 3'})
+            user = User.objects.get(username=question.author_name)
+            send(
+                f'New comment for {question.question_title}',
+                f'''User {request.user.username} commented on your question!\n
+                You can\'t get rid of the mailing because I have not implemented it.''',
+                user.email,
+            )
             return JsonResponse({'success': ' • Comment successful posted'})
             # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
 

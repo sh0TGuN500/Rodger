@@ -57,6 +57,7 @@
                             {% endif %}
                             <li><a class="dropdown-item" href="{% url 'polls:my_questions' %}">My Questions</a></li>
                             <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'account_email' %}">Email settings</a></li>
                             <li><a class="dropdown-item" href="{% url 'account_logout' %}">LogOut</a></li>
                         {% else %}
                             <li><a class="dropdown-item" href="{% url 'account_login' %}">LogIn</a></li>
