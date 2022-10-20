@@ -305,7 +305,7 @@ class CommentCreate(LoginRequiredMixin, View):
                 f'New comment for {question.question_title}',
                 f'''User {request.user.username} commented on your question!\n
                 You can\'t get rid of the mailing because I have not implemented it.''',
-                user.email,
+                user_email=user.email,
             )
             return JsonResponse({'success': ' • Comment successful posted'})
             # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))

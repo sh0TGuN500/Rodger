@@ -142,7 +142,7 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGIN_URL = '/account/login/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -166,6 +166,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 
 EMAIL_USE_TLS = True
+
+EMAIL_USE_SSL = False
 
 if not DEBUG:
     import dj_database_url
@@ -228,8 +230,10 @@ if not DEBUG:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
+    DEFAULT_FROM_EMAIL = environ['EMAIL_HOST_USER']
+    SERVER_EMAIL = DEFAULT_FROM_EMAIL
     EMAIL_HOST = environ['EMAIL_HOST']
-    EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
+    EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
     EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
     EMAIL_PORT = int(environ['EMAIL_PORT'])
 

@@ -15,5 +15,5 @@ def send(subject, message, user_email, from_email=EMAIL_HOST_USER):
 
 
 def admin_send(subject, message):
-    mail_admins(subject, message)
+    mail_admins(subject=subject, message=message)
     print('send admin email')
