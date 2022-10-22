@@ -37,7 +37,7 @@ class CommentForm(forms.ModelForm):
         }
 
     def clean_comment_text(self):
-        data = text_validator(self.cleaned_data['comment_text'], min_length=4, max_length=300)
+        data = text_validator(self.cleaned_data['comment_text'], min_length=3, max_length=300)
         if data:
             return data
         else:
@@ -65,7 +65,6 @@ class AddQuestionForm(forms.ModelForm):
             raise ValidationError('Title field must contain the text!')
 
     def clean_question_text(self):
-        print(f'clean text')
         data = text_validator(self.data['question_text'], min_length=10, max_length=9000)
         if data:
             return data

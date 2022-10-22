@@ -11,7 +11,7 @@ add_choice_fields.onclick = function(){
 	newField.setAttribute('class','choices');
 	newField.setAttribute('size','100');
 	newField.setAttribute('placeholder','Choice field');
-	newField.setAttribute('minlength', '5');
+	newField.setAttribute('minlength', '2');
 	newField.setAttribute('maxlength', '200');
 	let otherField = document.createElement('input');
 	otherField.required = true;
@@ -20,7 +20,7 @@ add_choice_fields.onclick = function(){
 	otherField.setAttribute('class','choices');
 	otherField.setAttribute('size','100');
 	otherField.setAttribute('placeholder','Choice field');
-	otherField.setAttribute('minlength', '5');
+	otherField.setAttribute('minlength', '2');
 	otherField.setAttribute('maxlength', '200');
 	let input_tags = choices.getElementsByTagName('input');
 	if(input_tags.length === 0) {

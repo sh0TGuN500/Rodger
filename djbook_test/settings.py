@@ -157,6 +157,11 @@ MEDIA_ROOT = PROJECT_ROOT / 'media'
 
 # GRAPPELLI_ADMIN_TITLE = "RODGER"
 
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 SITE_ID = 2
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -197,11 +202,9 @@ if not DEBUG:
 
     SECURE_HSTS_PRELOAD = True
 
-    ADMINS = (
+    ADMINS = MANAGERS = (
         ('stepanJo', 'grandma7ter500@gmail.com'),
     )
-
-    MANAGERS = ADMINS
 
     LOGGING = {
         'version': 1,
@@ -230,10 +233,10 @@ if not DEBUG:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
-    DEFAULT_FROM_EMAIL = environ['EMAIL_HOST_USER']
-    SERVER_EMAIL = DEFAULT_FROM_EMAIL
+    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ['REDIS_URL']
+
+    DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
     EMAIL_HOST = environ['EMAIL_HOST']
-    EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
     EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
     EMAIL_PORT = int(environ['EMAIL_PORT'])
 

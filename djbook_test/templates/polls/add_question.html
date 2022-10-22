@@ -34,7 +34,7 @@
                 <div id="tags_id">
                     <h3>Tags:</h3>
                     {% for tag in tags %}
-                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="5" maxlength="200" placeholder="Tag field">
+                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="2" maxlength="200" placeholder="Tag field">
                     {% endfor %}
                 </div>
                 <small class="tag-error"></small>
@@ -53,7 +53,7 @@
                 <div id="choices_id">
                     <h3>Choices:</h3>
                     {% for choice in choices %}
-                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="5" maxlength="200" placeholder="Choice field">
+                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="2" maxlength="200" placeholder="Choice field">
                     {% endfor %}
                 </div>
                 <small class="choice-error"></small>

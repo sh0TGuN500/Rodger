@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag, Comment
-from .service import send, admin_send
+from .tasks import send_task, admin_send_task
 
 
 ########################################################################################################################
@@ -151,8 +151,8 @@ def question_db_save(request, question_id=None):
 
     # constants
     no_errors = True
-    response_dict = {'title_info': 'Title ✔️',
-                     'text_info': 'Text ✔️'}
+    response_dict = {'title_info': ' • Title ✔️',
+                     'text_info': ' • Text ✔️'}
 
     # title data validation
     title = data['question_title']
@@ -181,25 +181,28 @@ def question_db_save(request, question_id=None):
     tag_list, tag_status = add_question_list_validation(request, 'tag')
     if tag_list:
         if 'error' in tag_status:
-            response_dict.update({'tag_info': ' • An error in tags'})
+            response_dict.update({'tag_info': ' • Tag should be the length between 2 and 200'})
             no_errors = False
         else:
-            response_dict.update({'tag_info': '✔️'})
+            response_dict.update({'tag_info': ' ✔️'})
 
     # choices data validation
     choice_list, choice_status = add_question_list_validation(request, 'choice')
     if choice_list:
         if 'error' in choice_status:
-            response_dict.update({'choice_info': ' • An error in choices'})
+            response_dict.update({'choice_info': ' • Choice should be the length between 2 and 200'})
             no_errors = False
         else:
-            response_dict.update({'choice_info': '✔️'})
+            response_dict.update({'choice_info': ' ✔️'})
 
     # save data into DB
     if no_errors:
         if question_id:
             get_question.choice_set.all().delete()
-        data.save()
+        try:
+            data.save()
+        except ValueError:
+            return JsonResponse(response_dict)
         # if question exist
         '''if not get_question:
             get_question = Question(author_name=request.user)'''
@@ -235,9 +238,10 @@ def question_db_save(request, question_id=None):
         # Success jsonResponse
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
         question_url = reverse('polls:detail', args=(get_question.id,))
+        # email_template = render(request, 'account/email/email_confirmation_message.txt')
         question_url_message = f' • Question "<a href="{question_url}">{escape(get_question.question_title)}</a>" successfully posted'
-        admin_send('New question',
-                   question_url_message)
+        admin_send_task.delay('New question',
+                              question_url_message)
         response_dict.update({
             'success': question_url_message
         })
@@ -301,9 +305,9 @@ class CommentCreate(LoginRequiredMixin, View):
                 else:
                     return JsonResponse({'error': ' • Symbols less than 3'})
             user = User.objects.get(username=question.author_name)
-            send(
+            send_task.delay(
                 f'New comment for {question.question_title}',
-                f'''User {request.user.username} commented on your question!\n
+                f'''User {request.user.username} commented on your question!
                 You can\'t get rid of the mailing because I have not implemented it.''',
                 user_email=user.email,
             )
@@ -349,8 +353,7 @@ class TagListView(LoginRequiredMixin, generic.ListView):
         published in the future).
         """
         tag = self.kwargs['tag_id']
-        tag_name = Tag.objects.get(id=tag).name
-        print(tag_name)
+        # tag_name = Tag.objects.get(id=tag).name
         if tag:
             return Question.objects.filter(tag=tag).order_by('-pub_date')
         else:
@@ -405,7 +408,7 @@ def add_question_list_validation(request, element_name: str):
         count = 0
         status_list = []
         for element in request_list:
-            text = text_validator(element)
+            text = text_validator(element, 2, 200)
             if text:
                 request_list[count] = text
 
