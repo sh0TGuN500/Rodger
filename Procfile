@@ -1,2 +1,2 @@
 web: gunicorn djbook_test.wsgi
-worker: celery worker --app=tasks.app
+celery -A djbook_test worker -l info --app=tasks.app
