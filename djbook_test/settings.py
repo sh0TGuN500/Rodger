@@ -184,6 +184,8 @@ if not DEBUG:
 
     STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
+    WHITENOISE_MANIFEST_STRICT = False
+
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = environ['SECRET_KEY']
 
