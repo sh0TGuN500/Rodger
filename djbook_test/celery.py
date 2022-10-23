@@ -1,6 +1,6 @@
 import os
 from celery import Celery
-from .settings import DEBUG
+from .settings import DEBUG, INSTALLED_APPS
 
 if DEBUG:
     os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
@@ -8,7 +8,7 @@ if DEBUG:
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djbook_test.settings')
 
-app = Celery('djbook_test')
+app = Celery('polls')
 
 if not DEBUG:
     app.conf.update(BROKER_URL=os.environ['REDIS_URL'],
@@ -21,7 +21,7 @@ if not DEBUG:
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
-app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: INSTALLED_APPS)
 
 
 @app.task(bind=True)
