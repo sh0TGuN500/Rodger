@@ -4,6 +4,7 @@ django-heroku
 django-storages
 django-allauth
 django-crispy-forms
+django-froala-editor
 gunicorn
 whitenoise
 requests
