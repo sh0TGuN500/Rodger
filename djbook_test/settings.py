@@ -59,6 +59,7 @@ FROALA_EDITOR_PLUGINS = (
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,7 +148,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = PROJECT_ROOT / 'static'  # GRAPPELLI
+STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
 
 MEDIA_ROOT = PROJECT_ROOT / 'media'
 
@@ -181,7 +182,7 @@ if not DEBUG:
         'default': dj_database_url.config(default=environ['DATABASE_URL'])
     }
 
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = environ['SECRET_KEY']

@@ -1,4 +1,5 @@
-django
+Brotli
+Django
 argon2-cffi
 django-heroku
 django-storages
