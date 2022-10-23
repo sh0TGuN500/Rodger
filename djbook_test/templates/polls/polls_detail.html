@@ -34,7 +34,7 @@
         </em>
 
         <hr>
-        <em style="white-space: break-spaces">{{ question.question_text }}</em>
+        <div style="white-space: break-spaces">{{ question.question_text|safe|escape }}</div>
         <hr>
 
         {% if user.is_authenticated %}

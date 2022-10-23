@@ -124,7 +124,6 @@ def question_create_update_form(request, question_id=None):
         else:
             return HttpResponseRedirect(reverse('polls:create_question'))
     else:
-        print('must be form')
         return render(request, 'polls/add_question.html', {
             'form': AddQuestionForm
         })
@@ -308,7 +307,7 @@ class CommentCreate(LoginRequiredMixin, View):
             send_task.delay(
                 f'New comment for {question.question_title}',
                 f'''User {request.user.username} commented on your question!
-                You can\'t get rid of the mailing because I have not implemented it.''',
+                \nYou can\'t get rid of the mailing because I have not implemented it.''',
                 user_email=user.email,
             )
             return JsonResponse({'success': ' • Comment successful posted'})

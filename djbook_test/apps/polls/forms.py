@@ -52,10 +52,8 @@ class AddQuestionForm(forms.ModelForm):
         fields = ('question_title', 'question_text')
         widgets = {
             'question_title': forms.TextInput(attrs={'minlength': 5,
-                                                     'maxlength': 200}),
-            'question_text': forms.Textarea(attrs={'minlength': 10,
-                                                   'maxlength': 9000})
-    }
+                                                     'maxlength': 200})
+        }
 
     def clean_question_title(self):
         data = text_validator(self.data['question_title'], min_length=5, max_length=200).upper()
@@ -78,7 +76,6 @@ class AddQuestionForm(forms.ModelForm):
     class Meta:
         model = FroalaModel
         fields = ('name', 'content')'''
-
 
 '''
 CHOICES = [('1', 'First'), ('2', 'Second')]

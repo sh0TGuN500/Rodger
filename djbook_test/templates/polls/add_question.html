@@ -20,6 +20,7 @@
             {% csrf_token %}
             <br>
             <div class="wrapper">
+                {{ form.media }}
                 {{ form|crispy }}
                 {% comment %}
                 <p>
@@ -127,7 +128,6 @@
                 error: function (){
                     $('small').html("")
                     $('small.text-warning').html('Bad client request');
-
                 }
             })
         }
