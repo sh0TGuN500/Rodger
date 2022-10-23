@@ -1,0 +1,16 @@
+h1 {
+    color: darkblue;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+    text-shadow: #8f8f8f 0.7px 0.7px 0, #8f8f8f -0.7px -0.7px 0,
+                 #8f8f8f -0.7px 0.7px 0, #8f8f8f 0.7px -0.7px 0;
+}
+
+body {
+    background: white url("../images/home_background.gif") no-repeat;
+    background-size: 100vmax 100vh;
+}
+
+nav  {
+    color: gray;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
