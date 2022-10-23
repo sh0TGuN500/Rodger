@@ -8,7 +8,7 @@ if DEBUG:
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djbook_test.settings')
 
-app = Celery('polls')
+app = Celery('djbook_test')
 
 if not DEBUG:
     app.conf.update(BROKER_URL=os.environ['REDIS_URL'],
