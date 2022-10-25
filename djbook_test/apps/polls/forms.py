@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 from .models import Comment, Question
 
@@ -60,8 +59,6 @@ class AddQuestionForm(forms.ModelForm):
         fields = ('question_title', 'question_text')
         widgets = {
             'question_title': forms.TextInput(attrs={'minlength': 5,
-                                                     'maxlength': 200}),
-            'question_text': SummernoteWidget(attrs={'minlength': 5,
                                                      'maxlength': 200}),
         }
 

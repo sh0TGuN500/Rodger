@@ -5,7 +5,7 @@ django-heroku
 django-storages
 django-allauth
 django-crispy-forms
-django-summernote
+django-tinymce
 gunicorn
 whitenoise
 requests
