@@ -8,6 +8,7 @@ django-crispy-forms
 django-froala-editor
 django-summernote
 gunicorn
+hello_django
 whitenoise
 requests
 celery
