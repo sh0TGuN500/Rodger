@@ -55,12 +55,19 @@ SUMMERNOTE_THEME = 'bs5'
 
 SUMMERNOTE_CONFIG = {
     'summernote': {
-        # As an example, using Summernote Air-mode
-        'airMode': False,
-
         # Change editor size
         'width': '100%',
         'height': '300',
+        'toolbar': [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']],
+                ],
     }
 }
 
