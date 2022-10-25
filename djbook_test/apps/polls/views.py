@@ -154,7 +154,7 @@ def question_db_save(request, question_id=None):
                      'text_info': ' • Text ✔️'}
 
     # title data validation
-    title = data['question_title']
+    title = data.data['question_title']
     if not get_question:
         try:
             Question.objects.get(question_title=title)

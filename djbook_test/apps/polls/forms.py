@@ -1,11 +1,19 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 from .models import Comment, Question
 
 
 def text_validator(origin_text: str, min_length: int = 0, max_length: int = 0):
-    splitted_text: list = origin_text.split()
+    import re
+    # as per recommendation from @freylis, compile once only
+    CLEANR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+
+    def cleanhtml(raw_html):
+        cleantext = re.sub(CLEANR, '', raw_html)
+        return cleantext
+    splitted_text: list = cleanhtml(origin_text.strip()).split()
     formated_text = ' '.join(splitted_text)
     if min_length:
         if not len(formated_text) >= min_length:
@@ -52,7 +60,9 @@ class AddQuestionForm(forms.ModelForm):
         fields = ('question_title', 'question_text')
         widgets = {
             'question_title': forms.TextInput(attrs={'minlength': 5,
-                                                     'maxlength': 200})
+                                                     'maxlength': 200}),
+            'question_text': SummernoteWidget(attrs={'minlength': 5,
+                                                     'maxlength': 200}),
         }
 
     def clean_question_title(self):
@@ -64,6 +74,7 @@ class AddQuestionForm(forms.ModelForm):
 
     def clean_question_text(self):
         data = text_validator(self.data['question_text'], min_length=10, max_length=9000)
+        print(data)
         if data:
             return data
         else:
