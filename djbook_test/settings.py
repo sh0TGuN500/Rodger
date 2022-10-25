@@ -182,9 +182,7 @@ if not DEBUG:
         'default': dj_database_url.config(default=environ['DATABASE_URL'])
     }
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-    WHITENOISE_MANIFEST_STRICT = False
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = environ['SECRET_KEY']
