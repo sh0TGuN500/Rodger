@@ -131,6 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+LANGUAGES = 'en'
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Warsaw'
@@ -234,7 +236,7 @@ if not DEBUG:
     # s3 static settings
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ['REDIS_URL']
