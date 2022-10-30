@@ -25,13 +25,15 @@ BASE_DIR = PROJECT_ROOT.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv("DJANGO_SECRET_KEY", get_random_secret_key())
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+SECRET_KEY = getenv(get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG", "False") == "True"
+DEBUG = str(environ.get('DEBUG')) == "1" # 1 == True
+
+ENV_ALLOWED_HOST = environ.get('DJANGO_ALLOWED_HOST') or None
+ALLOWED_HOSTS = []
+if not DEBUG:
+    ALLOWED_HOSTS += [environ.get('DJANGO_ALLOWED_HOST')]
 
 # Application definition
 
@@ -129,6 +131,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -189,21 +198,31 @@ try:
 except ImportError:
     import dj_database_url
 
-    if DEVELOPMENT_MODE is True:
+    POSTGRES_DB = environ.get("POSTGRES_DB")  # database name
+    POSTGRES_PASSWORD = environ.get("POSTGRES_PASSWORD")  # database user password
+    POSTGRES_USER = environ.get("POSTGRES_USER")  # database username
+    POSTGRES_HOST = environ.get("POSTGRES_HOST")  # database host
+    POSTGRES_PORT = environ.get("POSTGRES_PORT")  # database port
+
+    POSTGRES_READY = (
+            POSTGRES_DB is not None
+            and POSTGRES_PASSWORD is not None
+            and POSTGRES_USER is not None
+            and POSTGRES_HOST is not None
+            and POSTGRES_PORT is not None
+    )
+
+    if POSTGRES_READY:
         DATABASES = {
             "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": path.join(BASE_DIR, "db.sqlite3"),
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": POSTGRES_DB,
+                "USER": POSTGRES_USER,
+                "PASSWORD": POSTGRES_PASSWORD,
+                "HOST": POSTGRES_HOST,
+                "PORT": POSTGRES_PORT,
             }
         }
-    elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-        if getenv("DATABASE_URL", None) is None:
-            raise Exception("DATABASE_URL environment variable not defined")
-        DATABASES = {
-            "default": dj_database_url.parse(environ.get("DATABASE_URL")),
-        }
-
-    ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
     ROOT_URLCONF = 'djbook_test.urls'
 
@@ -248,11 +267,15 @@ except ImportError:
     # s3 static settings
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
+    # from storage_backend.py
+    DEFAULT_FILE_STORAGE = 'djbook_test.storage_backends.PublicMediaStorage'
+    AWS_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    STATICFILES_STORAGE = 'djbook_test.storage_backends.StaticStorage'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ.get('REDIS_URL')
 
     DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
     EMAIL_HOST = environ.get('EMAIL_HOST')
     EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
-    EMAIL_PORT = int(environ.get('EMAIL_PORT'))
+    EMAIL_PORT = 587
