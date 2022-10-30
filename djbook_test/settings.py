@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from django.core.management.utils import get_random_secret_key
-from os import environ, getenv
+from os import environ, getenv, path
 import sys
 from pathlib import Path
 
@@ -182,12 +182,26 @@ EMAIL_USE_TLS = True
 
 EMAIL_USE_SSL = False
 
-if not DEBUG:
+DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
+
+try:
+    from .local_settings import *
+except ImportError:
     import dj_database_url
 
-    DATABASES = {
-        "default": dj_database_url.parse(environ.get("DATABASE_URL"))
-    }
+    if DEVELOPMENT_MODE is True:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": path.join(BASE_DIR, "db.sqlite3"),
+            }
+        }
+    elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+        if getenv("DATABASE_URL", None) is None:
+            raise Exception("DATABASE_URL environment variable not defined")
+        DATABASES = {
+            "default": dj_database_url.parse(environ.get("DATABASE_URL")),
+        }
 
     ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
