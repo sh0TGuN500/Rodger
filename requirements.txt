@@ -1,7 +1,6 @@
 Brotli
 Django
 argon2-cffi
-django-heroku
 django-storages
 django-allauth
 django-crispy-forms
@@ -10,4 +9,3 @@ gunicorn
 requests
 celery
 redis
-whitenoise

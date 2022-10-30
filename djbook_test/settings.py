@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.core.management.utils import get_random_secret_key
+from os import environ, getenv
 import sys
 from pathlib import Path
 
@@ -22,14 +24,14 @@ BASE_DIR = PROJECT_ROOT.parent
 
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-try:
-    from djbook_test.local_settings import *
-except ImportError:
-    DEBUG = False
+DEBUG = getenv("DEBUG", "False") == "True"
 
 # Application definition
 
@@ -63,7 +65,6 @@ FROALA_EDITOR_OPTIONS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -183,19 +184,14 @@ EMAIL_USE_SSL = False
 
 if not DEBUG:
     import dj_database_url
-    from os import environ
-    import django_heroku
 
     DATABASES = {
-        'default': dj_database_url.config(default=environ['DATABASE_URL'])
+        "default": dj_database_url.parse(environ.get("DATABASE_URL"))
     }
 
-    # STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
-    # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = environ['SECRET_KEY']
-
-    ALLOWED_HOSTS = ['www.rodger-dj.herokuapp.com/', 'rodger-dj.herokuapp.com']
+    ROOT_URLCONF = 'djbook_test.urls'
 
     SECURE_HSTS_SECONDS = 60
 
@@ -231,23 +227,18 @@ if not DEBUG:
         }
     }
 
-    AWS_STORAGE_BUCKET_NAME = environ['AWS_STORAGE_BUCKET_NAME']
+    AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     # s3 static settings
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    WHITENOISE_MANIFEST_STRICT = False
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
-    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ['REDIS_URL']
+    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ.get('REDIS_URL')
 
-    DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
-    EMAIL_HOST = environ['EMAIL_HOST']
-    EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
-    EMAIL_PORT = int(environ['EMAIL_PORT'])
-
-    # Configure Django App for Heroku.
-    django_heroku.settings(locals())
+    DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST = environ.get('EMAIL_HOST')
+    EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = int(environ.get('EMAIL_PORT'))
