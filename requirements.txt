@@ -10,3 +10,4 @@ gunicorn
 requests
 celery
 redis
+whitenoise
