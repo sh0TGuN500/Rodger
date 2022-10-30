@@ -63,6 +63,7 @@ FROALA_EDITOR_OPTIONS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -185,7 +186,7 @@ if not DEBUG:
         'default': dj_database_url.config(default=environ['DATABASE_URL'])
     }
 
-    # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    # STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = environ['SECRET_KEY']
@@ -233,7 +234,7 @@ if not DEBUG:
     # s3 static settings
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    STATICFILES_STORAGE = 'hello_django.storage_backends.StaticStorage'
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
     DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ['REDIS_URL']
