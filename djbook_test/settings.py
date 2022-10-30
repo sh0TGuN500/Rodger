@@ -25,7 +25,7 @@ BASE_DIR = PROJECT_ROOT.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv(get_random_secret_key())
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(environ.get('DEBUG')) == "1" # 1 == True
