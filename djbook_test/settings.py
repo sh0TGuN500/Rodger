@@ -34,7 +34,7 @@ ENV_ALLOWED_HOST = getenv('DJANGO_ALLOWED_HOST') or None
 print(ENV_ALLOWED_HOST)
 ALLOWED_HOSTS = []
 if not DEBUG:
-    ALLOWED_HOSTS += ENV_ALLOWED_HOST
+    ALLOWED_HOSTS += [getenv('DJANGO_ALLOWED_HOST')]
 print(ALLOWED_HOSTS)
 
 # Application definition
