@@ -194,6 +194,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
+print(getenv("DJANGO_ALLOWED_HOST"))
 
 try:
     from .local_settings import *
