@@ -1,6 +1,6 @@
 import os
 from celery import Celery
-from .settings import DEBUG, INSTALLED_APPS
+from .settings import DEBUG
 
 if DEBUG:
     os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
