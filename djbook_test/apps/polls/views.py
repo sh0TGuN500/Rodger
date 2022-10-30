@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag, Comment
 from .tasks import send_task, admin_send_task
+from djbook_test.settings import DEBUG
 
 
 ########################################################################################################################
@@ -133,55 +134,35 @@ def question_create_update_form(request, question_id=None):
 def question_db_save(request, question_id=None):
     if question_id:
         try:
-            get_question = Question.objects.get(id=question_id)
+            question_model = Question.objects.get(id=question_id)
+            edit = True
         except Question.DoesNotExist:
-            get_question = Question(author_name=request.user)
+            edit = False
+            question_model = Question(author_name=request.user)
         else:
-            get_question.up_date = timezone.now()
+            question_model.up_date = timezone.now()
     else:
-        get_question = Question(author_name=request.user)
-    user_ok = get_question.author_name == request.user.username if question_id else True
+        edit = False
+        question_model = Question(author_name=request.user)
+    user_ok = question_model.author_name == request.user.username if edit else True
 
     # request validation
     is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
-    data = AddQuestionForm(request.POST, instance=get_question) if request.POST else None
+    data = AddQuestionForm(request.POST, instance=question_model) if request.POST else None
     if not data or not is_ajax or not user_ok:
         return HttpResponseRedirect(reverse('polls:create_question'))
 
     # constants
-    no_errors = True
-    response_dict = {'title_info': ' • Title ✔️',
-                     'text_info': ' • Text ✔️'}
-
-    # title data validation
-    title = data.data['question_title']
-    if not get_question:
-        try:
-            Question.objects.get(question_title=title)
-        except Question.DoesNotExist:
-            pass
-        else:
-            response_dict.update({'title_info': f' • Title "{escape(title)}" already exist'})
-            no_errors = False
-    try:
-        data.clean_question_title()
-    except ValidationError:
-        response_dict.update({'title_info': ' • Title should be the length between 5 and 200'})
-        no_errors = False
-
-    # text data validation
-    try:
-        data.clean_question_text()
-    except ValidationError:
-        response_dict.update({'text_info': ' • Text should be the length between 10 and 9000'})
-        no_errors = False
+    errors = False
+    response_dict = {'title_info': ' • Title: ✔️',
+                     'text_info': ' • Text: ✔️'}
 
     # tags data validation
     tag_list, tag_status = add_question_list_validation(request, 'tag')
     if tag_list:
         if 'error' in tag_status:
             response_dict.update({'tag_info': ' • Tag should be the length between 2 and 200'})
-            no_errors = False
+            errors = True
         else:
             response_dict.update({'tag_info': ' ✔️'})
 
@@ -190,18 +171,32 @@ def question_db_save(request, question_id=None):
     if choice_list:
         if 'error' in choice_status:
             response_dict.update({'choice_info': ' • Choice should be the length between 2 and 200'})
-            no_errors = False
+            errors = True
         else:
             response_dict.update({'choice_info': ' ✔️'})
 
     # save data into DB
-    if no_errors:
-        if question_id:
-            get_question.choice_set.all().delete()
-        try:
+    for error in data.errors:
+        if error == 'question_text':
+            key = 'text_info'
+            msg = 'Text: '
+        elif error == 'question_title':
+            key = 'title_info'
+            msg = 'Title: '
+        response_dict.update({key: ' • ' + msg + list(data.errors[error].data[0])[0]})
+    if not errors:
+        if edit:
+            question_model.choice_set.all().delete()
+        if data.is_valid():
+            print('is valid')
             data.save()
-        except ValueError:
+            '''зробити з із валід і еррорс щось робоче, щоб скоротити код вищенаписаний і пришвидшити функцію'''
+        else:
+            print('no valid')
             return JsonResponse(response_dict)
+
+        '''title = data.data['question_title']
+            response_dict.update({'title_info': f' • Title "{escape(title)}" already exist'})'''
         # if question exist
         '''if not get_question:
             get_question = Question(author_name=request.user)'''
@@ -225,22 +220,23 @@ def question_db_save(request, question_id=None):
                     add_tag.save()
 
                 # create connection tag-question
-                get_question.tag.add(add_tag)
+                question_model.tag.add(add_tag)
 
         # save choices if exist
         if choice_list:
             for choice in choice_list:
-                create_choice = Choice(question_id=get_question.id,
+                create_choice = Choice(question_id=question_model.id,
                                        choice_text=choice)
                 create_choice.save()
 
         # Success jsonResponse
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
-        question_url = reverse('polls:detail', args=(get_question.id,))
+        question_url = reverse('polls:detail', args=(question_model.id,))
         # email_template = render(request, 'account/email/email_confirmation_message.txt')
-        question_url_message = f' • Question "<a href="{question_url}">{escape(get_question.question_title)}</a>" successfully posted'
-        admin_send_task.delay('New question',
-                              question_url_message)
+        question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
+        if not DEBUG:
+            admin_send_task.delay('New question',
+                                  question_url_message)
         response_dict.update({
             'success': question_url_message
         })
@@ -304,12 +300,13 @@ class CommentCreate(LoginRequiredMixin, View):
                 else:
                     return JsonResponse({'error': ' • Symbols less than 3'})
             user = User.objects.get(username=question.author_name)
-            send_task.delay(
-                f'New comment for {question.question_title}',
-                f'''User {request.user.username} commented on your question!
-                \nYou can\'t get rid of the mailing because I have not implemented it.''',
-                user_email=user.email,
-            )
+            if not DEBUG:
+                send_task.delay(
+                    f'New comment for {question.question_title}',
+                    f'''User {request.user.username} commented on your question!
+                    \nYou can\'t get rid of the mailing because I have not implemented it.''',
+                    user_email=user.email,
+                )
             return JsonResponse({'success': ' • Comment successful posted'})
             # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
 

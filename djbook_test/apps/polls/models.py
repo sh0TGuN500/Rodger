@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
-from tinymce.models import HTMLField
+from froala_editor.fields import FroalaField
 
 '''
 from django.contrib.postgres.fields import ArrayField
@@ -22,7 +22,7 @@ class Tag(models.Model):
 
 class Question(models.Model):
     question_title = models.CharField('question title', max_length=200, unique=True)
-    question_text = HTMLField('question text', max_length=9000)
+    question_text = FroalaField('question text', max_length=9000)
     # question_text = models.TextField('question text', max_length=9000, default='')
     author_name = models.CharField('author name', max_length=200)
     pub_date = models.DateTimeField('publication date', auto_now_add=True)

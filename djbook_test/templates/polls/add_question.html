@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block tinymce %}
+{% block media %}
     {{ form.media }}
 {% endblock %}
 
@@ -70,9 +70,10 @@
                     <a href="#" id="remove_choice_fields"><i class="fa fa-minus"></i>Remove Field</a>
                 </div>
                 <button type="submit" class="form" >Left question</button>
-                <small class="text-success"></small>
-                <small class="text-warning"></small>
-                <small class="title-error"></small>
+                {{ response_dict|json_script:'data' }}
+                <small class="text-success"></small><br>
+                <small class="text-warning"></small><br>
+                <small class="title-error"></small><br>
                 <small class="text-error"></small>
             </div>
         </form>
