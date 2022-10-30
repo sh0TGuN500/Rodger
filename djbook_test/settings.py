@@ -31,9 +31,11 @@ SECRET_KEY = get_random_secret_key()
 DEBUG = str(environ.get('DEBUG')) == "1" # 1 == True
 
 ENV_ALLOWED_HOST = environ.get('DJANGO_ALLOWED_HOST') or None
+print(ENV_ALLOWED_HOST)
 ALLOWED_HOSTS = []
 if not DEBUG:
     ALLOWED_HOSTS += [environ.get('DJANGO_ALLOWED_HOST')]
+print(ALLOWED_HOSTS)
 
 # Application definition
 
