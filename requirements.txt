@@ -7,7 +7,6 @@ django-allauth
 django-crispy-forms
 django-froala-editor
 gunicorn
-whitenoise
 requests
 celery
 redis
