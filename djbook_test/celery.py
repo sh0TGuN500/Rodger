@@ -12,7 +12,7 @@ app = Celery('djbook_test')
 if not DEBUG:
     app.conf.update(BROKER_URL=CELERY_BROKER_URL,
                     CELERY_RESULT_BACKEND=CELERY_BROKER_URL)
-    app.conf.redis_backend_use_ssl = {"ssl_cert_reqs": "optional"}
+    # app.conf.redis_backend_use_ssl = {"ssl_cert_reqs": "optional"}
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
