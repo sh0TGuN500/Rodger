@@ -246,7 +246,7 @@ except ImportError:
     AWS_LOCATION = 'static'
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
-    STATIC_HOST = 'AWS_S3_CUSTOM_DOMAIN' if not DEBUG else ""
+    STATIC_HOST = AWS_S3_CUSTOM_DOMAIN if not DEBUG else ""
     STATIC_URL = STATIC_HOST + "/static/"
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
