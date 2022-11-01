@@ -195,14 +195,13 @@ try:
     from .local_settings import *
 except ImportError:
     import dj_database_url
+    import django_heroku
 
-    if getenv('DATABASE_URL'):
-        DATABASES = {
-            'default': dj_database_url.config(
-                default=getenv('DATABASE_URL')
-            )
-
-        }
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=getenv('DATABASE_URL')
+        )
+    }
     ROOT_URLCONF = 'djbook_test.urls'
 
     SECURE_HSTS_SECONDS = 60
@@ -259,3 +258,5 @@ except ImportError:
     EMAIL_HOST = getenv('EMAIL_HOST')
     EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = 587
+
+    django_heroku.settings(locals())
