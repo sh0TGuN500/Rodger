@@ -30,11 +30,6 @@ SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # 1 == True
 
-ENV_ALLOWED_HOST = getenv('DJANGO_ALLOWED_HOST') or None
-ALLOWED_HOSTS = []
-if not DEBUG:
-    ALLOWED_HOSTS += [getenv('DJANGO_ALLOWED_HOST')]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -178,6 +173,8 @@ except ImportError:
     import dj_database_url
     import django_heroku
 
+    ALLOWED_HOSTS = ['rodger.herokuapp.com', ]
+
     DATABASES = {
         'default': dj_database_url.config(default=getenv('DATABASE_URL'))
     }
@@ -197,24 +194,6 @@ except ImportError:
     ADMINS = MANAGERS = (
         ('stepanJo', 'grandma7ter500@gmail.com'),
     )
-
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'class': 'django.utils.log.AdminEmailHandler'
-            }
-        },
-        'loggers': {
-            'django.request': {
-                'handlers': ['mail_admins'],
-                'level': 'ERROR',
-                'propagate': True,
-            },
-        }
-    }
 
     AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = None
