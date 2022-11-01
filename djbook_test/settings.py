@@ -67,6 +67,7 @@ FROALA_EDITOR_OPTIONS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -243,10 +244,11 @@ except ImportError:
     # from storage_backend.py
     DEFAULT_FILE_STORAGE = 'djbook_test.storage_backends.PublicMediaStorage'
     AWS_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-    STATICFILES_STORAGE = 'djbook_test.storage_backends.StaticStorage'
-    print(STATIC_URL)
-    print(STATICFILES_STORAGE)
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
+    STATIC_HOST = 'AWS_S3_CUSTOM_DOMAIN' if not DEBUG else ""
+    STATIC_URL = STATIC_HOST + "/static/"
+    # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
 
