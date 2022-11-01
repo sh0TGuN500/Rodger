@@ -225,10 +225,8 @@ except ImportError:
                 "PORT": POSTGRES_PORT,
             }
         }
-    else:
+    elif getenv('DATABASE_URL'):
         print(getenv('DATABASE_URL'))
-        print(environ['DATABASE_URL'])
-        print(environ.get('DATABASE_URL'))
         DATABASES = {
             'default': dj_database_url.config(
                 default=getenv('DATABASE_URL')
