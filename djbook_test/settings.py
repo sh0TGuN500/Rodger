@@ -193,7 +193,6 @@ EMAIL_USE_TLS = True
 
 EMAIL_USE_SSL = False
 
-DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
 print(getenv("DJANGO_ALLOWED_HOST"))
 
 try:
@@ -226,7 +225,16 @@ except ImportError:
                 "PORT": POSTGRES_PORT,
             }
         }
+    else:
+        print(getenv('DATABASE_URL'))
+        print(environ['DATABASE_URL'])
+        print(environ.get('DATABASE_URL'))
+        DATABASES = {
+            'default': dj_database_url.config(
+                default=getenv('DATABASE_URL')
+            )
 
+        }
     ROOT_URLCONF = 'djbook_test.urls'
 
     SECURE_HSTS_SECONDS = 60
