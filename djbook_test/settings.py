@@ -188,7 +188,7 @@ except ImportError:
         ('stepanJo', 'grandma7ter500@gmail.com'),
     )
 
-    AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
+    '''AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
@@ -197,10 +197,12 @@ except ImportError:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     # from storage_backend.py
     DEFAULT_FILE_STORAGE = 'djbook_test.storage_backends.PublicMediaStorage'
-    AWS_LOCATION = 'static'
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    AWS_LOCATION = 'static'''
+
     STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
     STATIC_URL = "/static/"
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')

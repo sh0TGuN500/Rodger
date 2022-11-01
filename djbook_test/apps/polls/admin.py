@@ -17,7 +17,6 @@ class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['question_title']}),
         ('Author name', {'fields': ['author_name']}),
-        ('Date information', {'fields': ['pub_date', 'up_date'], 'classes': ['collapse']}),
         ('Question text', {'fields': ['question_text']}),
         ('Tags', {'fields': ['tag']})
     ]
