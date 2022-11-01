@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from django.core.management.utils import get_random_secret_key
-from os import environ, getenv, path
+from os import getenv, path
 import sys
 from pathlib import Path
 
@@ -26,16 +26,15 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_random_secret_key()
+print(SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(environ.get('DEBUG')) == "1" # 1 == True
+DEBUG = str(getenv('DEBUG')) == "1" # 1 == True
 
-ENV_ALLOWED_HOST = environ.get('DJANGO_ALLOWED_HOST') or None
-print(ENV_ALLOWED_HOST)
+ENV_ALLOWED_HOST = getenv('DJANGO_ALLOWED_HOST') or None
 ALLOWED_HOSTS = []
 if not DEBUG:
-    ALLOWED_HOSTS += [environ.get('DJANGO_ALLOWED_HOST')]
-print(ALLOWED_HOSTS)
+    ALLOWED_HOSTS += [getenv('DJANGO_ALLOWED_HOST')]
 
 # Application definition
 
@@ -187,7 +186,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 EMAIL_USE_TLS = True
 
@@ -200,33 +199,7 @@ try:
 except ImportError:
     import dj_database_url
 
-    POSTGRES_DB = environ.get("POSTGRES_DB")  # database name
-    POSTGRES_PASSWORD = environ.get("POSTGRES_PASSWORD")  # database user password
-    POSTGRES_USER = environ.get("POSTGRES_USER")  # database username
-    POSTGRES_HOST = environ.get("POSTGRES_HOST")  # database host
-    POSTGRES_PORT = environ.get("POSTGRES_PORT")  # database port
-
-    POSTGRES_READY = (
-            POSTGRES_DB is not None
-            and POSTGRES_PASSWORD is not None
-            and POSTGRES_USER is not None
-            and POSTGRES_HOST is not None
-            and POSTGRES_PORT is not None
-    )
-
-    if POSTGRES_READY:
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": POSTGRES_DB,
-                "USER": POSTGRES_USER,
-                "PASSWORD": POSTGRES_PASSWORD,
-                "HOST": POSTGRES_HOST,
-                "PORT": POSTGRES_PORT,
-            }
-        }
-    elif getenv('DATABASE_URL'):
-        print(getenv('DATABASE_URL'))
+    if getenv('DATABASE_URL'):
         DATABASES = {
             'default': dj_database_url.config(
                 default=getenv('DATABASE_URL')
@@ -269,7 +242,7 @@ except ImportError:
         }
     }
 
-    AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
@@ -282,9 +255,9 @@ except ImportError:
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'djbook_test.storage_backends.StaticStorage'
 
-    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = environ.get('REDIS_URL')
+    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
 
-    DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
-    EMAIL_HOST = environ.get('EMAIL_HOST')
-    EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
+    DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
+    EMAIL_HOST = getenv('EMAIL_HOST')
+    EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = 587

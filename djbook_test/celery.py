@@ -10,9 +10,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djbook_test.settings')
 
 app = Celery('djbook_test')
 
+print(os.getenv('REDIS_URL'))
 if not DEBUG:
-    app.conf.update(BROKER_URL=os.environ['REDIS_URL'],
-                    CELERY_RESULT_BACKEND=os.environ['REDIS_URL'])
+    app.conf.update(BROKER_URL=os.environ.get('REDIS_URL'),
+                    CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL'))
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
