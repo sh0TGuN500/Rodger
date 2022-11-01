@@ -256,6 +256,7 @@ except ImportError:
     STATICFILES_STORAGE = 'djbook_test.storage_backends.StaticStorage'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
+    print(CELERY_BROKER_URL)
 
     DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
     EMAIL_HOST = getenv('EMAIL_HOST')
