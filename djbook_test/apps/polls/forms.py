@@ -61,7 +61,7 @@ class AddQuestionForm(forms.ModelForm):
         widgets = {
             'question_title': forms.TextInput(attrs={'minlength': 5,
                                                      'maxlength': 200}),
-            'question_text': forms.Textarea(attrs={'minlength': 5,
+            'question_text': forms.Textarea(attrs={'minlength': 10,
                                                    'maxlength': 200})
         }
 
