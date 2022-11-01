@@ -28,7 +28,7 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(getenv('DEBUG')) == "1"  # 1 == True
+DEBUG = False  # 1 == True
 
 ENV_ALLOWED_HOST = getenv('DJANGO_ALLOWED_HOST') or None
 ALLOWED_HOSTS = []
@@ -55,15 +55,6 @@ INSTALLED_APPS = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
-FROALA_EDITOR_OPTIONS = {
-    'language': 'en_gb',
-}
-
-'''FROALA_EDITOR_PLUGINS = ('align', 'char_counter', 'code_beautifier', 'code_view', 'colors', 'draggable', 'emoticons',
-                         'entities', 'file', 'font_family', 'font_size', 'fullscreen', 'image_manager', 'image',
-                         'inline_style', 'line_breaker', 'link', 'lists', 'paragraph_format', 'paragraph_style', 
-                         'quick_insert','quote', 'save', 'table', 'url', 'video')'''
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -74,8 +65,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'djbook_test.urls'
 
 TEMPLATES = [
     {
@@ -141,10 +130,6 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGES = [
-    ('en', 'English'),
-]
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Warsaw'
@@ -192,11 +177,8 @@ except ImportError:
     import django_heroku
 
     DATABASES = {
-        'default': dj_database_url.config(
-            default=getenv('DATABASE_URL')
-        )
+        'default': dj_database_url.config(default=getenv('DATABASE_URL'))
     }
-    ROOT_URLCONF = 'djbook_test.urls'
 
     SECURE_HSTS_SECONDS = 60
 
@@ -244,8 +226,7 @@ except ImportError:
     AWS_LOCATION = 'static'
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
-    STATIC_HOST = AWS_S3_CUSTOM_DOMAIN if not DEBUG else ""
-    STATIC_URL = STATIC_HOST + "/static/"
+    STATIC_URL = "/static/"
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
