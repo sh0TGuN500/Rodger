@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from froala_editor.fields import FroalaField
 
 from .models import Comment, Question
 
@@ -61,11 +60,12 @@ class AddQuestionForm(forms.ModelForm):
         fields = ('question_title', 'question_text')
         widgets = {
             'question_title': forms.TextInput(attrs={'minlength': 5,
-                                                     'maxlength': 200})
+                                                     'maxlength': 200}),
+            'question_text': forms.Textarea(attrs={'minlength': 5,
+                                                   'maxlength': 200})
         }
 
     def clean_question_title(self):
-        print('title clean')
         data = text_validator(self.data['question_title'], min_length=5, max_length=200).upper()
         if data:
             return data
@@ -73,7 +73,6 @@ class AddQuestionForm(forms.ModelForm):
             raise ValidationError('should be the length between 5 and 200')
 
     def clean_question_text(self):
-        print('text clean')
         data = text_validator(self.data['question_text'], min_length=10, max_length=9000)
         if data:
             return data

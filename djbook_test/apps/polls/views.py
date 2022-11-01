@@ -188,11 +188,9 @@ def question_db_save(request, question_id=None):
         if edit:
             question_model.choice_set.all().delete()
         if data.is_valid():
-            print('is valid')
             data.save()
             '''зробити з із валід і еррорс щось робоче, щоб скоротити код вищенаписаний і пришвидшити функцію'''
         else:
-            print('no valid')
             return JsonResponse(response_dict)
 
         '''title = data.data['question_title']
@@ -235,10 +233,8 @@ def question_db_save(request, question_id=None):
         # email_template = render(request, 'account/email/email_confirmation_message.txt')
         question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
         if not DEBUG:
-            print('send message')
             admin_send_task.delay('New question',
                                   question_url_message)
-            print('message was send')
         response_dict.update({
             'success': question_url_message
         })

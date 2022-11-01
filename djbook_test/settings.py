@@ -28,7 +28,7 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(getenv('DEBUG')) == "1" # 1 == True
+DEBUG = str(getenv('DEBUG')) == "1"  # 1 == True
 
 ENV_ALLOWED_HOST = getenv('DJANGO_ALLOWED_HOST') or None
 ALLOWED_HOSTS = []
@@ -49,8 +49,7 @@ INSTALLED_APPS = [
     'storages',
     'allauth',
     'allauth.account',
-    'crispy_forms',
-    'froala_editor'
+    'crispy_forms'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -189,7 +188,6 @@ EMAIL_USE_SSL = False
 try:
     from .local_settings import *
 except ImportError:
-    print('********************************')
     import dj_database_url
     import django_heroku
 
