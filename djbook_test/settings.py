@@ -164,12 +164,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-
-STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
-
-MEDIA_ROOT = PROJECT_ROOT / 'media'
-
 # GRAPPELLI settings
 
 # GRAPPELLI_ADMIN_TITLE = "RODGER"
@@ -194,6 +188,7 @@ EMAIL_USE_SSL = False
 try:
     from .local_settings import *
 except ImportError:
+    print('********************************')
     import dj_database_url
     import django_heroku
 
@@ -250,9 +245,10 @@ except ImportError:
     AWS_LOCATION = 'static'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'djbook_test.storage_backends.StaticStorage'
+    print(STATIC_URL)
+    print(STATICFILES_STORAGE)
 
     CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
-    print(CELERY_BROKER_URL)
 
     DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
     EMAIL_HOST = getenv('EMAIL_HOST')
