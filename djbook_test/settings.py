@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.core.management.utils import get_random_secret_key
 from os import getenv, path
 import sys
 from pathlib import Path
-from djbook_test.apps.polls.apps import PollsConfig
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from djbook_test.apps.polls.apps import PollsConfig
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
@@ -24,7 +25,7 @@ BASE_DIR = PROJECT_ROOT.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '836nkzwt63!)deq)a*8!6zjv1sp7ph+jq-zq2gy4u*cs+fbo-u'
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # 1 == True
