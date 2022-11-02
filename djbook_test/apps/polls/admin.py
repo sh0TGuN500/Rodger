@@ -20,7 +20,7 @@ class QuestionAdmin(admin.ModelAdmin):
         ('Question text', {'fields': ['question_text']}),
         ('Tags', {'fields': ['tag']})
     ]
-    readonly_fields = ('Publication date', {'fields': ['pub_date', 'up_date']})
+    readonly_fields = ('pub_date', 'up_date')
     inlines = [ChoiceInline, CommentInline]
     list_filter = ['pub_date']
     search_fields = ['question_title']
