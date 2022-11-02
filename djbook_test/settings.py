@@ -25,7 +25,7 @@ BASE_DIR = PROJECT_ROOT.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_random_secret_key()
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # 1 == True
@@ -188,7 +188,25 @@ except ImportError:
         ('stepanJo', 'grandma7ter500@gmail.com'),
     )
 
-    '''AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        }
+    }
+
+    AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
@@ -197,10 +215,12 @@ except ImportError:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     # from storage_backend.py
     DEFAULT_FILE_STORAGE = 'djbook_test.storage_backends.PublicMediaStorage'
-    AWS_LOCATION = 'static'''
+    AWS_LOCATION = 'static'
+
+    STATIC_HOST = AWS_S3_CUSTOM_DOMAIN if not DEBUG else ""
+    STATIC_URL = STATIC_HOST + "/static/"
 
     STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
-    STATIC_URL = "/static/"
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
