@@ -14,13 +14,14 @@ class CommentInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    readonly_fields = ('pub_date', 'up_date')
     fieldsets = [
         (None, {'fields': ['question_title']}),
         ('Author name', {'fields': ['author_name']}),
+        ('Date information', {'fields': readonly_fields, 'classes': ['collapse']}),
         ('Question text', {'fields': ['question_text']}),
         ('Tags', {'fields': ['tag']})
     ]
-    readonly_fields = ('pub_date', 'up_date')
     inlines = [ChoiceInline, CommentInline]
     list_filter = ['pub_date']
     search_fields = ['question_title']

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from django.core.management.utils import get_random_secret_key
-from os import getenv, path
+from os import getenv, path, environ
 import sys
 from pathlib import Path
 
@@ -28,7 +28,8 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # 1 == True
+DEBUG = str(getenv('DEBUG')) == "1"
+print(environ)
 
 # Application definition
 
@@ -136,6 +137,8 @@ LOGIN_URL = '/account/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -218,9 +221,9 @@ except ImportError:
     AWS_LOCATION = 'static'
 
     STATIC_HOST = AWS_S3_CUSTOM_DOMAIN if not DEBUG else ""
+
     STATIC_URL = STATIC_HOST + "/static/"
 
-    STATIC_ROOT = PROJECT_ROOT / 'staticfiles'  # GRAPPELLI
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
