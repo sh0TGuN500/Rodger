@@ -30,8 +30,8 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(getenv('DEBUG')) == "1"
 
-for i in environ:
-    print(i)
+for i, j in environ:
+    print(f'{i}: {j}')
 
 # Application definition
 
