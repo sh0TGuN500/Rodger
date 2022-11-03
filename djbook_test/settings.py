@@ -10,8 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from django.core.management.utils import get_random_secret_key
-from os import getenv, path, environ
+from os import getenv, path
 import sys
 from pathlib import Path
 
@@ -29,9 +28,6 @@ SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(getenv('DEBUG')) == "1"
-
-for i in environ:
-    print(f'\'{i}\': \'{environ[i]}\'')
 
 # Application definition
 
