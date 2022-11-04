@@ -1,8 +1,8 @@
 {% extends "polls/base_polls.html" %}
-
+{% load i18n %}
 
 {% block title %}
-	R | Information for customers
+	{% translate 'Information for customers' %}
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/customers.css' %}">
 
-    <h2>Technologies:</h2>
+    <h2>{% translate 'Technologies' %}:</h2>
     <dl>
       <dt>Python/Django</dt>
         <dd>allauth, argon2, AWS boto3, Celery/Redis, crispy, whitenoise</dd>
@@ -21,9 +21,10 @@
         <dd>Just PostgreSQL DB</dd>
     </dl>
 
-    <a href="https://inter-k.herokuapp.com/">My other simple project</a><br>
+    <h4 class="INTER*K"><a href="https://inter-k.herokuapp.com/">{% translate 'My other simple project' %}</a></h4>
 
-    <h2>To view the source code on GitHub, please write the username, full name or email of your GitHub account on my mailbox | grandma7ter500@gmail.com |</h2>
+    <h2>{% translate 'To view the source code on GitHub, please write the username, full name or email of your GitHub account on my mailbox' %}
+        | grandma7ter500@gmail.com |</h2>
 
 </div>
 {% endblock %}

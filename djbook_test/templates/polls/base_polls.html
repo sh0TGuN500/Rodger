@@ -1,12 +1,14 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="en">
 {% block head %}
     <head>
     {% block media %}
     {% endblock %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://code.jquery.com/jquery-3.6.1.js"
                 integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
                 crossorigin="anonymous">
@@ -44,11 +46,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href={% url 'polls:index' %}>Questions</a>
+                    <a class="nav-link" href={% url 'polls:index' %}>{% translate 'Questions' %}</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        My Account
+                        {% translate 'My Account' %}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% if user.is_authenticated %}
@@ -57,26 +59,26 @@
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'polls:personal_page' %}">{{ user.username }}</a></li>
                             {% endif %}
-                            <li><a class="dropdown-item" href="{% url 'polls:my_questions' %}">My Questions</a></li>
+                            <li><a class="dropdown-item" href="{% url 'polls:my_questions' %}">{% translate 'My Questions' %}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'account_email' %}">Email settings</a></li>
-                            <li><a class="dropdown-item" href="{% url 'account_logout' %}">LogOut</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_email' %}">{% translate 'Email settings' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_logout' %}">{% translate 'LogOut' %}</a></li>
                         {% else %}
-                            <li><a class="dropdown-item" href="{% url 'account_login' %}">LogIn</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_login' %}">{% translate 'LogIn' %}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'account_signup' %}">Register Now</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_signup' %}">{% translate 'Register Now' %}</a></li>
                         {% endif %}
                     </ul>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href='{% url 'polls:create_question' %}'>Add question +</a>
+                        <a class="nav-link" href='{% url 'polls:create_question' %}'>{% translate 'Add question' %} +</a>
                     </li>
                 {% endif %}
             </ul>
             <form class="d-flex" action="{% url 'polls:search' %}" method="get">
-                <input name="search" class="form-control me-2" type="search" minlength="3" placeholder="Search" aria-label="Search" required>
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <input name="search" class="form-control me-2" type="search" minlength="3" placeholder={% translate "Search" %} aria-label="Search" required>
+                <button class="btn btn-outline-success" type="submit">{% translate 'Search' %}</button>
                 {{ search_message }}
             </form>
         </div>
@@ -84,7 +86,7 @@
 </nav>
 
 {% block content %}
-    There is any content
+    {% translate 'There is any content' %}
 {% endblock %}
 </body>
 {% block script %}

@@ -1,7 +1,8 @@
 {% extends 'polls/base_polls.html' %}
+{% load i18n %}
 
 {% block title %}
-	Personal page
+	{% translate 'Personal page' %}
 {% endblock %}
 
 {% block content %}
@@ -9,7 +10,7 @@
 	{% load static %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/home_style.css' %}">
-    <h1>In development</h1>
+    <h1>{% translate 'In development' %}</h1>
 
 
 </div>

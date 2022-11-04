@@ -1,7 +1,8 @@
 {% extends 'polls/base_polls.html' %}
+{% load i18n %}
 
 {% block title %}
-	RODJER | Home
+	RODJER | {% translate 'Home' %}
 {% endblock %}
 
 {% block content %}
@@ -10,8 +11,8 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/home_style.css' %}">
 
-    <a href="{% url 'polls:index' %}"><h1>Questions</h1></a>
-    <a href="{% url 'polls:info_for_customers' %}"><h1>Information For Customers</h1></a>
+    <a href="{% url 'polls:index' %}"><h1>{% translate 'Questions' %}</h1></a>
+    <a href="{% url 'polls:info_for_customers' %}"><h1>{% translate 'Information For Customers' %}</h1></a>
 
 </div>
 {% endblock %}

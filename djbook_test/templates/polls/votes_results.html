@@ -1,7 +1,8 @@
 {% extends 'polls/base_polls.html' %}
+{% load i18n %}
 
 {% block title %}
-	Results | {{ question.question_title }}
+	{% translate 'Results' %} | {{ question.question_title }}
 {% endblock %}
 
 {% block content %}
@@ -14,9 +15,9 @@
 
 	<ul>
 		{% for choice in question.choice_set.all %}
-			<li>{{ choice.choice_text }} have {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+			<li>{{ choice.choice_text }} {% translate 'have' %} {{ choice.votes }} {% translate 'vote' %}{{ choice.votes|pluralize }}</li>
 		{% endfor %}
 	</ul>
-	{% block nav-results %}<a href="{% url 'polls:detail' question.id %}" class="again">Vote again?</a>{% endblock %}
+	{% block nav-results %}<a href="{% url 'polls:detail' question.id %}" class="again">{% translate 'Back to Question page' %}?</a>{% endblock %}
 </div>
 {% endblock %}

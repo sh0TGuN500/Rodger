@@ -1,7 +1,8 @@
 {% extends 'polls/base_polls.html' %}
+{% load i18n %}
 
 {% block title %}
-	Questions
+	{% translate 'Questions' %}
 {% endblock %}
 
 {% block content %}
@@ -11,20 +12,20 @@
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_list.css' %}">
         {% if user.is_staff %}
             {% if user.is_authenticated %}
-                <a href="{% url 'polls:create_question' %}" class="add_question"> + Add question</a>
+                <a href="{% url 'polls:create_question' %}" class="add_question"> + {% translate 'Add question' %}</a>
             {% else %}
-                <p class="add_question">For add question you need to <a href="/accounts/login/">Sign In</a></p>
+                <p class="add_question">{% translate 'For add question you need to' %} <a href="/accounts/login/">{% translate 'Sign In' %}</a></p>
             {% endif %}
         {% endif %}
 
     {% if my_question_list %}
-        <h3>My questions:</h3>
+        <h3>{% translate 'My questions' %}:</h3>
     {% elif search_list %}
-        <h3>Search results:</h3>
+        <h3>{% translate 'Search results' %}:</h3>
     {% elif tags_list %}
-        <h3>Tag results:</h3>
+        <h3>{% translate 'Tag results' %}:</h3>
     {% else %}
-        <h3>Questions:</h3>
+        <h3>{% translate 'Questions' %}:</h3>
     {% endif %}
 
     <ul>
@@ -40,17 +41,17 @@
                 {% for question in my_question_list %}
                     <li>
                         <a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a> |
-                        <a href="{% url 'polls:update_question' question.id %}"> Edit</a> |
-                        <a href="{% url 'polls:delete_question' question.id %}"> Delete</a>
+                        <a href="{% url 'polls:update_question' question.id %}"> {% translate 'Edit' %}</a> |
+                        <a href="{% url 'polls:delete_question' question.id %}"> {% translate 'Delete'%}</a>
                     </li>
                 {% empty %}
-                    <p>No questions are available.</p>
+                    <p>{% translate 'No questions are available' %}.</p>
                 {% endfor %}
             {% else %}
                 {% for question in page_obj %}
                     <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_title }}</a></li>
                 {% empty %}
-                    <p>No questions are available.</p>
+                    <p>{% translate 'No questions are available' %}.</p>
                 {% endfor %}
             {% endif %}
     </ul>
@@ -61,16 +62,16 @@
         {% if page_obj.has_previous %}
             {% if request.GET.search %}
 
-                <a href="?search={{ request.GET.search}}&page=1">&laquo; First</a>
+                <a href="?search={{ request.GET.search}}&page=1">&laquo; {% translate 'First' %}</a>
                 {% if page_obj.previous_page_number != 1 %}
-                    <a href="?search={{ request.GET.search}}&page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a href="?search={{ request.GET.search}}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
                 {% endif %}
 
             {% else %}
 
-                <a href="?page=1">&laquo; First</a>
+                <a href="?page=1">&laquo; {% translate 'First' %}</a>
                 {% if page_obj.previous_page_number != 1 %}
-                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
                 {% endif %}
 
             {% endif %}
@@ -78,22 +79,22 @@
         {% endif %}
 
         <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            {% translate 'Page' %} {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}
             {% if request.GET.search %}
 
-                <a href="?search={{ request.GET.search}}&page={{ page_obj.next_page_number }}">Next&nbsp;&raquo;</a>
+                <a href="?search={{ request.GET.search}}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}&nbsp;&raquo;</a>
                 {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
-                    <a href="?search={{ request.GET.search}}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?search={{ request.GET.search}}&page={{ page_obj.paginator.num_pages }}">{% translate 'Last' %}&raquo;</a>
                 {% endif %}
 
             {% else %}
 
-                <a href="?page={{ page_obj.next_page_number }}">Next&nbsp;&raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}">{% translate 'Next' %}&nbsp;&raquo;</a>
                 {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{% translate 'Last' %} &raquo;</a>
                 {% endif %}
 
             {% endif %}

@@ -1,9 +1,10 @@
 {% extends 'polls/base_polls.html' %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block title %}
-    Question | {{ question.question_title }}
+    {% translate 'Question' %} | {{ question.question_title }}
 {% endblock %}
 
 {% block content %}
@@ -13,21 +14,21 @@
         <link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
 
         <em>{% if question.was_published_recently %}
-            <blink>NEW QUESTION!</blink><br>
+            <blink>{% translate 'NEW QUESTION' %}!</blink><br>
         {% endif %}
             <h2>{{ question.author_name }}</h2>
             {% if question.author_name == user.username %}
-                <a href="{% url 'polls:update_question' question.id %}"> Edit</a> |
-                <a href="{% url 'polls:delete_question' question.id %}"> Delete</a><br>
+                <a href="{% url 'polls:update_question' question.id %}"> {% translate 'Edit' %}</a> |
+                <a href="{% url 'polls:delete_question' question.id %}"> {% translate 'Delete' %}</a><br>
             {% endif %}
             {% if question.tag.all %}
-                <span>tags: </span>
+                <span>{% translate 'tags' %}: </span>
                 {% for tag in question.tag.all %}
                     <a href="{% url 'polls:tag' tag.id %}">#{{ tag }}</a>
                 {% endfor %}<br>
             {% endif %}
             {% if question.up_date %}
-                {{ question.up_date }} * Edited *
+                {{ question.up_date }} * {% translate 'Edited' %} *
             {% else %}
                 {{ question.pub_date }}
             {% endif %}
@@ -47,7 +48,6 @@
                     {% for choice in question.choice_set.all %}
                         <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-                        <input hidden name="user_id" value="">
                     {% endfor %}
                     <br><input type="submit" value="Vote" class="vote">
                     <small class="vote-success"></small>
@@ -61,12 +61,12 @@
                 {% comment %}
                     <input hidden name="question_id" value="{{ question.id }}">
                 {% endcomment %}
-                <button type="submit" class="btn btn-primary">Left comment</button>
+                <button type="submit" class="btn btn-primary">{% translate 'Left comment' %}</button>
                 <small class="comment-success"></small>
                 <small class="comment-warning">{{ comment_message }}</small>
             </form>
         {% else %}
-            <p>For vote and commenting you need to <a href={% url 'account_login' %}>Sign In</a></p>
+            <p>{% translate 'For vote and commenting you need to' %} <a href={% url 'account_login' %}>{% translate 'Sign In' %}</a></p>
         {% endif %}
         <hr>
         <ul>
@@ -74,14 +74,14 @@
                 <li><strong class="comment_autor">{{ comment.author_name }}:</strong>
                     <p class="comment_text">{{ comment }}
                         {% if comment.author_name == user.username %}
-                            | <a href="{% url 'polls:comment_edit' question.id comment.id %}">Edit</a>
-                            | <a href="{% url 'polls:comment_delete' question.id comment.id %}">Delete</a>
+                            | <a href="{% url 'polls:comment_edit' question.id comment.id %}">{% translate 'Edit' %}</a>
+                            | <a href="{% url 'polls:comment_delete' question.id comment.id %}">{% translate 'Delete' %}</a>
                         {% endif %}
                     </p>
                 </li>
                 <hr>
                 {% empty %}
-                <p>Comments not found! Be the first ;)</p>
+                <p>{% translate 'Comments not found! Be the first' %} ;)</p>
         {% endfor %}
         </ul>
         {% comment %}

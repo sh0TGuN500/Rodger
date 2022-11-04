@@ -1,4 +1,7 @@
 from django.contrib.auth.models import User
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,7 +11,7 @@ from django.views import generic
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag, Comment
@@ -83,10 +86,10 @@ def question_delete(request, question_id):
     try:
         deleting_question = Question.objects.get(id=question_id, author_name=user)
     except Question.DoesNotExist:
-        error_message = 'Question does not exist'
+        error_message = _('Question does not exist')
     else:
         deleting_question.delete()
-        error_message = f'Question "{deleting_question}" has been deleted'
+        error_message = _(f'Question "{deleting_question}" has been deleted')
     my_question_list = Question.objects.filter(author_name=user).order_by('-pub_date')
     context = {
         'my_question_list': my_question_list,
@@ -154,14 +157,14 @@ def question_db_save(request, question_id=None):
 
     # constants
     errors = False
-    response_dict = {'title_info': ' • Title: ✔️',
-                     'text_info': ' • Text: ✔️'}
+    response_dict = {'title_info': _(' • Title: ✔️'),
+                     'text_info': _(' • Text: ✔️')}
 
     # tags data validation
     tag_list, tag_status = add_question_list_validation(request, 'tag')
     if tag_list:
         if 'error' in tag_status:
-            response_dict.update({'tag_info': ' • Tag should be the length between 2 and 200'})
+            response_dict.update({'tag_info': _(' • Tag should be the length between 2 and 200')})
             errors = True
         else:
             response_dict.update({'tag_info': ' ✔️'})
@@ -189,7 +192,6 @@ def question_db_save(request, question_id=None):
             question_model.choice_set.all().delete()
         if data.is_valid():
             data.save()
-            '''зробити з із валід і еррорс щось робоче, щоб скоротити код вищенаписаний і пришвидшити функцію'''
         else:
             return JsonResponse(response_dict)
 
@@ -234,7 +236,7 @@ def question_db_save(request, question_id=None):
         question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
         if not DEBUG:
             admin_send_task.delay('New question',
-                                  question_url_message)
+                                  EmailMultiAlternatives(strip_tags(render_to_string(question_url_message))))
         response_dict.update({
             'success': question_url_message
         })

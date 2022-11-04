@@ -2,15 +2,16 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load i18n %}
 
 {% block media %}
 {% endblock %}
 
 {% block title %}
     {% if question_id %}
-        Editing "{{ title }}" question
+        {% translate 'Editing' %} "{{ title }}" {% translate 'question' %}
     {% else %}
-        New question
+        {% translate 'New question' %}
     {% endif %}
 
 {% endblock %}
@@ -36,15 +37,15 @@
                 </p>
                 {% endcomment %}
                 <div id="tags_id">
-                    <h3>Tags:</h3>
+                    <h3>{% translate 'Tags' %}:</h3>
                     {% for tag in tags %}
-                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="2" maxlength="200" placeholder="Tag field">
+                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="2" maxlength="200" placeholder={% translate "Tag field" %}>
                     {% endfor %}
                 </div>
                 <small class="tag-error"></small>
                 <div class="tag-controls">
-                    <a href="#" id="add_tag_fields"><i class="fa fa-plus"></i>Add More</a>
-                    <a href="#" id="remove_tag_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                    <a href="#" id="add_tag_fields"><i class="fa fa-plus"></i>{% translate 'Add More' %}</a>
+                    <a href="#" id="remove_tag_fields"><i class="fa fa-minus"></i>{% translate 'Remove Field' %}</a>
                 </div>
                 {% comment %}
                     <p>Press space after each tag</p>
@@ -55,20 +56,20 @@
                     </div>
                 {% endcomment %}
                 <div id="choices_id">
-                    <h3>Choices:</h3>
+                    <h3>{% translate 'Choices' %}:</h3>
                     {% for choice in choices %}
-                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="2" maxlength="200" placeholder="Choice field">
+                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="2" maxlength="200" placeholder={% translate "Choice field" %}>
                     {% endfor %}
                 </div>
                 <small class="choice-error"></small>
                 {% if question_id %}
-                    <span class="text-warning">When updating the question, voting results are reset</span>
+                    <span class="text-warning">{% translate 'When updating the question, voting results are reset' %}</span>
                 {% endif %}
                 <div class="choice-controls">
-                    <a href="#" id="add_choice_fields"><i class="fa fa-plus"></i>Add More</a>
-                    <a href="#" id="remove_choice_fields"><i class="fa fa-minus"></i>Remove Field</a>
+                    <a href="#" id="add_choice_fields"><i class="fa fa-plus"></i>{% translate 'Add More' %}</a>
+                    <a href="#" id="remove_choice_fields"><i class="fa fa-minus"></i>{% translate 'Remove Field' %}</a>
                 </div>
-                <button type="submit" class="form" >Left question</button>
+                <button type="submit" class="form" >{% translate 'Left question' %}</button>
                 {{ response_dict|json_script:'data' }}
                 <small class="text-success"></small><br>
                 <small class="text-warning"></small><br>
@@ -80,9 +81,9 @@
     <script src="{% static 'polls/js/script.js' %}"></script>
     <header>
         {% if question_id %}
-            <h1>Editing "{{ title }}" question</h1>
+            <h1>{% translate 'Editing' %} "{{ title }}" {% translate 'question' %}</h1>
         {% else %}
-        <h1>New question</h1>
+        <h1>{% translate 'New question' %}</h1>
         {% endif %}
     </header>
 {% endblock %}
@@ -131,7 +132,7 @@
                 //error message into h2
                 error: function (){
                     $('small').html("")
-                    $('small.text-warning').html('Bad client request');
+                    $('small.text-warning').html({% translate 'Bad client request' %});
                 }
             })
         }

@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 '''
 from django.contrib.postgres.fields import ArrayField
@@ -13,20 +14,20 @@ file_storage = SFTPStorage()
 
 
 class Tag(models.Model):
-    name = models.CharField('tag name', max_length=200)
+    name = models.CharField(_('tag name'), max_length=200)
 
     def __str__(self):
         return self.name
 
 
 class Question(models.Model):
-    question_title = models.CharField('question title', max_length=200, unique=True)
-    question_text = models.TextField('question text', max_length=9000)
+    question_title = models.CharField(_('question title'), max_length=200, unique=True)
+    question_text = models.TextField(_('question text'), max_length=9000)
     # question_text = models.TextField('question text', max_length=9000, default='')
-    author_name = models.CharField('author name', max_length=200)
-    pub_date = models.DateTimeField('publication date', auto_now_add=True)
+    author_name = models.CharField(_('author name'), max_length=200)
+    pub_date = models.DateTimeField(_('publication date'), auto_now_add=True)
     tag = models.ManyToManyField(Tag)
-    up_date = models.DateTimeField('updating date', null=True, default=None)
+    up_date = models.DateTimeField(_('updating date'), null=True, default=None)
 
     def __str__(self):
         return self.question_title
@@ -37,13 +38,13 @@ class Question(models.Model):
 
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
-    was_published_recently.short_description = 'Published recently?'
+    was_published_recently.short_description = _('Published recently?')
 
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField('votes', default=0)
+    votes = models.IntegerField(_('votes'), default=0)
 
     def __str__(self):
         return self.choice_text
@@ -52,14 +53,14 @@ class Choice(models.Model):
 class Vote(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    user = models.IntegerField('user')
+    user = models.IntegerField(_('user'))
 
 
 class Comment(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)  # Foreignkey binding to the Question class,
     # when the Question is removed, the Comment assigned to it is removed
-    author_name = models.CharField('author name', max_length=50, blank=False)
-    comment_text = models.CharField('comment text', max_length=300, blank=False)
+    author_name = models.CharField(_('author name'), max_length=50, blank=False)
+    comment_text = models.CharField(_('comment text'), max_length=300, blank=False)
 
     def __str__(self):
         return self.comment_text

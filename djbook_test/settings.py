@@ -27,7 +27,10 @@ sys.path.insert(0, str(PROJECT_ROOT / 'apps'))
 SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(getenv('DEBUG')) == "1"
+
+
+DEBUG = True if getenv('RUN_MAIN') == 'true' else str(getenv('DEBUG')) == "1"
+
 
 # Application definition
 

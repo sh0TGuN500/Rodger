@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import gettext as _
 
 from .models import Question, Choice, Comment  # , File
 
@@ -17,10 +18,10 @@ class QuestionAdmin(admin.ModelAdmin):
     readonly_fields = ('pub_date', 'up_date')
     fieldsets = [
         (None, {'fields': ['question_title']}),
-        ('Author name', {'fields': ['author_name']}),
-        ('Date information', {'fields': readonly_fields, 'classes': ['collapse']}),
-        ('Question text', {'fields': ['question_text']}),
-        ('Tags', {'fields': ['tag']})
+        (_('Author name'), {'fields': ['author_name']}),
+        (_('Date information'), {'fields': readonly_fields, 'classes': ['collapse']}),
+        (_('Question text'), {'fields': ['question_text']}),
+        (_('Tags'), {'fields': ['tag']})
     ]
     inlines = [ChoiceInline, CommentInline]
     list_filter = ['pub_date']
