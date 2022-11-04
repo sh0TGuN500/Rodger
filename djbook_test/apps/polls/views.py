@@ -241,7 +241,8 @@ def question_db_save(request, question_id=None):
                 {'question_url': question_absolute_url,
                  'question_title': escape(question_model.question_title),
                  'user': request.user.username}))
-            text_content = EmailMultiAlternatives(html_content)
+            text_content = html_content
+            print(text_content)
             admin_send_task.delay('New question',
                                   text_content)
         response_dict.update({
