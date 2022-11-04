@@ -236,7 +236,7 @@ def question_db_save(request, question_id=None):
         question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
         if not DEBUG:
             admin_send_task.delay('New question',
-                                  EmailMultiAlternatives(strip_tags(render_to_string(question_url_message))))
+                                  EmailMultiAlternatives(strip_tags(question_url_message)))
         response_dict.update({
             'success': question_url_message
         })
