@@ -1,0 +1,17 @@
+{% extends 'polls/base_polls.html' %}
+{% load i18n %}
+
+{% block title %}
+	{% translate 'NEW QUESTION' %} !!!
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/css/home_style.css' %}">
+    <p>{% translate User %} {{ user }}</p>
+    <p> • {% translate 'Question' %} "<a href="{{ question_url }}">{{ question_title }}</a>" {% translate 'successfully posted' %}.</p>
+
+</div>
+{% endblock %}

@@ -235,8 +235,15 @@ def question_db_save(request, question_id=None):
         # email_template = render(request, 'account/email/email_confirmation_message.txt')
         question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
         if not DEBUG:
+            question_absolute_url = 'rodger-dj.herokuapp.com' + question_url
+            html_content = strip_tags(render_to_string(
+                'polls/email_template.html',
+                {'question_url': question_absolute_url,
+                 'question_title': escape(question_model.question_title),
+                 'user': request.user.username}))
+            text_content = EmailMultiAlternatives(html_content)
             admin_send_task.delay('New question',
-                                  EmailMultiAlternatives(strip_tags(question_url_message)))
+                                  text_content)
         response_dict.update({
             'success': question_url_message
         })
