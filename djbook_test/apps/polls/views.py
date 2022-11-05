@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponseRedirect, JsonResponse
@@ -173,7 +172,7 @@ def question_db_save(request, question_id=None):
     choice_list, choice_status = add_question_list_validation(request, 'choice')
     if choice_list:
         if 'error' in choice_status:
-            response_dict.update({'choice_info': ' • Choice should be the length between 2 and 200'})
+            response_dict.update({'choice_info': _(' • Choice should be the length between 2 and 200')})
             errors = True
         else:
             response_dict.update({'choice_info': ' ✔️'})
@@ -232,8 +231,9 @@ def question_db_save(request, question_id=None):
         # Success jsonResponse
         # return HttpResponseRedirect(reverse('polls:detail', args=(get_question.id,)))
         question_url = reverse('polls:detail', args=(question_model.id,))
+        question_href = f'"<a href="{question_url}">{escape(question_model.question_title)}</a>"'
         # email_template = render(request, 'account/email/email_confirmation_message.txt')
-        question_url_message = f' • Question "<a href="{question_url}">{escape(question_model.question_title)}</a>" successfully posted'
+        question_url_message = _(f' • Question {question_href} successfully posted')
         if not DEBUG:
             question_absolute_url = 'rodger-dj.herokuapp.com' + question_url
             html_content = strip_tags(render_to_string(
@@ -241,10 +241,8 @@ def question_db_save(request, question_id=None):
                 {'question_url': question_absolute_url,
                  'question_title': escape(question_model.question_title),
                  'user': request.user.username}))
-            text_content = html_content
-            print(text_content)
             admin_send_task.delay('New question',
-                                  text_content)
+                                  html_content)
         response_dict.update({
             'success': question_url_message
         })
@@ -262,12 +260,12 @@ class CommentCreate(LoginRequiredMixin, View):
         try:
             comment = Comment.objects.get(id=comment_id, author_name=request.user)
         except Comment.DoesNotExist:
-            return JsonResponse({'error': ' • Comment does not exist'})
+            return JsonResponse({'error': _(' • Comment does not exist')})
         else:
             try:
                 question = Question.objects.get(id=question_id)
             except Question.DoesNotExist:
-                return JsonResponse({'error': ' • Question does not exist'})
+                return JsonResponse({'error': _(' • Question does not exist')})
             form = CommentForm(instance=comment)
             return render(request, 'polls/polls_detail.html', {
                 'question': question,
@@ -285,18 +283,18 @@ class CommentCreate(LoginRequiredMixin, View):
             try:
                 question = Question.objects.get(id=question_id)
             except Question.DoesNotExist:
-                return JsonResponse({'error': ' • Question does not exist'})
+                return JsonResponse({'error': _(' • Question does not exist')})
             if comment_id:
                 try:
                     comment = Comment.objects.get(id=comment_id)
                 except Comment.DoesNotExist:
-                    return JsonResponse({'error': ' • Comment does not exist'})
+                    return JsonResponse({'error': _(' • Comment does not exist')})
                 else:
                     form = CommentForm(request.POST, instance=comment)
                     if form.is_valid():
                         form.save()
                     else:
-                        return JsonResponse({'error': ' • Symbols less than 3'})
+                        return JsonResponse({'error': _(' • Symbols length less than 3')})
 
             else:
                 form = CommentForm(request.POST)
@@ -306,16 +304,16 @@ class CommentCreate(LoginRequiredMixin, View):
                     form.question = question
                     form.save()
                 else:
-                    return JsonResponse({'error': ' • Symbols less than 3'})
+                    return JsonResponse({'error': _(' • Symbols length less than 3')})
             user = User.objects.get(username=question.author_name)
             if not DEBUG:
                 send_task.delay(
-                    f'New comment for {question.question_title}',
-                    f'''User {request.user.username} commented on your question!
-                    \nYou can\'t get rid of the mailing because I have not implemented it.''',
+                    _(f'New comment for {question.question_title}'),
+                    _(f'''User {request.user.username} commented on your question!
+                    \nYou can\'t get rid of the mailing because I have not implemented it.'''),
                     user_email=user.email,
                 )
-            return JsonResponse({'success': ' • Comment successful posted'})
+            return JsonResponse({'success': _(' • Comment successful posted')})
             # return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
 
 
@@ -324,10 +322,10 @@ def comment_delete(request, question_id, comment_id):
     try:
         comment = Comment.objects.get(id=comment_id, author_name=request.user)
     except Comment.DoesNotExist:
-        comment_message = ' • Comment does not exist'
+        comment_message = _(' • Comment does not exist')
     else:
         comment.delete()
-        comment_message = ' • Comment has been deleted'
+        comment_message = _(' • Comment has been deleted')
     try:
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
@@ -381,22 +379,22 @@ def vote(request, question_id):
     try:
         question = Question.objects.get(id=question_id)
     except Question.DoesNotExist:
-        return JsonResponse({'error': ' • Question does not exist'})
+        return JsonResponse({'error': _(' • Question does not exist')})
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return JsonResponse({'error': ' • You didn\'t select a choice'})
+        return JsonResponse({'error': _(' • You didn\'t select a choice')})
     else:
         results_url = reverse('polls:results', args=(question_id,))
         if question.vote_set.filter(user=request.user.id):
-            return JsonResponse({'error': f' • You have already voted. <a href="{results_url}">Results</a>'})
+            return JsonResponse({'error': _(f' • You have already voted. <a href="{results_url}">Results</a>')})
         add_vote = question.vote_set.create(choice_id=request.POST['choice'],
                                             user=request.user.id)
         add_vote.save()
         selected_choice.votes += 1
         selected_choice.save()
 
-        return JsonResponse({'success': f' • Voting was successful. <a href="{results_url}">Results</a>'})
+        return JsonResponse({'success': _(f' • Voting was successful. <a href="{results_url}">Results</a>')})
 
 
 ########################################################################################################################

@@ -24,7 +24,8 @@ urlpatterns = [
     path('', include('polls.urls')),
     path('admin228/', admin.site.urls, name='admin'),
     path('favicon.ico', RedirectView.as_view(url='/static/polls/images/favicon.ico'), name='favicon'),
-    path('account/', include('allauth.urls'))
+    path('account/', include('allauth.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 if settings.DEBUG:

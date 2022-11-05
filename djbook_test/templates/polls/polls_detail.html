@@ -4,7 +4,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% translate 'Question' %} | {{ question.question_title }}
+    {% trans 'Question' %} | {{ question.question_title }}
 {% endblock %}
 
 {% block content %}
@@ -14,21 +14,21 @@
         <link rel="stylesheet" type="text/css" href="{% static 'polls/css/polls_detail.css' %}">
 
         <em>{% if question.was_published_recently %}
-            <blink>{% translate 'NEW QUESTION' %}!</blink><br>
+            <blink>{% trans 'NEW QUESTION' %}!</blink><br>
         {% endif %}
             <h2>{{ question.author_name }}</h2>
             {% if question.author_name == user.username %}
-                <a href="{% url 'polls:update_question' question.id %}"> {% translate 'Edit' %}</a> |
-                <a href="{% url 'polls:delete_question' question.id %}"> {% translate 'Delete' %}</a><br>
+                <a href="{% url 'polls:update_question' question.id %}"> {% trans 'Edit' %}</a> |
+                <a href="{% url 'polls:delete_question' question.id %}"> {% trans 'Delete' %}</a><br>
             {% endif %}
             {% if question.tag.all %}
-                <span>{% translate 'tags' %}: </span>
+                <span>{% trans 'tags' %}: </span>
                 {% for tag in question.tag.all %}
                     <a href="{% url 'polls:tag' tag.id %}">#{{ tag }}</a>
                 {% endfor %}<br>
             {% endif %}
             {% if question.up_date %}
-                {{ question.up_date }} * {% translate 'Edited' %} *
+                {{ question.up_date }} * {% trans 'Edited' %} *
             {% else %}
                 {{ question.pub_date }}
             {% endif %}
@@ -61,12 +61,12 @@
                 {% comment %}
                     <input hidden name="question_id" value="{{ question.id }}">
                 {% endcomment %}
-                <button type="submit" class="btn btn-primary">{% translate 'Left comment' %}</button>
+                <button type="submit" class="btn btn-primary">{% trans 'Left comment' %}</button>
                 <small class="comment-success"></small>
                 <small class="comment-warning">{{ comment_message }}</small>
             </form>
         {% else %}
-            <p>{% translate 'For vote and commenting you need to' %} <a href={% url 'account_login' %}>{% translate 'Sign In' %}</a></p>
+            <p>{% trans 'For vote and commenting you need to' %} <a href={% url 'account_login' %}>{% trans 'Sign In' %}</a></p>
         {% endif %}
         <hr>
         <ul>
@@ -74,14 +74,14 @@
                 <li><strong class="comment_autor">{{ comment.author_name }}:</strong>
                     <p class="comment_text">{{ comment }}
                         {% if comment.author_name == user.username %}
-                            | <a href="{% url 'polls:comment_edit' question.id comment.id %}">{% translate 'Edit' %}</a>
-                            | <a href="{% url 'polls:comment_delete' question.id comment.id %}">{% translate 'Delete' %}</a>
+                            | <a href="{% url 'polls:comment_edit' question.id comment.id %}">{% trans 'Edit' %}</a>
+                            | <a href="{% url 'polls:comment_delete' question.id comment.id %}">{% trans 'Delete' %}</a>
                         {% endif %}
                     </p>
                 </li>
                 <hr>
                 {% empty %}
-                <p>{% translate 'Comments not found! Be the first' %} ;)</p>
+                <p>{% trans 'Comments not found! Be the first' %} ;)</p>
         {% endfor %}
         </ul>
         {% comment %}
@@ -100,6 +100,7 @@
     </header>
 {% endblock %}
 {% block script %}
+    {% if user.is_authenticated %}
     <script>
         // comment part
         // on('action', 'button id or class')
@@ -175,4 +176,5 @@
             }
         {% endif %}
     </script>
+    {% endif %}
 {% endblock %}

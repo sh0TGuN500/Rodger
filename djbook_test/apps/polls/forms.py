@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from .models import Comment, Question
 
@@ -38,7 +39,7 @@ class CommentForm(forms.ModelForm):
                                                   'rows': 3,
                                                   'minlength': 4,
                                                   'maxlength': 300,
-                                                  'placeholder': 'Your comment...'})
+                                                  'placeholder': _('Your comment...')})
         }
         labels = {
             'comment_text': 'Your comment:\n',
@@ -49,7 +50,7 @@ class CommentForm(forms.ModelForm):
         if data:
             return data
         else:
-            raise ValidationError('Comment field must contain the text!')
+            raise ValidationError(_('Comment field must contain the text!'))
 
 
 class AddQuestionForm(forms.ModelForm):
@@ -70,14 +71,14 @@ class AddQuestionForm(forms.ModelForm):
         if data:
             return data
         else:
-            raise ValidationError('should be the length between 5 and 200')
+            raise ValidationError(_('should be the length between 5 and 200'))
 
     def clean_question_text(self):
         data = text_validator(self.data['question_text'], min_length=10, max_length=9000)
         if data:
             return data
         else:
-            raise ValidationError('should be the length between 10 and 9000')
+            raise ValidationError(_('should be the length between 10 and 9000'))
 
 
 '''class FroalaModelForm(forms.ModelForm):
