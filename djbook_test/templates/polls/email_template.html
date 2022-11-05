@@ -1,5 +1,5 @@
-{% extends 'polls/base_polls.html' %}
 {% load i18n %}
+{% autoescape off %}
 
 {% block title %}
 	{% translate 'NEW QUESTION' %} !!!
@@ -7,11 +7,10 @@
 
 {% block content %}
 <div class="main">
-	{% load static %}
-
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/css/home_style.css' %}">
-    <p>{% translate User %} {{ user }}</p>
-    <p> • {% translate 'Question' %} "<a href="{{ question_url }}">{{ question_title }}</a>" {% translate 'successfully posted' %}.</p>
-
+    {% blocktrans %}
+        • User {{ user }} posted a {{ question_title }} question:
+        {{ question_url }}
+    {% endblocktrans %}
 </div>
 {% endblock %}
+{% endautoescape %}
