@@ -124,6 +124,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pl'
 
+LOCALE_PATHS = (PROJECT_ROOT / 'locale',)
+
 TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
