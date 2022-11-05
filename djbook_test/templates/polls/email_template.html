@@ -1,16 +1,12 @@
 {% load i18n %}
 {% autoescape off %}
 
-{% block title %}
-	{% translate 'NEW QUESTION' %} !!!
-{% endblock %}
-
-{% block content %}
-<div class="main">
-    {% blocktrans %}
-        • User {{ user }} posted a {{ question_title }} question:
-        {{ question_url }}
-    {% endblocktrans %}
-</div>
-{% endblock %}
+    {% block content %}
+        <div class="main">
+            {% blocktrans %}
+                • User '{{ user }}' posted a '{{ question_title }}' question:
+                • {{ question_url }}
+            {% endblocktrans %}
+        </div>
+    {% endblock %}
 {% endautoescape %}
