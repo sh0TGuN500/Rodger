@@ -42,7 +42,7 @@ class CommentForm(forms.ModelForm):
                                                   'placeholder': _('Your comment...')})
         }
         labels = {
-            'comment_text': 'Your comment:\n',
+            'comment_text': _('Your comment:\n'),
         }
 
     def clean_comment_text(self):

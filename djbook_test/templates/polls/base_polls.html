@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 {% block head %}
     <head>
-    {% block media %}
-    {% endblock %}
+        {% block media %}
+        {% endblock %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -40,7 +40,7 @@
 <body>
 <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href={% url 'polls:home' %}>RODJER</a>
+        <a class="navbar-brand" href={% url 'polls:home' %}>RODGER</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -76,6 +76,19 @@
                         <a class="nav-link" href='{% url 'polls:create_question' %}'>{% translate 'Add question' %} +</a>
                     </li>
                 {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ LANGUAGE_CODE }}
+                    </a>
+                    {% get_available_languages as languages %}
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for lang_code, lang_name in languages %}
+                            {% language lang_code %}
+                                <li><a class="dropdown-item" href="{% url 'polls:lang' lang_code %}">{{ lang_name }}</a></li>
+                            {% endlanguage %}
+                        {% endfor %}
+                    </ul>
+                </li>
             </ul>
             <form class="d-flex" action="{% url 'polls:search' %}" method="get">
                 <input name="search" class="form-control me-2" type="search" minlength="3" placeholder={% translate "Search" %} aria-label="Search" required>

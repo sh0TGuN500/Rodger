@@ -10,7 +10,8 @@ from django.views import generic
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import activate
 
 from .forms import CommentForm, AddQuestionForm, text_validator
 from .models import Question, Choice, Tag, Comment
@@ -34,6 +35,13 @@ def personal_page(request):
 
 def info_for_customers(request):
     return render(request, 'polls/info_for_customers_page.html')
+
+
+def lang_switcher(request, lang):
+    user_language = lang
+    activate(user_language)
+    print(request.session.items())
+    return render(request, 'polls/home_page.html')
 
 
 ########################################################################################################################
