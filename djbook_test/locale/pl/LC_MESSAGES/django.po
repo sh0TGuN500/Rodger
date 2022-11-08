@@ -1,0 +1,472 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-08 19:40+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
+"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
+"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: .\djbook_test\apps\polls\admin.py:21
+msgid "Author name"
+msgstr "Imię autora"
+
+#: .\djbook_test\apps\polls\admin.py:22
+msgid "Date information"
+msgstr "Informacje o daty"
+
+#: .\djbook_test\apps\polls\admin.py:23
+msgid "Question text"
+msgstr "Tekst pytania"
+
+#: .\djbook_test\apps\polls\admin.py:24
+#: .\djbook_test\templates\polls\add_question.html:42
+msgid "Tags"
+msgstr "Tagi"
+
+#: .\djbook_test\apps\polls\forms.py:42
+msgid "Your comment..."
+msgstr "Twój komentarz..."
+
+#: .\djbook_test\apps\polls\forms.py:45
+#, fuzzy
+#| msgid "Your comment..."
+msgid "Your comment:\n"
+msgstr "Twój komentarz..."
+
+#: .\djbook_test\apps\polls\forms.py:53
+msgid "Comment field must contain the text!"
+msgstr "Pole komentarza musi zawierać tekst!"
+
+#: .\djbook_test\apps\polls\forms.py:74
+msgid "should be the length between 5 and 200"
+msgstr "powinien mieć długość od 5 do 200"
+
+#: .\djbook_test\apps\polls\forms.py:81
+msgid "should be the length between 10 and 9000"
+msgstr "powinien mieć długość od 10 do 9000"
+
+#: .\djbook_test\apps\polls\models.py:17
+msgid "tag name"
+msgstr "nazwa znacznika"
+
+#: .\djbook_test\apps\polls\models.py:24
+msgid "question title"
+msgstr "tytuł pytania"
+
+#: .\djbook_test\apps\polls\models.py:25
+msgid "question text"
+msgstr "tekst pytania"
+
+#: .\djbook_test\apps\polls\models.py:27 .\djbook_test\apps\polls\models.py:62
+msgid "author name"
+msgstr "imię autora"
+
+#: .\djbook_test\apps\polls\models.py:28
+msgid "publication date"
+msgstr "data publikacji"
+
+#: .\djbook_test\apps\polls\models.py:30
+msgid "updating date"
+msgstr "data aktualizacji"
+
+#: .\djbook_test\apps\polls\models.py:41
+msgid "Published recently?"
+msgstr "Opublikowane niedawno?"
+
+#: .\djbook_test\apps\polls\models.py:47
+msgid "votes"
+msgstr "głosy"
+
+#: .\djbook_test\apps\polls\models.py:56
+msgid "user"
+msgstr "użytkownik"
+
+#: .\djbook_test\apps\polls\models.py:63
+msgid "comment text"
+msgstr "tekst komentarza"
+
+#: .\djbook_test\apps\polls\views.py:96
+msgid "Question does not exist"
+msgstr "Pytanie nie istnieje"
+
+#: .\djbook_test\apps\polls\views.py:99
+#, python-brace-format
+msgid "Question \"{deleting_question}\" has been deleted"
+msgstr "Pytanie \"{deleting_question}\" zostało usunięte"
+
+#: .\djbook_test\apps\polls\views.py:167
+msgid " • Title: ✔️"
+msgstr " • Tytuł: ✔️"
+
+#: .\djbook_test\apps\polls\views.py:168
+msgid " • Text: ✔️"
+msgstr " • Tekst: ✔️"
+
+#: .\djbook_test\apps\polls\views.py:174
+msgid " • Tag should be the length between 2 and 200"
+msgstr " • Tag powinien mieć długość od 2 do 200"
+
+#: .\djbook_test\apps\polls\views.py:183
+msgid " • Choice should be the length between 2 and 200"
+msgstr " • Wybór powinien mieć długość od 2 do 200"
+
+#: .\djbook_test\apps\polls\views.py:244
+#, python-brace-format
+msgid " • Question {question_href} successfully posted"
+msgstr " • Pytanie {question_href} pomyślnie opublikowane"
+
+#: .\djbook_test\apps\polls\views.py:271 .\djbook_test\apps\polls\views.py:299
+#: .\djbook_test\apps\polls\views.py:333
+msgid " • Comment does not exist"
+msgstr " • Komentarz nie istnieje"
+
+#: .\djbook_test\apps\polls\views.py:276 .\djbook_test\apps\polls\views.py:294
+#: .\djbook_test\apps\polls\views.py:390
+msgid " • Question does not exist"
+msgstr " • Pytanie nie istnieje"
+
+#: .\djbook_test\apps\polls\views.py:305 .\djbook_test\apps\polls\views.py:315
+msgid " • Symbols length less than 3"
+msgstr " • Liczba znaków jest mniejsza niż 3"
+
+#: .\djbook_test\apps\polls\views.py:319
+#, python-brace-format
+msgid "New comment for {question.question_title}"
+msgstr "Nowy komentarz do {question.question_title}"
+
+#: .\djbook_test\apps\polls\views.py:320
+#, python-brace-format
+msgid ""
+"User {request.user.username} commented on your question!\n"
+"                    \n"
+"You can't get rid of the mailing because I have not implemented it."
+msgstr ""
+"Użytkownik {request.user.username} skomentował twoje pytanie!\n"
+"                    \n"
+"Nie możesz pozbyć się automatycznych wiadomości, ponieważ nie wdrożyłem ich."
+
+#: .\djbook_test\apps\polls\views.py:324
+msgid " • Comment successful posted"
+msgstr " • Komentarz udany opublikowany"
+
+#: .\djbook_test\apps\polls\views.py:336
+msgid " • Comment has been deleted"
+msgstr " • Komentarz został usunięty"
+
+#: .\djbook_test\apps\polls\views.py:394
+msgid " • You didn't select a choice"
+msgstr " • Nie wybrałeś wyboru"
+
+#: .\djbook_test\apps\polls\views.py:398
+#, python-brace-format
+msgid " • You have already voted. <a href=\"{results_url}\">Results</a>"
+msgstr " • Już głosowałeś. <a href=\"{results_url}\">Results</a>"
+
+#: .\djbook_test\apps\polls\views.py:405
+#, python-brace-format
+msgid " • Voting was successful. <a href=\"{results_url}\">Results</a>"
+msgstr " • Głosowanie zakończyło się sukcesem. <a href=\"{results_url}\">Wyniki</a>"
+
+#: .\djbook_test\settings.py:131
+msgid "Polish"
+msgstr "Polski"
+
+#: .\djbook_test\settings.py:132
+msgid "English"
+msgstr "Angielski"
+
+#: .\djbook_test\templates\polls\add_question.html:13
+#: .\djbook_test\templates\polls\add_question.html:87
+msgid "Editing"
+msgstr "Redagowanie"
+
+#: .\djbook_test\templates\polls\add_question.html:13
+#: .\djbook_test\templates\polls\add_question.html:87
+msgid "question"
+msgstr "pytanie"
+
+#: .\djbook_test\templates\polls\add_question.html:15
+#: .\djbook_test\templates\polls\add_question.html:89
+msgid "New question"
+msgstr "Nowe pytanie"
+
+#: .\djbook_test\templates\polls\add_question.html:44
+msgid "Tag field"
+msgstr "Pole tagu"
+
+#: .\djbook_test\templates\polls\add_question.html:49
+#: .\djbook_test\templates\polls\add_question.html:72
+msgid "Add More"
+msgstr "Dodaj więcej"
+
+#: .\djbook_test\templates\polls\add_question.html:50
+#: .\djbook_test\templates\polls\add_question.html:73
+msgid "Remove Field"
+msgstr "Usuń pole"
+
+#: .\djbook_test\templates\polls\add_question.html:62
+msgid "Choices"
+msgstr "Wybory"
+
+#: .\djbook_test\templates\polls\add_question.html:64
+msgid "Choice field"
+msgstr "Pole wyboru"
+
+#: .\djbook_test\templates\polls\add_question.html:69
+msgid "When updating the question, voting results are reset"
+msgstr "Podczas aktualizacji pytania wyniki głosowania są resetowane"
+
+#: .\djbook_test\templates\polls\add_question.html:75
+msgid "Left question"
+msgstr "Pozostawione pytanie"
+
+#: .\djbook_test\templates\polls\add_question.html:139
+msgid "Bad client request"
+msgstr "Zły żądanie klienta"
+
+#: .\djbook_test\templates\polls\base_polls.html:50
+#: .\djbook_test\templates\polls\home_page.html:15
+#: .\djbook_test\templates\polls\polls_list.html:6
+#: .\djbook_test\templates\polls\polls_list.html:29
+msgid "Questions"
+msgstr "Pytania"
+
+#: .\djbook_test\templates\polls\base_polls.html:54
+msgid "My Account"
+msgstr "Moje Konto"
+
+#: .\djbook_test\templates\polls\base_polls.html:63
+msgid "My Questions"
+msgstr "Moje Pytania"
+
+#: .\djbook_test\templates\polls\base_polls.html:65
+msgid "Email settings"
+msgstr "Ustawienia poczty e-mail"
+
+#: .\djbook_test\templates\polls\base_polls.html:66
+msgid "LogOut"
+msgstr "Wyloguj"
+
+#: .\djbook_test\templates\polls\base_polls.html:68
+msgid "LogIn"
+msgstr "Zaloguj sie"
+
+#: .\djbook_test\templates\polls\base_polls.html:70
+msgid "Register Now"
+msgstr "Zarejestruj się Teraz"
+
+#: .\djbook_test\templates\polls\base_polls.html:76
+#: .\djbook_test\templates\polls\polls_list.html:16
+msgid "Add question"
+msgstr "Dodaj pytanie"
+
+#: .\djbook_test\templates\polls\base_polls.html:94
+#: .\djbook_test\templates\polls\base_polls.html:95
+msgid "Search"
+msgstr "Poszukiwanie"
+
+#: .\djbook_test\templates\polls\base_polls.html:103
+msgid "There is no any content"
+msgstr "Nie ma żadnej treści"
+
+#: .\djbook_test\templates\polls\email_template.html:6
+#, python-format
+msgid ""
+"\n"
+" • User '%(user)s' posted a '%(question_title)s' question:\n"
+" • %(question_url)s\n"
+"            "
+msgstr ""
+"\n"
+" • Użytkownik '%(user)s' opublikował '%(question_title)s' pytanie:\n"
+" • %(question_url)s\n"
+"            "
+
+#: .\djbook_test\templates\polls\home_page.html:6
+msgid "Home"
+msgstr "Strona główna"
+
+#: .\djbook_test\templates\polls\home_page.html:16
+msgid "Information For Customers"
+msgstr "Informacje Dla Klientów"
+
+#: .\djbook_test\templates\polls\info_for_customers_page.html:6
+msgid "Information for customers"
+msgstr "Informacje dla klientów"
+
+#: .\djbook_test\templates\polls\info_for_customers_page.html:15
+msgid "Technologies"
+msgstr "Technologie"
+
+#: .\djbook_test\templates\polls\info_for_customers_page.html:25
+msgid "My other simple project"
+msgstr "Mój inny prosty projekt"
+
+#: .\djbook_test\templates\polls\info_for_customers_page.html:27
+msgid ""
+"To view the source code on GitHub, please write the username, full name or "
+"email of your GitHub account on my mailbox"
+msgstr ""
+"Aby wyświetlić kod źródłowy w GitHub, napisz nazwę użytkownika, pełną nazwę "
+"lub E -mail z konta Github do mojej skrzynki pocztowej"
+
+#: .\djbook_test\templates\polls\personal_page.html:6
+msgid "Personal page"
+msgstr "Strona osobista"
+
+#: .\djbook_test\templates\polls\personal_page.html:14
+msgid "In development"
+msgstr "W rozwoju"
+
+#: .\djbook_test\templates\polls\polls_detail.html:8
+msgid "Question"
+msgstr "Pytanie"
+
+#: .\djbook_test\templates\polls\polls_detail.html:18
+msgid "NEW QUESTION"
+msgstr "NOWE PYTANIE"
+
+#: .\djbook_test\templates\polls\polls_detail.html:22
+#: .\djbook_test\templates\polls\polls_detail.html:79
+#: .\djbook_test\templates\polls\polls_list.html:45
+msgid "Edit"
+msgstr "Edytować"
+
+#: .\djbook_test\templates\polls\polls_detail.html:23
+#: .\djbook_test\templates\polls\polls_detail.html:80
+#: .\djbook_test\templates\polls\polls_list.html:46
+msgid "Delete"
+msgstr "Usuwać"
+
+#: .\djbook_test\templates\polls\polls_detail.html:26
+msgid "tags"
+msgstr "tagi"
+
+#: .\djbook_test\templates\polls\polls_detail.html:32
+msgid "Edited"
+msgstr "Edytowane"
+
+#: .\djbook_test\templates\polls\polls_detail.html:66
+msgid "Left comment"
+msgstr "Zostaw komentarz"
+
+#: .\djbook_test\templates\polls\polls_detail.html:71
+msgid "For vote and commenting you need to"
+msgstr "Do głosowania i komentowania musisz"
+
+#: .\djbook_test\templates\polls\polls_detail.html:71
+#: .\djbook_test\templates\polls\polls_list.html:18
+msgid "Sign In"
+msgstr "Zaloguj się"
+
+#: .\djbook_test\templates\polls\polls_detail.html:86
+msgid "Comments not found! Be the first"
+msgstr "Nie znaleziono komentarzy! Bądź pierwszy"
+
+#: .\djbook_test\templates\polls\polls_list.html:18
+msgid "For add question you need to"
+msgstr "Aby dodać pytanie, musisz"
+
+#: .\djbook_test\templates\polls\polls_list.html:23
+msgid "My questions"
+msgstr "Moje pytania"
+
+#: .\djbook_test\templates\polls\polls_list.html:25
+msgid "Search results"
+msgstr "Wyniki wyszukiwania"
+
+#: .\djbook_test\templates\polls\polls_list.html:27
+msgid "Tag results"
+msgstr "Wyniki tagu"
+
+#: .\djbook_test\templates\polls\polls_list.html:49
+#: .\djbook_test\templates\polls\polls_list.html:55
+msgid "No questions are available"
+msgstr "Żadne pytania nie są dostępne"
+
+#: .\djbook_test\templates\polls\polls_list.html:66
+#: .\djbook_test\templates\polls\polls_list.html:73
+msgid "First"
+msgstr "Pierwsza"
+
+#: .\djbook_test\templates\polls\polls_list.html:68
+#: .\djbook_test\templates\polls\polls_list.html:75
+msgid "Previous"
+msgstr "Poprzednia"
+
+#: .\djbook_test\templates\polls\polls_list.html:83
+msgid "Page"
+msgstr "Strona"
+
+#: .\djbook_test\templates\polls\polls_list.html:89
+#: .\djbook_test\templates\polls\polls_list.html:96
+msgid "Next"
+msgstr "Następna"
+
+#: .\djbook_test\templates\polls\polls_list.html:91
+#: .\djbook_test\templates\polls\polls_list.html:98
+msgid "Last"
+msgstr "Ostatnia"
+
+#: .\djbook_test\templates\polls\votes_results.html:6
+msgid "Results"
+msgstr "Wyniki"
+
+#: .\djbook_test\templates\polls\votes_results.html:19
+msgid "have"
+msgstr "ma"
+
+#: .\djbook_test\templates\polls\votes_results.html:19
+msgid "vote"
+msgstr "głosy"
+
+#: .\djbook_test\templates\polls\votes_results.html:22
+msgid "Back to Question page"
+msgstr "Powrót do strony Pytań"
+
+#, fuzzy
+#~| msgid "My Account"
+#~ msgid "Account"
+#~ msgstr "Moje Konto"
+
+#, fuzzy
+#~| msgid "Email settings"
+#~ msgid "E-mail Addresses"
+#~ msgstr "Ustawienia poczty e-mail"
+
+#, fuzzy
+#~| msgid "Remove Field"
+#~ msgid "Remove"
+#~ msgstr "Usuń pole"
+
+#~ msgid "or"
+#~ msgstr "albo"
+
+#, fuzzy
+#~| msgid "Sign In"
+#~ msgid "Sign Out"
+#~ msgstr "Zaloguj się"
+
+#, fuzzy
+#~| msgid "Sign In"
+#~ msgid "Signup"
+#~ msgstr "Zaloguj się"
+
+#, fuzzy
+#~| msgid "Sign In"
+#~ msgid "Sign Up"
+#~ msgstr "Zaloguj się"
