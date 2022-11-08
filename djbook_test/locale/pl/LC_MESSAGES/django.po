@@ -277,7 +277,7 @@ msgstr "Dodaj pytanie"
 #: .\djbook_test\templates\polls\base_polls.html:94
 #: .\djbook_test\templates\polls\base_polls.html:95
 msgid "Search"
-msgstr "Poszukiwanie"
+msgstr "Szukaj"
 
 #: .\djbook_test\templates\polls\base_polls.html:103
 msgid "There is no any content"
