@@ -14,6 +14,9 @@
                 integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
                 crossorigin="anonymous">
         </script>
+        <script type="text/javascript" src="path/to/file/uni-form-validation.jquery.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="path/to/file/uni-form.jquery.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
               rel="stylesheet"
@@ -30,6 +33,8 @@
               integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
               crossorigin="anonymous"
               referrerpolicy="no-referrer" />
+        <link href="path/to/file/uni-form.css" media="all" rel="stylesheet"/>
+        <link href="path/to/file/default.uni-form.css" media="all" rel="stylesheet"/>
         <title>
             {% block title %}
                 Polls Engine
@@ -109,5 +114,10 @@
 {% endblock %}
 </body>
 {% block script %}
+    <script type="text/javascript">
+        $(function(){
+            $('form.uniForm').uniform();
+        });
+    </script>
 {% endblock %}
 </html>
