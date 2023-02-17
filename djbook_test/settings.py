@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'crispy_forms',
-    'rosetta',
+    # 'rosetta',
     'avatar',
     'rest_framework',
     'rest_framework.authtoken',
