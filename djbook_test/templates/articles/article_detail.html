@@ -1,0 +1,304 @@
+{% extends 'articles/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load humanize %}
+{% load avatar_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+    {% trans 'Article' %} | {{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+        {% load static %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_detail.css' %}">
+
+        <em>
+            {% if article.was_published_recently %}
+                <blink>{% trans 'NEW QUESTION' %}!</blink><br>
+            {% endif %}
+            {% avatar article.user %}
+            <h2>{{ article.user }}</h2>
+            {% if article.user == user %}
+                <a href="{% url 'articles:article_update' article.id %}"> {% trans 'Edit' %}</a> |
+                <a href="{% url 'articles:article_delete' article.id %}"> {% trans 'Delete' %}</a><br>
+            {% endif %}
+            {% if article.tag.all %}
+                <span>{% trans 'tags' %}: </span>
+                {% for tag in article.tag.all %}
+                    <a href="{% url 'articles:tag' tag.id %}">#{{ tag }}</a>
+                {% endfor %}<br>
+            {% endif %}
+            {% if article.up_date %}
+                {{ article.up_date|naturaltime }} * {% trans 'Edited' %} *
+            {% else %}
+                {{ article.pub_date|naturaltime }}
+            {% endif %}
+        </em>
+
+        <hr>
+        <div style="white-space: break-spaces">{{ article.text|safe|escape }}</div>
+        <hr>
+
+        {% if user.is_authenticated %}
+            {% if error_message %}
+                <p><strong>{{ error_message }}</strong></p>
+            {% endif %}
+            {% if article.choice_set.exists %}
+                {% comment %}
+                {% if article.vote_set.exists %}
+                    {% for vote in article.vote_set.all %}
+                        {% if user == vote.user %}
+                         <ul>
+                            {% for choice in article.choice_set.all %}
+                                <li>"{{ choice }}" {% translate 'have' %} {{ choice.votes }} {% translate 'vote' %}{{ choice.votes|pluralize }}{% if vote.choice.id == choice.id %} - your choice{% endif %}</li>
+                            {% endfor %}
+                         </ul>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endcomment %}
+                <form id="vote-form" method="post">
+                    {% csrf_token %}
+                    {% for choice in article.choice_set.all %}
+                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label> - have {{ choice.votes }} votes {% for vote in choice.vote_set.all %}{% if vote.user == user %} <small>*your choice*</small> {% endif %}{% endfor %}<br>
+                    {% endfor %}
+                    <br><input type="submit" value="Vote" class="vote">
+                    <small class="vote-success"></small>
+                    <small class="vote-warning"></small>
+
+                </form>
+                <hr>
+            {% endif %}
+            Likes: {{ article.like_count }}
+            <div>
+                <form style="margin: 0; display: inline;" method="post" class="mt-4" id="article-like">
+                    {% csrf_token %}
+                    <button id="article-like" type="submit" class="btn btn-primary" value=1>{% trans 'Like' %}</button>
+                </form>
+                <form style="margin: 0; display: inline;" method="post" class="mt-4" id="article-dislike">
+                    {% csrf_token %}
+                    <button id="article-dislike" type="submit" class="btn btn-primary" value=0>{% trans 'Dislike' %}</button>
+                    <small class="article-like-success"></small>
+                    <small class="article-like-warning"></small>
+                </form>
+            <hr>
+            </div>
+            <form method="post" class="mt-4" id="comment-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {% comment %}
+                    <input hidden name="article_id" value="{{ article.id }}">
+                {% endcomment %}
+                <button type="submit" class="btn btn-primary">{% trans 'Left comment' %}</button>
+                <small class="comment-success"></small>
+                <small class="comment-warning">{{ comment_message }}</small>
+                {% if comment_message %}
+                    <script> alert("{{ comment_message }}"); </script>
+                {% endif %}
+            </form>
+        {% else %}
+            <p>{% trans 'For vote and commenting you need to' %} <a href={% url 'account_login' %}>{% trans 'Sign In' %}</a></p>
+        {% endif %}
+        <hr>
+        <ul>
+            {% for comment in article.comment_set.all %}
+
+                <li>
+                    {% if comment.up_date|naturaltime %}
+                        {% trans '*edited*' %} {{ comment.up_date }}
+                    {% else %}
+                        {{ comment.pub_date|naturaltime }}
+                    {% endif %}
+                    |{% avatar comment.user %}
+                    <strong class="comment_autor">{{ comment.user }}:</strong>
+                    <p class="comment_text">{{ comment }}
+                        {% if comment.user == user %}
+                            | <a href="{% url 'articles:comment_edit' article.id comment.id %}">{% trans 'Edit' %}</a>
+                            | <a href="{% url 'articles:comment_delete' article.id comment.id %}">{% trans 'Delete' %}</a>
+                        {% endif %}
+                    </p>
+                    {% if user.is_authenticated %}
+                        <div>
+                            <form style="margin: 0; display: inline;" action={% url 'articles:comment_like' comment.id 1 %} method="post" class="mt-4" id="comment-like">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" value=1>{% trans 'Like' %}</button>
+                            </form>
+                            <form style="margin: 0; display: inline;" action={% url 'articles:comment_like' comment.id 0 %} method="post" class="mt-4" id="comment-dislike">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">{% trans 'Dislike' %}</button>
+                                <small class="comment-like-success"></small>
+                                <small class="comment-like-warning"></small>
+                            </form>
+                            Likes: {{ comment.like_count }}
+                        </div>
+                    {% endif %}
+                </li>
+                <hr>
+            {% empty %}
+                <p>{% trans 'Comments not found! Be the first' %} ;)</p>
+            {% endfor %}
+        </ul>
+        {% comment %}
+	{% if form.errors %}
+		<p><strong>{{ form.errors }}error</strong></p>
+    {% else %}
+        {% for i in form %}
+        <p><strong>var: {{ i }}</strong></p>
+        {% endfor %}
+	{% endif %}
+	{% endcomment %}
+    </div>
+
+    <header>
+        <h1>{{ article.title }}</h1>
+    </header>
+{% endblock %}
+{% block script %}
+    {% if user.is_authenticated %}
+        <script>
+            // comment part
+            // on('action', 'button id or class')
+            const comment_form = document.getElementById('comment-form');
+            comment_form.addEventListener("submit", submitCommentHandler);
+
+            function submitCommentHandler(event) {
+                event.preventDefault();
+                $.ajax({
+                    // type of form
+                    type: 'POST',
+                    // url: django url path
+                    {% if editing_comment %}
+                        url: '{% url 'articles:comment_edit' article.id editing_comment %}',
+                    {% else %}
+                        url: '{% url 'articles:comment_create' article.id %}',
+                    {% endif %}
+                    data: $('#comment-form').serialize(),
+                    dataType: 'json',
+                    // if django view returned data / if the request succeeds
+                    success: function (data) {
+                        // for each input span.class-name self data
+                        if (data.success) {
+                            $('small.comment-success').html(data.success);
+                            comment_form.reset()
+                            $('small.comment-warning').html("")
+                            //document.getElementById("id_comment_text").value = 'dddqwdwq'
+                        } else {
+                            $('small.comment-warning').html(data.error);
+                            $('small.comment-success').html("")
+                        }
+                    },
+                    //error message into small
+                    error: function (){
+                        $('small').html("")
+                        $('small.comment-warning').html(' • Bad client request');
+                    }
+                })
+            }
+
+            // vote part
+            {% if article.choice_set.exists %}
+                const vote_form = document.getElementById('vote-form');
+                vote_form.addEventListener("submit", submitVoteHandler);
+
+                function submitVoteHandler(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        // type of form
+                        type: 'POST',
+                        // url: django url path
+                        url: '{% url 'articles:vote' article.id %}',
+                        data: $('#vote-form').serialize(),
+                        dataType: 'json',
+                        // if django view returned data / if the request succeeds
+                        success: function (data) {
+                            // for each input span.class-name self data
+                            if (data.success) {
+                                $('small.vote-success').html(data.success);
+                                vote_form.reset()
+                                $('small.vote-warning').html("")
+                            } else {
+                                $('small.vote-warning').html(data.error);
+                                $('small.vote-success').html("")
+                            }
+                        },
+                        //error message into h2
+                        error: function () {
+                            $('small.vote-warning').html(' • Bad client request');
+                            $('small.vote-success').html("")
+                        }
+                    })
+                }
+            {% endif %}
+            // article like part
+            const article_like = document.getElementById('article-like');
+            article_like.addEventListener("submit", submitArticleLikeHandler);
+
+            function submitArticleLikeHandler(event) {
+                event.preventDefault();
+                $.ajax({
+                    // type of form
+                    type: 'POST',
+                    // url: django url path
+                    url: '{% url 'articles:article_like' article.id 1 %}',
+                    data: $('#article-like').serialize(),
+                    dataType: 'json',
+                    // if django view returned data / if the request succeeds
+                    success: function (data) {
+                        // for each input span.class-name self data
+                        if (data.success) {
+                            $('small.article-like-success').html(data.success);
+                            article_dislike.reset()
+                            $('small.article-like-warning').html("")
+                            //document.getElementById("id_comment_text").value = 'dddqwdwq'
+                        } else {
+                            $('small.article-like-warning').html(data.error);
+                            $('small.article-like-success').html("")
+                        }
+                    },
+                    //error message into small
+                    error: function (){
+                        $('small').html("")
+                        $('small.article-like-warning').html(' • Bad client request');
+                    }
+                })
+            }
+
+            const article_dislike = document.getElementById('article-dislike');
+            article_dislike.addEventListener("submit", submitArticleDislikeHandler);
+            function submitArticleDislikeHandler(event) {
+                event.preventDefault();
+                $.ajax({
+                    // type of form
+                    type: 'POST',
+                    // url: django url path
+                    url: '{% url 'articles:article_like' article.id 0 %}',
+                    data: $('#article-dislike').serialize(),
+                    dataType: 'json',
+                    // if django view returned data / if the request succeeds
+                    success: function (data) {
+                        // for each input span.class-name self data
+                        if (data.success) {
+                            $('small.article-like-success').html(data.success);
+                            article_dislike.reset()
+                            $('small.article-like-warning').html("")
+                            //document.getElementById("id_comment_text").value = 'dddqwdwq'
+                        } else {
+                            $('small.article-like-warning').html(data.error);
+                            $('small.article-like-success').html("")
+                        }
+                    },
+                    //error message into small
+                    error: function (){
+                        $('small').html("")
+                        $('small.article-like-warning').html(' • Bad client request');
+                    }
+                })
+            }
+        </script>
+    {% endif %}
+{% endblock %}

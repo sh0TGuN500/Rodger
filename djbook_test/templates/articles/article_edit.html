@@ -1,0 +1,141 @@
+{% extends 'articles/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block media %}
+{% endblock %}
+
+{% block title %}
+    {% if article_id %}
+        {% translate 'Editing' %} "{{ title }}" {% translate 'article' %}
+    {% else %}
+        {% translate 'New article' %}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_edit.css' %}">
+
+        <form method="post" id="add_article">
+            {% csrf_token %}
+            <br>
+            <div class="wrapper">
+                {{ form|crispy }}
+                {% comment %}
+                <p>
+                    <input value="{{ title }}" type="text" name="article_title" placeholder="Article title" minlength="5" maxlength="200" required="" id="id_article_title">
+                    <small class="title-error"></small>
+                </p>
+                <p>
+                    <textarea name="article_text" cols="35" rows="3" minlength="10" placeholder="Article text" maxlength="9000" required="" id="id_article_text">{{ text }}</textarea>
+                    <small class="text-error"></small>
+                </p>
+                {% endcomment %}
+                <div id="tags_id">
+                    <h3>{% translate 'Tags' %}:</h3>
+                    {% for tag in tags %}
+                        <input value="{{ tag }}" required type="text" name="tag" class="tags" size="100" minlength="2" maxlength="200" placeholder={% translate "Tag field" %}>
+                    {% endfor %}
+                </div>
+                <small class="tag-error"></small>
+                <div class="tag-controls">
+                    <a href="#" id="add_tag_fields"><i class="fa fa-plus"></i>{% translate 'Add More' %}</a>
+                    <a href="#" id="remove_tag_fields"><i class="fa fa-minus"></i>{% translate 'Remove Field' %}</a>
+                </div>
+                {% comment %}
+                    <p>Press space after each tag</p>
+                    <ul class="tag-ul"><input type="text" spellcheck="false" class="tag-input"></ul>
+                    <div class="tag-details">
+                        <p><span>10</span> tags are remaining</p>
+                        <button type="button" class="remove-tag">Remove All</button>
+                    </div>
+                {% endcomment %}
+                <div id="choices_id">
+                    <h3>{% translate 'Choices' %}:</h3>
+                    {% for choice in choices %}
+                        <input value="{{ choice }}" required type="text" name="choice" class="choices" size="100" minlength="2" maxlength="200" placeholder={% translate "Choice field" %}>
+                    {% endfor %}
+                </div>
+                <small class="choice-error"></small>
+                {% if article_id %}
+                    <span class="text-warning">{% translate 'When updating the article, voting results are reset' %}</span>
+                {% endif %}
+                <div class="choice-controls">
+                    <a href="#" id="add_choice_fields"><i class="fa fa-plus"></i>{% translate 'Add More' %}</a>
+                    <a href="#" id="remove_choice_fields"><i class="fa fa-minus"></i>{% translate 'Remove Field' %}</a>
+                </div>
+                <button type="submit" class="form" >{% translate 'Left article' %}</button>
+                {{ response_dict|json_script:'data' }}
+                <small class="text-success"></small><br>
+                <small class="text-warning"></small><br>
+                <small class="title-error"></small><br>
+                <small class="text-error"></small>
+            </div>
+        </form>
+    </div>
+    <script src="{% static 'articles/js/script.js' %}"></script>
+    <header>
+        {% if article_id %}
+            <h1>{% translate 'Editing' %} "{{ title }}" {% translate 'article' %}</h1>
+        {% else %}
+        <h1>{% translate 'New article' %}</h1>
+        {% endif %}
+    </header>
+{% endblock %}
+{% block script %}
+    <script>
+        // on('action', 'button id or class')
+        const form = document.getElementById('add_article');
+        form.addEventListener("submit", submitHandler);
+        function submitHandler(e){
+            e.preventDefault();
+            $.ajax({
+                // type of form
+                type: 'POST',
+                // url: django url path
+                {% if article_id %}
+                    url: '{% url 'articles:article_update_save' article_id %}',
+                {% else %}
+                    url: '{% url 'articles:article_create_save' %}',
+                {% endif %}
+                data: $('#add_article').serialize(),
+                {% comment %}
+                    {
+                        comment_text: $('#id_comment_text').val(),
+                        // csrf token from hidden html input
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        article_id: '{{ article.id }}'
+                    },
+                {% endcomment %}
+                dataType: 'json',
+                // if django view returned data / if the request succeeds
+                success: function (data){
+                    // for each input small.class-name self data
+                    if (data.success) {
+                        $('small').html("")
+                        $('small.text-success').html(data.success);
+                        form.reset()
+                    }
+                    else {
+                        $('small').html("")
+                        $('small.title-error').html(data.title_info);
+                        $('small.text-error').html(data.text_info);
+                        if (data.tag_info){$('small.tag-error').html(data.tag_info);}
+                        if (data.choice_info){$('small.choice-error').html(data.choice_info);}
+                    }
+                },
+                //error message into h2
+                error: function (){
+                    $('small').html("")
+                    $('small.text-warning').html('{% translate 'Bad client request' %}');
+                }
+            })
+        }
+    </script>
+{% endblock %}

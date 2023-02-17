@@ -1,0 +1,33 @@
+{% extends 'articles/base.html' %}
+{% load i18n %}
+{% load avatar_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+	{% translate 'Personal page' %}
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/home_style.css' %}">
+
+<div style="float: left; width: 50%;">
+    <h1>Avatar:</h1>
+
+    {% avatar user %}
+
+
+        <a href="{% url 'avatar_add' %}"><h1>{% translate 'Add Avatar' %}</h1></a>
+        <a href="{% url 'avatar_change' %}"><h1>{% translate 'Change Avatar' %}</h1></a>
+        <a href="{% url 'avatar_delete' %}"><h1>{% translate 'Delete Avatar' %}</h1></a>
+</div>
+<hr>
+<div style="margin-left: 50%; width: 50%;">
+<a href="{% url 'articles:my_articles' %}"><h1>{% translate 'My Articles' %}</h1></a>
+</div>
+
+
+</div>
+{% endblock %}

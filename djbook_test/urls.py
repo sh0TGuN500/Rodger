@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
@@ -22,15 +22,24 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
-    path('favicon.ico', RedirectView.as_view(url='/static/polls/images/favicon.ico'), name='favicon'),
+    path('favicon.ico', RedirectView.as_view(url='/static/articles/images/favicon.ico'), name='favicon'),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 urlpatterns += i18n_patterns(
-    path('', include('polls.urls')),
+    path('', include('articles.urls')),
     path('admin228/', admin.site.urls, name='admin'),
     path('account/', include('allauth.urls')),
+    path('avatar/', include('avatar.urls')),
+    path('api/drf-auth/', include('rest_framework.urls')),
+    path('api/auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 )
+
+if 'rosetta' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        re_path(r'^rosetta/', include('rosetta.urls'))
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,9 @@
+{% load i18n %}
+{% autoescape off %}
+{% block content %}
+    {% blocktrans %}
+ • User '{{ user }}' post '{{ article_title }}' article:
+ • {{ article_url }}
+    {% endblocktrans %}
+{% endblock %}
+{% endautoescape %}

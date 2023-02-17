@@ -1,0 +1,23 @@
+{% extends 'articles/base.html' %}
+
+{% block title %}
+	RODJER | Test
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_list.css' %}">
+
+    <p>Title: {{ title }}</p>
+    <p>Text: {{ text }}</p>
+    {% if option %}
+        {% for i in option %}
+            <p>Option: {{ i }}</p>
+        {% endfor %}
+    {% endif %}
+    <p>Test message: {{ test }}</p>
+
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'articles/base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+	{% trans 'Results' %} | {{ article.title }}
+{% endblock %}
+
+{% block content %}
+<div class="content">
+	{% load static %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'articles/css/votes_results.css' %}">
+
+	<h1>{{ article.title }}</h1>
+
+	<ul>
+		{% for choice in article.choice_set.all %}
+			<li>{{ choice.text }} {% translate 'have' %} {{ choice.votes }} {% translate 'vote' %}{{ choice.votes|pluralize }}</li>
+		{% endfor %}
+	</ul>
+	{% block nav-results %}<a href="{% url 'articles:detail' article.id %}" class="again">{% translate 'Back to Question page' %}?</a>{% endblock %}
+</div>
+{% endblock %}

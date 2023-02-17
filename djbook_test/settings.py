@@ -13,10 +13,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from os import getenv, path
 import sys
 from pathlib import Path
+
+import rest_framework.permissions
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from djbook_test.apps.polls.apps import PollsConfig
+from djbook_test.apps.articles.apps import ArticlesConfig
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
@@ -36,7 +38,7 @@ DEBUG = True if getenv('RUN_MAIN') == 'true' else str(getenv('DEBUG')) == "1"
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
+    'articles.apps.ArticlesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,10 +46,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
     'storages',
     'allauth',
     'allauth.account',
-    'crispy_forms'
+    'crispy_forms',
+    'rosetta',
+    'avatar',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -104,6 +112,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
 
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -122,13 +131,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ],
+    'DEFAULT_RENDER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-GB' 'pl'
+LANGUAGE_CODE = 'en-GB' 'pl' 'uk'
 
 LANGUAGES = [
     ('pl', _('Polish')),
+    ('uk', _('Ukrainian')),
     ('en', _('English')),
 ]
 
@@ -175,7 +204,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 try:
-    from .local_settings import *
+    from .__local_settings import *
 except ImportError:
     import dj_database_url
     import django_heroku

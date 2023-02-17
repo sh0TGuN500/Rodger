@@ -1,0 +1,113 @@
+{% extends 'articles/base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}
+	{% translate 'Articles' %}
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_list.css' %}">
+        {% if user.is_staff %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'articles:article_create' %}" class="add_article"> + {% translate 'Add article' %}</a>
+            {% else %}
+                <p class="add_article">{% translate 'For add article you need to' %} <a href="/accounts/login/">{% translate 'Sign In' %}</a></p>
+            {% endif %}
+        {% endif %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if my_article_list %}
+        <h3>{% translate 'My articles' %}:</h3>
+    {% elif search_list %}
+        <h3>{% translate 'Search results' %}:</h3>
+    {% elif tags_list %}
+        <h3>{% translate 'Tag results' %}:</h3>
+    {% else %}
+        <h3>{% translate 'Articles' %}:</h3>
+    {% endif %}
+
+    <ul>
+        {% if error_message %}
+		    <p><strong>
+                {{ error_message }}
+                {% if not user.is_authenticated %}
+                    <a href={% url 'account_login' %}>Sign In</a>
+                {% endif %}
+            </strong></p>
+	    {% endif %}
+            {% if my_article_list %}
+                {% for article in my_article_list %}
+                    <li>
+                        <a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a> |
+                        <a href="{% url 'articles:article_update' article.id %}"> {% translate 'Edit' %}</a> |
+                        <a href="{% url 'articles:article_delete' article.id %}"> {% translate 'Delete'%}</a>
+                    </li>
+                {% empty %}
+                    <p>{% translate 'No articles are available' %}.</p>
+                {% endfor %}
+            {% else %}
+                {% for article in page_obj %}
+                    <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
+                {% empty %}
+                    <p>{% translate 'No articles are available' %}.</p>
+                {% endfor %}
+            {% endif %}
+    </ul>
+</div>
+<div class="pagination">
+    <span class="step-links">
+    {% if page_obj.number %}
+        {% if page_obj.has_previous %}
+            {% if request.GET.search %}
+
+                <a href="?search={{ request.GET.search}}&page=1">&laquo; {% translate 'First' %}</a>
+                {% if page_obj.previous_page_number != 1 %}
+                    <a href="?search={{ request.GET.search}}&page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
+                {% endif %}
+
+            {% else %}
+
+                <a href="?page=1">&laquo; {% translate 'First' %}</a>
+                {% if page_obj.previous_page_number != 1 %}
+                    <a href="?page={{ page_obj.previous_page_number }}">{% translate 'Previous' %}</a>
+                {% endif %}
+
+            {% endif %}
+
+        {% endif %}
+
+        <span class="current">
+            {% translate 'Page' %} {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            {% if request.GET.search %}
+
+                <a href="?search={{ request.GET.search}}&page={{ page_obj.next_page_number }}">{% translate 'Next' %}&nbsp;&raquo;</a>
+                {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+                    <a href="?search={{ request.GET.search}}&page={{ page_obj.paginator.num_pages }}">{% translate 'Last' %}&raquo;</a>
+                {% endif %}
+
+            {% else %}
+
+                <a href="?page={{ page_obj.next_page_number }}">{% translate 'Next' %}&nbsp;&raquo;</a>
+                {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{% translate 'Last' %} &raquo;</a>
+                {% endif %}
+
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    </span>
+</div>
+{% endblock %}
