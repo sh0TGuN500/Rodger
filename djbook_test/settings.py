@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'djoser',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'uni_form'
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 MIDDLEWARE = [

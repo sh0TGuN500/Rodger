@@ -36,7 +36,7 @@ urlpatterns += i18n_patterns(
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 )
 
-if 'rosetta' in settings.INSTALLED_APPS:
+if 'rosetta' in settings.INSTALLED_APPS and settings.DEBUG:
     urlpatterns += [
         re_path(r'^rosetta/', include('rosetta.urls'))
     ]
