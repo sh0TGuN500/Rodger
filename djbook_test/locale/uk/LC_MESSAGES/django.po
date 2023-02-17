@@ -1,0 +1,542 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-17 15:25+0100\n"
+"PO-Revision-Date: 2023-02-17 16:17+0100\n"
+"Last-Translator:   <grandma7ter500@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: .\djbook_test\apps\articles\admin.py:31
+msgid "Author name"
+msgstr "Ім'я автора"
+
+#: .\djbook_test\apps\articles\admin.py:32
+msgid "Date information"
+msgstr "Інформація про дату"
+
+#: .\djbook_test\apps\articles\admin.py:33
+msgid "Article text"
+msgstr "Текст статті"
+
+#: .\djbook_test\apps\articles\admin.py:34
+#: .\djbook_test\apps\articles\models.py:25
+#: .\djbook_test\templates\articles\article_edit.html:42
+msgid "Tags"
+msgstr "Теги"
+
+#: .\djbook_test\apps\articles\admin.py:35
+msgid "Likes"
+msgstr "Лайки"
+
+#: .\djbook_test\apps\articles\forms.py:42
+msgid "Your comment..."
+msgstr "Ваш коментар..."
+
+#: .\djbook_test\apps\articles\forms.py:45
+msgid "Your comment:\n"
+msgstr "Ваш коментар:\n"
+
+#: .\djbook_test\apps\articles\models.py:12
+msgid "tag name"
+msgstr "назва тегу"
+
+#: .\djbook_test\apps\articles\models.py:24
+msgid "Tag"
+msgstr "Тег"
+
+#: .\djbook_test\apps\articles\models.py:30
+msgid "article title"
+msgstr "назва статті"
+
+#: .\djbook_test\apps\articles\models.py:39
+msgid "article text"
+msgstr "текст статті"
+
+#: .\djbook_test\apps\articles\models.py:48
+#: .\djbook_test\apps\articles\models.py:122
+msgid "publication date"
+msgstr "дата публікації"
+
+#: .\djbook_test\apps\articles\models.py:50
+#: .\djbook_test\apps\articles\models.py:123
+msgid "updating date"
+msgstr "дата оновлення"
+
+#: .\djbook_test\apps\articles\models.py:51
+msgid "is published"
+msgstr "опубліковано"
+
+#: .\djbook_test\apps\articles\models.py:52
+#: .\djbook_test\apps\articles\models.py:124
+msgid "like counter"
+msgstr "кількість лайків"
+
+#: .\djbook_test\apps\articles\models.py:63
+msgid "Published recently?"
+msgstr "Опубліковано нещодавно?"
+
+#: .\djbook_test\apps\articles\models.py:66
+#: .\djbook_test\templates\articles\article_detail.html:10
+msgid "Article"
+msgstr "Стаття"
+
+#: .\djbook_test\apps\articles\models.py:67
+#: .\djbook_test\templates\articles\article_list.html:6
+#: .\djbook_test\templates\articles\article_list.html:36
+#: .\djbook_test\templates\articles\base.html:50
+#: .\djbook_test\templates\articles\home_page.html:15
+msgid "Articles"
+msgstr "Статті"
+
+#: .\djbook_test\apps\articles\models.py:73
+#: .\djbook_test\apps\articles\models.py:137
+msgid "is like"
+msgstr "це лайк"
+
+#: .\djbook_test\apps\articles\models.py:76
+#: .\djbook_test\apps\articles\models.py:77
+msgid "Article like"
+msgstr "Лайк статті"
+
+#: .\djbook_test\apps\articles\models.py:89
+msgid "votes"
+msgstr "голоси"
+
+#: .\djbook_test\apps\articles\models.py:95
+msgid "Choice"
+msgstr "Вибір"
+
+#: .\djbook_test\apps\articles\models.py:96
+#: .\djbook_test\templates\articles\article_edit.html:62
+msgid "Choices"
+msgstr "Вибори"
+
+#: .\djbook_test\apps\articles\models.py:105
+msgid "Vote"
+msgstr "Голос"
+
+#: .\djbook_test\apps\articles\models.py:106
+msgid "Votes"
+msgstr "Голоси"
+
+#: .\djbook_test\apps\articles\models.py:114
+msgid "comment text"
+msgstr "текст коментаря"
+
+#: .\djbook_test\apps\articles\models.py:130
+msgid "Comment"
+msgstr "Коментар"
+
+#: .\djbook_test\apps\articles\models.py:131
+msgid "Comments"
+msgstr "Коментарі"
+
+#: .\djbook_test\apps\articles\models.py:140
+msgid "Comment like"
+msgstr "Лайк коментаря"
+
+#: .\djbook_test\apps\articles\models.py:141
+msgid "Comment likes"
+msgstr "Лайки коментарів"
+
+#: .\djbook_test\apps\articles\views.py:96
+#, python-brace-format
+msgid "Article \"{article_title}\" has been deleted"
+msgstr "Стаття \"{article_title}\" була видалена"
+
+#: .\djbook_test\apps\articles\views.py:157
+msgid " • Tag should be the length between 2 and 200"
+msgstr "• Тег повинен мати довжину від 2 до 200"
+
+#: .\djbook_test\apps\articles\views.py:159
+msgid " • Choice should be the length between 2 and 200"
+msgstr "• Вибір повинен мати довжину від 2 до 200"
+
+#: .\djbook_test\apps\articles\views.py:172
+#, python-brace-format
+msgid " • Article {article_href} successfully posted"
+msgstr "• Стаття {article_href} успішно опублікована"
+
+#: .\djbook_test\apps\articles\views.py:178
+#, python-brace-format
+msgid "New article posted: {article_model.title}"
+msgstr "Нова стаття опублікована: {article_model.title}"
+
+#: .\djbook_test\apps\articles\views.py:191
+msgid "Liked"
+msgstr "Вподобано"
+
+#: .\djbook_test\apps\articles\views.py:191
+msgid "Disliked"
+msgstr "Вподобайку вилучено"
+
+#: .\djbook_test\apps\articles\views.py:192
+msgid "Unliked"
+msgstr "Не вподобано"
+
+#: .\djbook_test\apps\articles\views.py:192
+msgid "Undisliked"
+msgstr "Не вподобання вилучено"
+
+#: .\djbook_test\apps\articles\views.py:247
+#: .\djbook_test\apps\articles\views.py:256
+msgid " • Symbols length less than 3"
+msgstr "• Довжина менша ніж 3"
+
+#: .\djbook_test\apps\articles\views.py:260
+#, python-brace-format
+msgid "New comment for {article.title}"
+msgstr "Новий коментар для {article.title}"
+
+#: .\djbook_test\apps\articles\views.py:261
+#, python-brace-format
+msgid ""
+"User {request.user.username} commented on your article!\n"
+"                \n"
+"You can't get rid of the mailing because I have not implemented it."
+msgstr ""
+"Користувач {request.user.username} прокоментував твою статтю!\n"
+"\n"
+"Неможливо відписатись від цієї розсилки тому що я ще не впровадив такої можливості."
+
+#: .\djbook_test\apps\articles\views.py:265
+msgid " • Comment successful posted"
+msgstr "• Коментар успішно опубліковано"
+
+#: .\djbook_test\apps\articles\views.py:271
+msgid " • Comment has been deleted"
+msgstr "• Коментар видалено"
+
+#: .\djbook_test\apps\articles\views.py:289
+msgid "Comment liked"
+msgstr "Коментар вподобано"
+
+#: .\djbook_test\apps\articles\views.py:289
+msgid "Comment disliked"
+msgstr "Вподобання коментаря вилучено"
+
+#: .\djbook_test\apps\articles\views.py:290
+msgid "Comment unliked"
+msgstr "Коментар не вподобано"
+
+#: .\djbook_test\apps\articles\views.py:290
+msgid "Comment undisliked"
+msgstr "Не вподобання коментаря вилучено"
+
+#: .\djbook_test\apps\articles\views.py:360
+#, python-brace-format
+msgid " • You have already voted. <a href=\"{results_url}\">Results</a>"
+msgstr "• Ти вже проголосував. <a href=\"{results_url}\">Результати</a>"
+
+#: .\djbook_test\apps\articles\views.py:366
+#, python-brace-format
+msgid " • Voting was successful. <a href=\"{results_url}\">Results</a>"
+msgstr "• Голос успішно зараховано. <a href=\"{results_url}\">Результати</a>"
+
+#: .\djbook_test\settings.py:159
+msgid "Polish"
+msgstr "Польська"
+
+#: .\djbook_test\settings.py:160
+msgid "Ukrainian"
+msgstr "Українська"
+
+#: .\djbook_test\settings.py:161
+msgid "English"
+msgstr "Англійська"
+
+#: .\djbook_test\templates\articles\about.html:6
+msgid "Information for customers"
+msgstr "Інформація для клієнтів"
+
+#: .\djbook_test\templates\articles\about.html:15
+msgid "Technologies"
+msgstr "Технології"
+
+#: .\djbook_test\templates\articles\about.html:22
+msgid "As"
+msgstr "як"
+
+#: .\djbook_test\templates\articles\about.html:22
+msgid "through"
+msgstr "через"
+
+#: .\djbook_test\templates\articles\about.html:25
+msgid ""
+"This is a forum, not commercial, is not in demand by users, it's just my pet"
+" project, written by myself. I'm modifying it to test and demonstrate the "
+"technologies I'm currently learning (as much as the theme of the site "
+"allows)."
+msgstr ""
+"Це не комерційний форум, не затребуваний користувачами, це просто мій пет-"
+"проект, повністю написаний мною. Я модифікую його, щоб перевірити та "
+"продемонструвати технології, які зараз вивчаю (наскільки дозволяє тематика "
+"сайту)."
+
+#: .\djbook_test\templates\articles\about.html:27
+msgid "My other simple project"
+msgstr "Мій інший простий проект"
+
+#: .\djbook_test\templates\articles\about.html:29
+msgid "Source code on GitHub"
+msgstr "Вихідний код на GitHub"
+
+#: .\djbook_test\templates\articles\article_detail.html:21
+msgid "NEW QUESTION"
+msgstr "НОВЕ ПИТАННЯ"
+
+#: .\djbook_test\templates\articles\article_detail.html:26
+#: .\djbook_test\templates\articles\article_detail.html:123
+#: .\djbook_test\templates\articles\article_list.html:52
+msgid "Edit"
+msgstr "Редагувати"
+
+#: .\djbook_test\templates\articles\article_detail.html:27
+#: .\djbook_test\templates\articles\article_detail.html:124
+#: .\djbook_test\templates\articles\article_list.html:53
+msgid "Delete"
+msgstr "Видалити"
+
+#: .\djbook_test\templates\articles\article_detail.html:30
+msgid "tags"
+msgstr "теги"
+
+#: .\djbook_test\templates\articles\article_detail.html:36
+msgid "Edited"
+msgstr "Відредаговано"
+
+#: .\djbook_test\templates\articles\article_detail.html:82
+#: .\djbook_test\templates\articles\article_detail.html:131
+msgid "Like"
+msgstr "Лайк"
+
+#: .\djbook_test\templates\articles\article_detail.html:86
+#: .\djbook_test\templates\articles\article_detail.html:135
+msgid "Dislike"
+msgstr "Дизлайк"
+
+#: .\djbook_test\templates\articles\article_detail.html:99
+msgid "Left comment"
+msgstr "Залишити коментар"
+
+#: .\djbook_test\templates\articles\article_detail.html:107
+msgid "For vote and commenting you need to"
+msgstr "Для голосування та коментування потрібно"
+
+#: .\djbook_test\templates\articles\article_detail.html:107
+#: .\djbook_test\templates\articles\article_list.html:18
+msgid "Sign In"
+msgstr "Увійти"
+
+#: .\djbook_test\templates\articles\article_detail.html:115
+msgid "*edited*"
+msgstr "*відредаговано*"
+
+#: .\djbook_test\templates\articles\article_detail.html:145
+msgid "Comments not found! Be the first"
+msgstr "Коментарів не знайдено! Будь першим"
+
+#: .\djbook_test\templates\articles\article_edit.html:13
+#: .\djbook_test\templates\articles\article_edit.html:87
+msgid "Editing"
+msgstr "Редагування"
+
+#: .\djbook_test\templates\articles\article_edit.html:13
+#: .\djbook_test\templates\articles\article_edit.html:87
+msgid "article"
+msgstr "стаття"
+
+#: .\djbook_test\templates\articles\article_edit.html:15
+#: .\djbook_test\templates\articles\article_edit.html:89
+msgid "New article"
+msgstr "Нова стаття"
+
+#: .\djbook_test\templates\articles\article_edit.html:44
+msgid "Tag field"
+msgstr "Поле тегів"
+
+#: .\djbook_test\templates\articles\article_edit.html:49
+#: .\djbook_test\templates\articles\article_edit.html:72
+msgid "Add More"
+msgstr "Додати більше"
+
+#: .\djbook_test\templates\articles\article_edit.html:50
+#: .\djbook_test\templates\articles\article_edit.html:73
+msgid "Remove Field"
+msgstr "Видалити поле"
+
+#: .\djbook_test\templates\articles\article_edit.html:64
+msgid "Choice field"
+msgstr "Поле вибору"
+
+#: .\djbook_test\templates\articles\article_edit.html:69
+msgid "When updating the article, voting results are reset"
+msgstr "При оновленні статті результати голосування видаляються"
+
+#: .\djbook_test\templates\articles\article_edit.html:75
+msgid "Left article"
+msgstr "Залишити статтю"
+
+#: .\djbook_test\templates\articles\article_edit.html:139
+msgid "Bad client request"
+msgstr "Помилка зі сторони клієнта"
+
+#: .\djbook_test\templates\articles\article_list.html:16
+#: .\djbook_test\templates\articles\base.html:79
+msgid "Add article"
+msgstr "Додати статтю"
+
+#: .\djbook_test\templates\articles\article_list.html:18
+msgid "For add article you need to"
+msgstr "Для додавання статті необхідно"
+
+#: .\djbook_test\templates\articles\article_list.html:30
+msgid "My articles"
+msgstr "Мої статті"
+
+#: .\djbook_test\templates\articles\article_list.html:32
+msgid "Search results"
+msgstr "Результати пошуку"
+
+#: .\djbook_test\templates\articles\article_list.html:34
+msgid "Tag results"
+msgstr "Результати тегів"
+
+#: .\djbook_test\templates\articles\article_list.html:56
+#: .\djbook_test\templates\articles\article_list.html:62
+msgid "No articles are available"
+msgstr "Немає доступних статей"
+
+#: .\djbook_test\templates\articles\article_list.html:73
+#: .\djbook_test\templates\articles\article_list.html:80
+msgid "First"
+msgstr "Перший"
+
+#: .\djbook_test\templates\articles\article_list.html:75
+#: .\djbook_test\templates\articles\article_list.html:82
+msgid "Previous"
+msgstr "Попередній"
+
+#: .\djbook_test\templates\articles\article_list.html:90
+msgid "Page"
+msgstr "Сторінка"
+
+#: .\djbook_test\templates\articles\article_list.html:96
+#: .\djbook_test\templates\articles\article_list.html:103
+msgid "Next"
+msgstr "Далі"
+
+#: .\djbook_test\templates\articles\article_list.html:98
+#: .\djbook_test\templates\articles\article_list.html:105
+msgid "Last"
+msgstr "Остання"
+
+#: .\djbook_test\templates\articles\base.html:54
+msgid "My Account"
+msgstr "Мій обліковий запис"
+
+#: .\djbook_test\templates\articles\base.html:64
+msgid "Email settings"
+msgstr "Налаштування електронної пошти"
+
+#: .\djbook_test\templates\articles\base.html:65
+msgid "LogOut"
+msgstr "Вийти"
+
+#: .\djbook_test\templates\articles\base.html:67
+msgid "API Root"
+msgstr "Корінь API"
+
+#: .\djbook_test\templates\articles\base.html:68
+msgid "Get API Key"
+msgstr "Отримайте ключ API"
+
+#: .\djbook_test\templates\articles\base.html:69
+msgid "Delete API KEY"
+msgstr "Видалити ключ API"
+
+#: .\djbook_test\templates\articles\base.html:71
+msgid "LogIn"
+msgstr "Вхід"
+
+#: .\djbook_test\templates\articles\base.html:73
+msgid "Register Now"
+msgstr "Зареєструватися зараз"
+
+#: .\djbook_test\templates\articles\base.html:99
+#: .\djbook_test\templates\articles\base.html:100
+msgid "Search"
+msgstr "Пошук"
+
+#: .\djbook_test\templates\articles\base.html:108
+msgid "There is no any content"
+msgstr "Немає жодного контенту"
+
+#: .\djbook_test\templates\articles\email_template.html:4
+#, python-format
+msgid ""
+"\n"
+" • User '%(user)s' post '%(article_title)s' article:\n"
+" • %(article_url)s\n"
+"    "
+msgstr ""
+"\n"
+"• Користувач ' %(user)s' опублікував статтю '%(article_title)s':\n"
+"• %(article_url)s"
+
+#: .\djbook_test\templates\articles\home_page.html:6
+msgid "Home"
+msgstr "Додому"
+
+#: .\djbook_test\templates\articles\home_page.html:16
+msgid "About"
+msgstr "Про сайт"
+
+#: .\djbook_test\templates\articles\personal_page.html:7
+msgid "Personal page"
+msgstr "Персональна сторінка"
+
+#: .\djbook_test\templates\articles\personal_page.html:22
+msgid "Add Avatar"
+msgstr "Додати аватар"
+
+#: .\djbook_test\templates\articles\personal_page.html:23
+msgid "Change Avatar"
+msgstr "Змінити аватар"
+
+#: .\djbook_test\templates\articles\personal_page.html:24
+msgid "Delete Avatar"
+msgstr "Видалити аватар"
+
+#: .\djbook_test\templates\articles\personal_page.html:28
+msgid "My Articles"
+msgstr "Мої Статті"
+
+#: .\djbook_test\templates\articles\votes_results.html:6
+msgid "Results"
+msgstr "Результати"
+
+#: .\djbook_test\templates\articles\votes_results.html:19
+msgid "have"
+msgstr "має"
+
+#: .\djbook_test\templates\articles\votes_results.html:19
+msgid "vote"
+msgstr "голосувати"
+
+#: .\djbook_test\templates\articles\votes_results.html:22
+msgid "Back to Question page"
+msgstr "Повернутися до сторінки статей"
