@@ -26,7 +26,7 @@
             {% csrf_token %}
             <br>
             <div class="wrapper">
-                {{ form|crispy }}
+                {{ form.as_p }}
                 {% comment %}
                 <p>
                     <input value="{{ title }}" type="text" name="article_title" placeholder="Article title" minlength="5" maxlength="200" required="" id="id_article_title">

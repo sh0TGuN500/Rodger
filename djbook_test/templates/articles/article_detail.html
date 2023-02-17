@@ -90,7 +90,7 @@
             </div>
             <form method="post" class="mt-4" id="comment-form">
                 {% csrf_token %}
-                {{ form|crispy }}
+                {{form.as_p}}
                 {% comment %}
                     <input hidden name="article_id" value="{{ article.id }}">
                 {% endcomment %}

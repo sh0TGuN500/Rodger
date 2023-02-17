@@ -42,7 +42,7 @@ class CommentForm(forms.ModelForm):
                                           'placeholder': _('Your comment...')})
         }
         labels = {
-            'text': _('Your comment:\n'),
+            'text': _('Your comment\n'),
         }
 
 
