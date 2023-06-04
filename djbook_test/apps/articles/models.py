@@ -43,7 +43,6 @@ class Article(models.Model):
             MaxLengthValidator(9000)
         ]
     )
-    # article_text = models.TextField('article text', max_length=9000, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(_('publication date'), auto_now_add=True, null=False)
     tag = models.ManyToManyField(Tag, blank=True)

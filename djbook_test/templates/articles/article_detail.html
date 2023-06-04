@@ -1,7 +1,6 @@
 {% extends 'articles/base.html' %}
-{% load crispy_forms_filters %}
-{% load crispy_forms_tags %}
 {% load i18n %}
+{% load l10n %}
 {% load humanize %}
 {% load avatar_tags %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -33,14 +32,14 @@
                 {% endfor %}<br>
             {% endif %}
             {% if article.up_date %}
-                {{ article.up_date|naturaltime }} * {% trans 'Edited' %} *
+                    {{ article.up_date|naturaltime|localize }} * {% trans 'Edited' %} *
             {% else %}
-                {{ article.pub_date|naturaltime }}
+                    {{ article.pub_date|naturaltime|localize }}
             {% endif %}
         </em>
 
         <hr>
-        <div style="white-space: break-spaces">{{ article.text|safe|escape }}</div>
+        <div style="white-space: break-spaces"><p id="article-text">{{ article.text|safe|escape }}</p></div>
         <hr>
 
         {% if user.is_authenticated %}
@@ -68,13 +67,13 @@
                         <label for="choice{{ forloop.counter }}">{{ choice.text }}</label> - have {{ choice.votes }} votes {% for vote in choice.vote_set.all %}{% if vote.user == user %} <small>*your choice*</small> {% endif %}{% endfor %}<br>
                     {% endfor %}
                     <br><input type="submit" value="Vote" class="vote">
-                    <small class="vote-success"></small>
-                    <small class="vote-warning"></small>
+                    <small class="vote-success" id="success"></small>
+                    <small class="vote-warning" id="warning"></small>
 
                 </form>
                 <hr>
             {% endif %}
-            Likes: {{ article.like_count }}
+            <h6>Likes: {{ article.like_count }}</h6>
             <div>
                 <form style="margin: 0; display: inline;" method="post" class="mt-4" id="article-like">
                     {% csrf_token %}
@@ -83,8 +82,8 @@
                 <form style="margin: 0; display: inline;" method="post" class="mt-4" id="article-dislike">
                     {% csrf_token %}
                     <button id="article-dislike" type="submit" class="btn btn-primary" value=0>{% trans 'Dislike' %}</button>
-                    <small class="article-like-success"></small>
-                    <small class="article-like-warning"></small>
+                    <small class="article-like-success" id="success"></small>
+                    <small class="article-like-warning" id="warning"></small>
                 </form>
             <hr>
             </div>
@@ -95,8 +94,8 @@
                     <input hidden name="article_id" value="{{ article.id }}">
                 {% endcomment %}
                 <button type="submit" class="btn btn-primary">{% trans 'Left comment' %}</button>
-                <small class="comment-success"></small>
-                <small class="comment-warning">{{ comment_message }}</small>
+                <small class="comment-success" id="success"></small>
+                <small class="comment-warning" id="warning">{{ comment_message }}</small>
                 {% if comment_message %}
                     <script> alert("{{ comment_message }}"); </script>
                 {% endif %}
@@ -109,10 +108,10 @@
             {% for comment in article.comment_set.all %}
 
                 <li>
-                    {% if comment.up_date|naturaltime %}
-                        {% trans '*edited*' %} {{ comment.up_date }}
+                    {% if comment.up_date %}
+                        {% trans '*edited*' %} {{ comment.up_date|naturaltime|localize }}
                     {% else %}
-                        {{ comment.pub_date|naturaltime }}
+                        {{ comment.pub_date|naturaltime|localize }}
                     {% endif %}
                     |{% avatar comment.user %}
                     <strong class="comment_autor">{{ comment.user }}:</strong>
@@ -131,8 +130,8 @@
                             <form style="margin: 0; display: inline;" action={% url 'articles:comment_like' comment.id 0 %} method="post" class="mt-4" id="comment-dislike">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary">{% trans 'Dislike' %}</button>
-                                <small class="comment-like-success"></small>
-                                <small class="comment-like-warning"></small>
+                                <small class="comment-like-success" id="success"></small>
+                                <small class="comment-like-warning" id="warning"></small>
                             </form>
                             Likes: {{ comment.like_count }}
                         </div>

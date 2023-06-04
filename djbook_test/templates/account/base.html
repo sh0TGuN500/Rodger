@@ -28,6 +28,11 @@
               crossorigin="anonymous"
               referrerpolicy="no-referrer" />
         <link rel="stylesheet" type="text/css" href="{% static 'articles/css/allauth.css' %}">
+        <title>
+            {% block head_title %}
+
+            {% endblock %}
+        </title>
     </head>
 {% endblock %}
 <body>
@@ -107,4 +112,3 @@
 </body>
 {% block script %}
 {% endblock %}
-</html>

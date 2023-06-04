@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from os import getenv, path
+from os import getenv
 import sys
 from pathlib import Path
 
@@ -19,6 +19,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from djbook_test.apps.articles.apps import ArticlesConfig
+from .allauth_settings import *
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
@@ -48,15 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.humanize',
     'storages',
-    'allauth',
-    'allauth.account',
-    'crispy_forms',
     'rosetta',
     'avatar',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
 ]
+
+INSTALLED_APPS += ALLAUTH_APPS
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 CRISPY_FAIL_SILENTLY = not DEBUG
@@ -85,10 +85,10 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -209,7 +209,7 @@ except ImportError:
     import dj_database_url
     import django_heroku
 
-    ALLOWED_HOSTS = ['rodger.herokuapp.com', ]
+    ALLOWED_HOSTS = ['rodger-dj.herokuapp.com', ]
 
     DATABASES = {
         'default': dj_database_url.config(default=getenv('DATABASE_URL'))

@@ -1,8 +1,8 @@
 h1 {
-    color: darkblue;
+    color: #120473;
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
-    text-shadow: #8f8f8f 0.7px 0.7px 0, #8f8f8f -0.7px -0.7px 0,
-                 #8f8f8f -0.7px 0.7px 0, #8f8f8f 0.7px -0.7px 0;
+    text-shadow: #adb5bd 0.7px 0.7px 0, #adb5bd -0.7px -0.7px 0,
+                 #adb5bd -0.7px 0.7px 0, #adb5bd 0.7px -0.7px 0;
 }
 
 body {

@@ -38,6 +38,7 @@ def about(request):
 
 
 def lang_switcher(request, lang):
+    print(request.path)
     user_language = lang
     activate(user_language)
     return render(request, 'articles/home_page.html')

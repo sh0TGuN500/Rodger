@@ -79,11 +79,25 @@ nav  {
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
 }
 
-h1  {
+h1, h6  {
     color: #DAA520FF;
     font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
     text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
                  #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+}
+
+#warning {
+    color: red;
+}
+
+#success {
+    color: green;
+
+}
+
+#warning, #success {
+    font-weight: bold;
+    vertical-align: -webkit-baseline-middle;
 }
 
 em {
@@ -102,7 +116,7 @@ label {
 }
 
 .comment_text {
-    font-size: 14pt;
+    font-size: 12pt;
 }
 
 label[for=id_comment_text] {
@@ -132,4 +146,8 @@ small {
 
 li {
     marker: none;
+}
+
+#article-text {
+    font-size: 14pt;
 }
