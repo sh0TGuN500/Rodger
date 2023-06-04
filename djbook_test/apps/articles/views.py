@@ -1,9 +1,11 @@
+from urllib.parse import urlparse, urlunparse
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -37,11 +39,18 @@ def about(request):
     return render(request, 'articles/about.html')
 
 
-def lang_switcher(request, lang):
-    print(request.path)
-    user_language = lang
+def lang_switcher(request, user_language):
+    preferred_language = request.META['HTTP_ACCEPT_LANGUAGE'].split(',')[0]
     activate(user_language)
-    return render(request, 'articles/home_page.html')
+    # Redirect the user back to the previous page
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    parsed_url = list(urlparse(redirect_url))
+    path_parts = parsed_url[2].split('/')
+    path_parts[1] = user_language
+    updated_path = '/'.join(path_parts)
+    parsed_url[2] = updated_path
+    updated_redirect_url = urlunparse(parsed_url)
+    return redirect(updated_redirect_url)
 
 
 ########################################################################################################################
@@ -64,10 +73,11 @@ class ArticleIndexView(generic.ListView):
 
 
 # ajax
-class ArticleDetailMixinView(generic.edit.FormMixin, generic.detail.DetailView):
+class ArticleDetailView(generic.DetailView, generic.edit.FormView):
     model = Article
     template_name = 'articles/article_detail.html'
     form_class = CommentForm
+    http_method_names = ['get', 'post']
 
 
 class ArticleSearchView(LoginRequiredMixin, generic.ListView):

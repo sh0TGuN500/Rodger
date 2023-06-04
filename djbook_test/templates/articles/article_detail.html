@@ -25,12 +25,15 @@
                 <a href="{% url 'articles:article_update' article.id %}"> {% trans 'Edit' %}</a> |
                 <a href="{% url 'articles:article_delete' article.id %}"> {% trans 'Delete' %}</a><br>
             {% endif %}
-            {% if article.tag.all %}
-                <span>{% trans 'tags' %}: </span>
-                {% for tag in article.tag.all %}
-                    <a href="{% url 'articles:tag' tag.id %}">#{{ tag }}</a>
-                {% endfor %}<br>
-            {% endif %}
+            {% with article.tag.all as tags %}
+                {% if tags %}
+                    <span>{% trans 'tags' %}: </span>
+                        {% for tag in tags %}
+                            <a href="{% url 'articles:tag' tag.id %}">#{{ tag }}</a>
+                        {% endfor %}
+                        <br>
+                {% endif %}
+            {% endwith %}
             {% if article.up_date %}
                     {{ article.up_date|naturaltime|localize }} * {% trans 'Edited' %} *
             {% else %}
@@ -47,29 +50,17 @@
                 <p><strong>{{ error_message }}</strong></p>
             {% endif %}
             {% if article.choice_set.exists %}
-                {% comment %}
-                {% if article.vote_set.exists %}
-                    {% for vote in article.vote_set.all %}
-                        {% if user == vote.user %}
-                         <ul>
-                            {% for choice in article.choice_set.all %}
-                                <li>"{{ choice }}" {% translate 'have' %} {{ choice.votes }} {% translate 'vote' %}{{ choice.votes|pluralize }}{% if vote.choice.id == choice.id %} - your choice{% endif %}</li>
-                            {% endfor %}
-                         </ul>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% endcomment %}
                 <form id="vote-form" method="post">
                     {% csrf_token %}
-                    {% for choice in article.choice_set.all %}
-                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label> - have {{ choice.votes }} votes {% for vote in choice.vote_set.all %}{% if vote.user == user %} <small>*your choice*</small> {% endif %}{% endfor %}<br>
-                    {% endfor %}
+                    {% with choices=article.choice_set.all %}
+                        {% for choice in choices %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                            <label for="choice{{ forloop.counter }}">{{ choice.text }}</label> - have {{ choice.votes }} votes {% for vote in choice.vote_set.all %}{% if vote.user == user %} <small>*your choice*</small> {% endif %}{% endfor %}<br>
+                        {% endfor %}
+                    {% endwith %}
                     <br><input type="submit" value="Vote" class="vote">
                     <small class="vote-success" id="success"></small>
                     <small class="vote-warning" id="warning"></small>
-
                 </form>
                 <hr>
             {% endif %}

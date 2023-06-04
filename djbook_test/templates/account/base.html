@@ -37,71 +37,7 @@
 {% endblock %}
 <body>
 {% block nav %}
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href={% url 'articles:home' %}>RODJER</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href={% url 'articles:index' %}>Articles</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            My Account
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% if user.is_authenticated %}
-                                {% if user.is_superuser %}
-                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">{{ user.username }}</a></li>
-                                {% else %}
-                                    <li><a class="dropdown-item" href="{% url 'articles:personal_page' %}">{{ user.username }}</a></li>
-                                {% endif %}
-                                <li><a class="dropdown-item" href="{% url 'articles:my_articles' %}">My Articles</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'account_email' %}">Email settings</a></li>
-                                <li><a class="dropdown-item" href="{% url 'account_logout' %}">LogOut</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'login' %}" target="_blank">{% translate 'Get API Key' %}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}" target="_blank">{% translate 'Delete API KEY' %}</a></li>
-                            {% else %}
-                                <li><a class="dropdown-item" href="{% url 'account_login' %}">LogIn</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'account_signup' %}">Register Now</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href='{% url 'articles:article_create' %}'>Add article +</a>
-                        </li>
-                    {% endif %}
-                    <a class="nav-link" href={% url 'articles:about' %}>About</a>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ LANGUAGE_CODE }}
-                        </a>
-                        {% get_available_languages as languages %}
-                        {% get_language_info_list for languages as lang_info %}
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% for lang in lang_info %}
-                                {% language lang.code %}
-                                    <li><a class="dropdown-item" href="{% url 'articles:lang' lang.code %}">{{ lang.name_local }}</a></li>
-                                {% endlanguage %}
-                            {% endfor %}
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex" action="{% url 'articles:search' %}" method="get">
-                    <input name="search" class="form-control me-2" type="search" minlength="3" placeholder="Search" aria-label="Search" required>
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                    {{ search_message }}
-                </form>
-            </div>
-        </div>
-    </nav>
+    {% include 'articles/navbar.html' %}
 {% endblock %}
 
 <div class="content-container">
