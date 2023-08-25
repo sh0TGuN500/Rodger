@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: gray;
+    background-color: #f0f5ff;
+    margin: 0;
+    padding: 0;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    height: 100%;
+    width: 100%;
+    overflow-y: visible;
+    overflow-x: hidden;
+    color: #fff;
+}
+
+::selection{
+    color: #fff;
+    background: #5372F0;
+}
+
+div.wrapper, button.form {
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="text"], textarea{
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    background: none;
+    color: black;
+    width: -webkit-fill-available;
+}
+
+input[type="text"]:focus, textarea:focus{
+    outline: none;
+}
+
+#remove_choice_fields, #remove_tag_fields {
+    float: right;
+}
+.fa-minus, .fa-plus {
+    margin-right: 5px;
+}
+
+
+header {
+    box-sizing: border-box;
+    min-height: 100vh;
+    position: relative;
+    transform-style: inherit;
+    width: 100vw;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+header h1 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: #3b3b3b 0.1vw 0.1vw 0, #3b3b3b -0.1vw -0.1vw 0,
+    #3b3b3b -0.1vw 0.1vw 0, #3b3b3b 0.1vw -0.1vw 0;
+    color: #DAA520FF;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+    text-align: center;
+}
+
+
+header,
+header:before {
+    background: 50% 50% / cover;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background: url("../images/add_question_background.gif");
+    background-size: cover;
+    transform-origin: center center 0;
+    transform: translateZ(-1px) scale(2);
+    z-index: -1;
+    min-height: 100vh;
+}
+
+.main {
+    z-index: 2;
+    position: absolute;
+    top: 100vh;
+    right: 0;
+    left: 0;
+    background: black;
+    opacity: 1;
+    line-height: 30px;
+    font-weight: lighter;
+    padding: 40px;
+    color: grey;
+}
+
+.choice-controls, .tag-controls {
+    width: 294px;
+    margin: 15px auto;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.wrapper {
+    width: 80%;
+    margin: 40px auto;
+    border-radius: 5px;
+    background: white;
+    padding: 20px 28px 22px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.06);
+}
+
+.wrapper :where(.title, li, li i, .tag-details){
+    display: flex;
+    align-items: center;
+}
+
+nav  {
+    color: gray;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+
+em {
+    color: GoldenRod;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+.wrapper .tags{
+    margin: 10px 0;
+}
+
+.tags p{
+    font-size: 15px;
+}
+
+.tags ul{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 7px;
+    margin: 12px 0;
+    border-radius: 5px;
+    border: 1px solid #a6a6a6;
+}
+
+.tags ul li{
+    color: #333;
+    margin: 4px 3px;
+    list-style: none;
+    border-radius: 5px;
+    background: #F2F2F2;
+    padding: 5px 8px 5px 10px;
+    border: 1px solid #e3e1e1;
+}
+
+.tags ul li i{
+    height: 20px;
+    width: 20px;
+    color: #808080;
+    margin-left: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #dfdfdf;
+    justify-content: center;
+}
+
+.tags ul input{
+    flex: 1;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.wrapper .tag-details{
+    justify-content: space-between;
+}
+
+button.form, button.remove-tag{
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 9px 15px;
+    border-radius: 5px;
+    background: #5372F0;
+    transition: background 0.3s ease;
+}
+button:hover.form, button:hover.remove-tag{
+    background: #2c52ed;
+}
+
+
