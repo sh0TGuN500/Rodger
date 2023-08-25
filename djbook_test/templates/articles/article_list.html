@@ -16,7 +16,10 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'articles:article_create' %}" class="add_article"> + {% translate 'Add article' %}</a>
             {% else %}
-                <p class="add_article">{% translate 'For add article you need to' %} <a href="/accounts/login/">{% translate 'Sign In' %}</a></p>
+                <p class="add_article">
+                    {% translate 'For add article you need to' %}
+                    <a href="/accounts/login/">{% translate 'Sign In' %}</a>
+                </p>
             {% endif %}
         {% endif %}
 

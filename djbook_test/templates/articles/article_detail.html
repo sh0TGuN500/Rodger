@@ -19,7 +19,9 @@
             {% if article.was_published_recently %}
                 <blink>{% trans 'NEW QUESTION' %}!</blink><br>
             {% endif %}
-            {% avatar article.user %}
+            {% if article.user.avatar.exist %}
+                {% avatar article.user %}
+            {% endif %}
             <h2>{{ article.user }}</h2>
             {% if article.user == user %}
                 <a href="{% url 'articles:article_update' article.id %}"> {% trans 'Edit' %}</a> |
@@ -35,9 +37,9 @@
                 {% endif %}
             {% endwith %}
             {% if article.up_date %}
-                    {{ article.up_date|naturaltime|localize }} * {% trans 'Edited' %} *
+                    {{ article.up_date|naturalday }} ({{ article.up_date|naturaltime|localize }}) * {% trans 'Edited' %} *
             {% else %}
-                    {{ article.pub_date|naturaltime|localize }}
+                    {{ article.pub_date|naturalday }} ({{ article.pub_date|naturaltime|localize }})
             {% endif %}
         </em>
 
@@ -104,7 +106,9 @@
                     {% else %}
                         {{ comment.pub_date|naturaltime|localize }}
                     {% endif %}
-                    |{% avatar comment.user %}
+                    {% if article.user.avatar.exist %}
+                        |{% avatar comment.user %}
+                    {% endif %}
                     <strong class="comment_autor">{{ comment.user }}:</strong>
                     <p class="comment_text">{{ comment }}
                         {% if comment.user == user %}

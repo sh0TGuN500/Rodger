@@ -5,12 +5,13 @@ import re
 from .models import Comment, Article
 
 
-def text_validator(origin_text: str, min_length: int = 0, max_length: int = 0):
+def cleanhtml(raw_html):
     clean_re = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+    cleantext = re.sub(clean_re, '', raw_html)
+    return cleantext
 
-    def cleanhtml(raw_html):
-        cleantext = re.sub(clean_re, '', raw_html)
-        return cleantext
+
+def text_validator(origin_text: str, min_length: int = 0, max_length: int = 0):
 
     splitted_text: list = cleanhtml(origin_text.strip()).split()
     formated_text = ' '.join(splitted_text)
