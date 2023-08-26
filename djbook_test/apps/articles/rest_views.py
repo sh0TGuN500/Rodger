@@ -13,7 +13,7 @@ from .serializers import ArticleListSerializer, CommentListSerializer, TagListSe
 
 
 class ArticlesViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all().order_by('-pub_date')
+    queryset = Article.objects.select_related('user').prefetch_related('tag').order_by('-pub_date')
     serializer_class = ArticleListSerializer
     permission_classes = (ObjectOwnerPermission,)
 
@@ -22,7 +22,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Comment.objects.all().order_by('-pub_date')
+    queryset = Comment.objects.select_related('user', 'article').order_by('-pub_date')
     serializer_class = CommentListSerializer
     permission_classes = (ObjectOwnerPermission,)
 
