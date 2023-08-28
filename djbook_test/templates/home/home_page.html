@@ -1,4 +1,4 @@
-{% extends 'articles/base.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'articles/css/home_style.css' %}">
 
     <a href="{% url 'articles:index' %}"><h1>{% translate 'Articles' %}</h1></a>
-    <a href="{% url 'articles:about' %}"><h1>{% translate 'About' %}</h1></a>
+    <a href="{% url 'home:about' %}"><h1>{% translate 'About' %}</h1></a>
 
 </div>
 {% endblock %}

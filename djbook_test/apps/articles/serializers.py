@@ -15,7 +15,7 @@ class CommentListSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Custom update logic goes here
-        up_date_value = validated_data.get('up_date', timezone.now())
+        up_date_value = validated_data.get('up_date')
         # Add the new field to the instance as an attribute
         instance.up_date = up_date_value
         # Call the super().update(instance, validated_data) to keep the original update logic as well
@@ -87,7 +87,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Custom update logic goes here
-        up_date_value = validated_data.get('up_date', timezone.now())
+        up_date_value = validated_data.get('up_date')
         # Add the new field to the instance as an attribute
         instance.up_date = up_date_value
         # Call the super().update(instance, validated_data) to keep the original update logic as well

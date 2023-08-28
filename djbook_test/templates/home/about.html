@@ -1,4 +1,4 @@
-{% extends "articles/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -18,15 +18,15 @@
         <dd>DRF, Celery/Redis, AWS boto3, crispy, whitenoise, rosetta, argon2, allauth</dd>
     <dt>AJAX</dt>
         <dd></dd>
-      <dt>PostgreSQL</dt>
-        <dd>{% translate 'As' %} DB {% translate 'through' %} Django ORM</dd>
+      <dt>PostgreSQL, MySQL</dt>
+        <dd>{% translate 'As' %} DB's {% translate 'through' %} Django ORM</dd>
     </dl>
 
     <p>{% translate "This is a forum, not commercial, is not in demand by users, it's just my pet project, written by myself. I'm modifying it to test and demonstrate the technologies I'm currently learning (as much as the theme of the site allows)." %}</p>
 
     <h4 class="interk"><a class="interk" href="https://inter-k.herokuapp.com/">{% translate 'My other simple project' %}</a></h4>
 
-    <h2><a href="https://github.com/sh0TGuN500/Rodger/tree/master">{% translate 'Source code on GitHub' %}</a></h2>
+    <h2><a href="https://github.com/sh0TGuN500/Rodger/">{% translate 'Source code on GitHub' %}</a></h2>
 
 </div>
 {% endblock %}

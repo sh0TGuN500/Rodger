@@ -27,7 +27,9 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    path('', include('articles.urls')),
+    path('articles/', include('articles.urls')),
+    path('weather/', include('weather.urls')),
+    path('', include('home.urls')),
     path('admin228/', admin.site.urls, name='admin'),
     path('account/', include('allauth.urls')),
     path('avatar/', include('avatar.urls')),
@@ -43,3 +45,4 @@ if 'rosetta' in settings.INSTALLED_APPS and settings.DEBUG:
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))

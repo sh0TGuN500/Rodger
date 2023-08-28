@@ -18,7 +18,7 @@ import rest_framework.permissions
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from djbook_test.apps.articles.apps import ArticlesConfig
+# from djbook_test.apps.articles.apps import ArticlesConfig
 from .allauth_settings import *
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -39,7 +39,9 @@ DEBUG = True if getenv('RUN_MAIN') == 'true' else str(getenv('DEBUG')) == "1"
 # Application definition
 
 INSTALLED_APPS = [
-    'articles.apps.ArticlesConfig',
+    'articles',
+    # 'weather',
+    # 'home',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'django_celery_results',
 ]
 
 INSTALLED_APPS += ALLAUTH_APPS
@@ -268,7 +271,9 @@ except ImportError:
 
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
-    CELERY_BROKER_URL = CELERY_RESULT_BACKEND = getenv('REDIS_URL')
+    CELERY_BROKER_URL = getenv('CLOUDAMQP_URL')
+
+    CELERY_RESULT_BACKEND = getenv('REDIS_URL')
 
     DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
     EMAIL_HOST = getenv('EMAIL_HOST')
