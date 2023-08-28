@@ -5,6 +5,7 @@ from .service import send, admin_send
 
 @app.task
 def send_task(subject, message, user_email):
+    print('task')
     send(subject, message, user_email)
 
 

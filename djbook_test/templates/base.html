@@ -31,6 +31,8 @@
               integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
               crossorigin="anonymous"
               referrerpolicy="no-referrer" />
+        {% block stylesheet %}
+        {% endblock %}
         <title>
             {% block title %}
                 Articles Engine
@@ -39,7 +41,7 @@
     </head>
 {% endblock %}
 <body>
-    {% include 'articles/navbar.html' %}
+    {% include 'navbar.html' %}
 {% block content %}
     {% translate 'There is no any content' %}
 {% endblock %}

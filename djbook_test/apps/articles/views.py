@@ -1,64 +1,32 @@
-import time
-from urllib.parse import urlparse, urlunparse
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.base import View
 
 from djbook_test.settings import DEBUG
 from .forms import CommentForm, ArticleEditForm, text_validator, cleanhtml
-from .models import Article, Choice, Tag, Comment, Vote
+from .models import Article, Choice, Tag, Comment
 from .tasks import send_task, admin_send_task
-
-
-########################################################################################################################
-################################################ CORE SECTION ##########################################################
-########################################################################################################################
-
-
-def home(request):
-    return render(request, 'articles/home_page.html')
-
-
-@login_required()
-def personal_page(request):
-    return render(request, 'articles/personal_page.html')
-
-
-def about(request):
-    return render(request, 'articles/about.html')
-
-
-def lang_switcher(request, user_language):
-    preferred_language = request.META['HTTP_ACCEPT_LANGUAGE'].split(',')[0]
-    print(preferred_language)
-    activate(user_language)
-    # Redirect the user back to the previous page
-    redirect_url = request.META.get('HTTP_REFERER')
-    parsed_url = list(urlparse(redirect_url))
-    path_parts = parsed_url[2].split('/')
-    path_parts[1] = user_language
-    updated_path = '/'.join(path_parts)
-    parsed_url[2] = updated_path
-    updated_redirect_url = urlunparse(parsed_url)
-    return redirect(updated_redirect_url)
 
 
 ########################################################################################################################
 ################################################ ARTICLE CRUD #########################################################
 ########################################################################################################################
+
+
+@login_required()
+def personal_page(request):
+    return render(request, 'articles/personal_page.html')
 
 
 class ArticleIndexView(generic.ListView):
@@ -206,14 +174,14 @@ def article_db_save(request, article_id=None):
     article_href = f'"<a href="{article_url}">{escape(article_model.title)}</a>"'
     article_url_message = _(f' • Article {article_href} successfully posted')
 
-    if not DEBUG:
-        article_absolute_url = 'rodger-dj.herokuapp.com' + article_url
-        html_content = render_to_string('articles/email_template.html', {'article_url': article_absolute_url})
-        admin_send_task.delay(
-            _(f'New article posted: {article_model.title}'),
-            html_content,
-            article_model.user.email
-        )
+    #if not DEBUG:
+    article_absolute_url = 'rodger-dj.herokuapp.com' + article_url
+    html_content = render_to_string('articles/email_template.html', {'article_url': article_absolute_url})
+    admin_send_task.delay(
+        _(f'New article posted: {article_model.title}'),
+        html_content,
+        # article_model.user.email
+    )
     return JsonResponse({'success': article_url_message})
 
 
@@ -304,13 +272,13 @@ class CommentCreate(LoginRequiredMixin, View):
                 error_text = cleanhtml(str(form.errors.get('text')).strip())
                 return JsonResponse({'error': f' • {error_text}'})
         user = article.user
-        if not DEBUG:
-            send_task.delay(
-                _(f'New comment for {article.title}'),
-                _(f'''User {request.user.username} commented on your article!
-                \nYou can\'t get rid of the mailing because I have not implemented it.'''),
-                user_email=user.email,
-            )
+        #if not DEBUG:
+        send_task.delay(
+            _(f'New comment for {article.title}'),
+            _(f'''User {request.user.username} commented on your article!
+            \nYou can\'t get rid of the mailing because I have not implemented it.'''),
+            user_email=user.email,
+        )
         return JsonResponse({'success': _(' • Comment successful posted')})
 
 

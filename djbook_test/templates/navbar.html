@@ -3,7 +3,7 @@
 
 <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href={% url 'articles:home' %}>RODGER</a>
+        <a class="navbar-brand" href={% url 'home:home' %}>RODGER</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -42,7 +42,7 @@
                         <a class="nav-link" href='{% url 'articles:article_create' %}'>{% translate 'Add article' %} +</a>
                     </li>
                 {% endif %}
-                <a class="nav-link" href={% url 'articles:about' %}>About</a>
+                <a class="nav-link" href={% url 'home:about' %}>About</a>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ LANGUAGE_CODE }}
@@ -52,7 +52,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for lang in lang_info %}
                             {% language lang.code %}
-                                <li><a class="dropdown-item" href="{% url 'articles:lang' lang.code %}">{{ lang.name_local }}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'home:lang' lang.code %}">{{ lang.name_local }}</a></li>
                             {% endlanguage %}
                         {% endfor %}
                     </ul>
