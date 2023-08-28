@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'django_celery_results',
 ]
 
 INSTALLED_APPS += ALLAUTH_APPS
