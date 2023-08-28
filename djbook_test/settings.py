@@ -214,7 +214,7 @@ except ImportError:
     ALLOWED_HOSTS = ['rodger-dj.herokuapp.com', ]
 
     DATABASES = {
-        'default': dj_database_url.config(default=getenv('DATABASE_URL'))
+        'default': dj_database_url.config(default=getenv('JAWSDB_URL'))
     }
 
     SECURE_HSTS_SECONDS = 60
