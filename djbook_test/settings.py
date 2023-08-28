@@ -217,6 +217,13 @@ except ImportError:
         'default': dj_database_url.config(default=getenv('JAWSDB_URL'))
     }
 
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": getenv('REDIS_URL'),
+        }
+    }
+
     SECURE_HSTS_SECONDS = 60
 
     SECURE_SSL_REDIRECT = True
