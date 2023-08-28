@@ -273,10 +273,11 @@ class CommentCreate(LoginRequiredMixin, View):
                 return JsonResponse({'error': f' • {error_text}'})
         user = article.user
         #if not DEBUG:
+        article_absolute_url = 'rodger-dj.herokuapp.com' + reverse_lazy('articles:detail', args=(article_id,))
         send_task.delay(
             _(f'New comment for {article.title}'),
-            _(f'''User {request.user.username} commented on your article!
-            \nYou can\'t get rid of the mailing because I have not implemented it.'''),
+            _(f'''User {request.user.username} commented on your article {article_absolute_url}!
+            \nYou can\'t get rid of the mailing because I haven\'t implemented it.'''),
             user_email=user.email,
         )
         return JsonResponse({'success': _(' • Comment successful posted')})
