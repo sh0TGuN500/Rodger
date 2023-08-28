@@ -171,7 +171,7 @@ def article_db_save(request, article_id=None):
         Choice.objects.bulk_create(choices_to_create)
 
     article_url = reverse_lazy('articles:detail', args=(article_model.id,))
-    article_href = f'"<a href="{article_url}">{escape(data.title)}</a>"'
+    article_href = f'"<a href="{article_url}">{escape(article_model.title)}</a>"'
     article_url_message = _(f' • Article {article_href} successfully posted')
 
     #if not DEBUG:
@@ -180,9 +180,9 @@ def article_db_save(request, article_id=None):
         'articles/email_template.html',
         {'article_url': article_absolute_url,
          'user': request.user.username,
-         'article_title': data.title})
+         'article_title': article_model.title})
     admin_send_task.delay(
-        _(f'New article posted: {data.title}'),
+        _(f'New article posted: {article_model.title}'),
         html_content,
         # article_model.user.email
     )
