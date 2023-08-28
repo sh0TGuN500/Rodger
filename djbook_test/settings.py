@@ -41,7 +41,7 @@ DEBUG = True if getenv('RUN_MAIN') == 'true' else str(getenv('DEBUG')) == "1"
 INSTALLED_APPS = [
     'articles',
     # 'weather',
-    # 'home',
+    'home',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

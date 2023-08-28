@@ -28,7 +28,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('articles/', include('articles.urls')),
-    path('weather/', include('weather.urls')),
+    # path('weather/', include('weather.urls')),
     path('', include('home.urls')),
     path('admin228/', admin.site.urls, name='admin'),
     path('account/', include('allauth.urls')),
