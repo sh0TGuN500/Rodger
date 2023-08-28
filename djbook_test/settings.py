@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'cachalot',
 ]
 
 INSTALLED_APPS += ALLAUTH_APPS
