@@ -27,6 +27,13 @@
                 <a href="{% url 'articles:article_update' article.id %}"> {% trans 'Edit' %}</a> |
                 <a href="{% url 'articles:article_delete' article.id %}"> {% trans 'Delete' %}</a><br>
             {% endif %}
+            {% if user.is_superuser %}
+                {% if article.is_published %}
+                    <a href="{% url 'articles:publish_article' article.id %}"> {% trans 'Unpublish' %}</a> |
+                {% else %}
+                    <a href="{% url 'articles:publish_article' article.id %}"> {% trans 'Publish' %}</a> |
+                {% endif %}
+            {% endif %}
             {% with article.tag.all as tags %}
                 {% if tags %}
                     <span>{% trans 'tags' %}: </span>

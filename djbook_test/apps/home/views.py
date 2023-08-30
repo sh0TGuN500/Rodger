@@ -19,6 +19,8 @@ def lang_switcher(request, user_language):
     path_parts = parsed_url[2].split('/')
     path_parts[1] = user_language
     parsed_url[2] = '/'.join(path_parts)
-    return redirect(urlunparse(parsed_url))  # redirect(urlunparse(parsed_url))
+    response = redirect(urlunparse(parsed_url))
+    response.set_cookie('django_language', user_language)
+    return response  # redirect(urlunparse(parsed_url))
 
 

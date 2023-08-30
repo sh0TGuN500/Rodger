@@ -1,12 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
@@ -29,6 +29,16 @@ def personal_page(request):
     return render(request, 'articles/personal_page.html')
 
 
+@login_required()
+def publish_article(request, article_id):
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse_lazy('home:home'))
+    article = get_object_or_404(Article, id=article_id)
+    article.publish()
+    # HttpResponseRedirect(reverse('articles:detail', args=(article_id,)))
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
 class ArticleIndexView(generic.ListView):
     paginate_by = 16
     template_name = 'articles/article_list.html'
@@ -39,7 +49,10 @@ class ArticleIndexView(generic.ListView):
         Return the last published articles (not including those set to be
         published in the future).
         """
-        return Article.objects.only('title').filter(is_published=True).order_by('-pub_date')
+        if self.request.user.is_superuser:
+            return Article.objects.only('title', 'is_published').all().order_by('-pub_date')
+        else:
+            return Article.objects.only('title').filter(is_published=True).order_by('-pub_date')
 
 
 # ajax

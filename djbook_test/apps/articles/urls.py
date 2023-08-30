@@ -36,6 +36,7 @@ urlpatterns = [
     path('edit_article/<int:article_id>/article_delete/', views.article_db_save, name='article_update_save'),
     path('search/', views.ArticleSearchView.as_view(), name='search'),
     path('delete_article/<int:article_id>', views.article_delete, name='article_delete'),
+    path('<int:article_id>/publish_article/', views.publish_article, name='publish_article'),
     # path('froala_form', views.froala_form, name='froala_form'),
     # path('post_froala_form', views.post_froala_form, name='post_froala_form'),
     # path('froala_index', views.FroalaIndexView.as_view(), name='froala_index'),

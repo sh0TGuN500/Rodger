@@ -57,6 +57,10 @@ class Article(models.Model):
         now = timezone.now()
         return now - timedelta(days=1) <= self.pub_date <= now
 
+    def publish(self):
+        self.is_published = not self.is_published
+        self.save()
+
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = _('Published recently?')

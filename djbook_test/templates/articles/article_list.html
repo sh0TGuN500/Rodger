@@ -61,7 +61,17 @@
                 {% endfor %}
             {% else %}
                 {% for article in page_obj %}
-                    <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
+                    <li>
+                        {% if user.is_superuser %}
+                            {% if article.is_published %}
+                                <a href="{% url 'articles:publish_article' article.id %}"> {% trans 'Unpublish' %}</a>
+                            {% else %}
+                                <a href="{% url 'articles:publish_article' article.id %}"> {% trans 'Publish' %}</a>
+                            {% endif %}
+                            |
+                        {% endif %}
+                        <a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a>
+                    </li>
                 {% empty %}
                     <p>{% translate 'No articles are available' %}.</p>
                 {% endfor %}
