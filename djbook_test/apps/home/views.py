@@ -15,9 +15,9 @@ def user_checker(address):
 
 
 def get_address(request):
-    if 'HTTP_X_FORWARDED_FOR' in request.headers:
-        addresses = request.headers['HTTP_X_FORWARDED_FOR'].split(',')
-        return addresses[-1].strip()
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        address = request.META['HTTP_X_FORWARDED_FOR']
+        return address
     else:
         return request.META['REMOTE_ADDR']
 
