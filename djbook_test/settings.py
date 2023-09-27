@@ -182,7 +182,11 @@ LOGIN_URL = '/account/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
+STATIC_ROOT = PROJECT_ROOT / 'static'
+
+STATICFILES_DIRS = [
+    PROJECT_ROOT / 'static',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
