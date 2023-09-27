@@ -1,0 +1,28 @@
+div.content {
+    margin-left: 10px
+}
+
+h1  {
+    color: GoldenRod;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+li {
+    color: GoldenRod;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+body {
+    background: white url("../images/background.gif") no-repeat;
+    background-size: 100vmax 100vh;
+}
+
+a.again {
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+	color: LimeGreen;
+}
+
+nav  {
+    color: gray;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
