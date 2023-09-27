@@ -1,0 +1,25 @@
+h1 {
+    color: darkblue;
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+    text-shadow: 0 0 4px black;
+}
+
+body {
+    background: white url("../images/customers.gif") no-repeat;
+    background-size: 100vmax 100vh;
+}
+
+nav {
+    font-family: "Comic Sans", "Comic Sans MS", "Chalkboard", "ChalkboardSE-Regular", sans-serif;
+}
+
+.main {
+    margin-left: 5px;
+    text-align: left;
+    color: GoldenRod;
+    text-shadow: 2px -1px 1px black;
+}
+
+.interk {
+    color: #d94800;
+}
