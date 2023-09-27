@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static 'weather/css/weather.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.css" />
+{% endblock %}
+{% block head_title %}Interactive Map with Weather{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div id="map"></div>
+        <div id="weather-info"></div>
+        <div id ="forecast"></div>
+    </div>
+    {% block script %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.js"></script>
+        <script>
+            // Initialize the map
+            const map = L.map('map').setView([0, 0], 2);
+
+            // Add a tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Create a marker layer group
+            const markers = L.layerGroup().addTo(map);
+
+            // Function to handle map click event
+            function fetchWeather(lat, lng) {
+                $.ajax({
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}', // Replace with your CSRF token variable
+                    },
+                    url: '{% url 'weather:get_weather' %}',
+                    method: 'POST',
+                    data: { lat: lat, lng: lng },
+                    success: function (data) {
+                        $("#weather-info").html('')
+                        // Display the weather information in the weather-info div
+                        $("#weather-info").html(data.weather_info);
+                        $("#forecast").html(data.forecast)
+                    },
+                    error: function () {
+                        $("#weather-info").html('')
+                        $("#weather-info").html(data.error);
+                        console.error("Error fetching weather data");
+                    }
+                });
+            }
+            function onMapClick(e) {
+                markers.clearLayers();
+                const marker = L.marker(e.latlng).addTo(markers);
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+                fetchWeather(lat, lng);
+            }
+
+            // Add click event listener to the map
+            map.on('click', onMapClick);
+
+
+            const geocoder = L.Control.geocoder({
+                defaultMarkGeocode: false,
+            }).addTo(map);
+
+            // Function to handle geocode result
+            function onGeocodeResult(result) {
+                const latlng = result.center;
+                markers.clearLayers();
+                L.marker(latlng).addTo(markers);
+                map.setView(latlng, 10);
+                fetchWeather(latlng.lat, latlng.lng);
+            }
+
+            // Add event listener for geocode result
+            geocoder.on('markgeocode', e => {
+                onGeocodeResult(e.geocode);
+            });
+        </script>
+    {% endblock %}
+{% endblock %}
+`

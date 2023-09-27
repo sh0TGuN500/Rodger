@@ -40,7 +40,7 @@ DEBUG = True if getenv('RUN_MAIN') == 'true' else str(getenv('DEBUG')) == "1"
 
 INSTALLED_APPS = [
     'articles',
-    # 'weather',
+    'weather',
     'home',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -180,6 +180,10 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/account/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+STATICFILES_DIRS = [
+    PROJECT_ROOT / 'static',
+]
 
 STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
 

@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block title %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/votes_results.css' %}">
+{% endblock %}
+
+{% block head_title %}
 	{% trans 'Results' %} | {{ article.title }}
 {% endblock %}
 
 {% block content %}
 <div class="content">
-	{% load static %}
 
-	<link rel="stylesheet" type="text/css" href="{% static 'articles/css/votes_results.css' %}">
+
 
 	<h1>{{ article.title }}</h1>
 

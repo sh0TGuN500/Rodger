@@ -12,12 +12,16 @@ class LanguageMiddleware:
     def __call__(self, request):
         language = request.COOKIES.get('django_language', None)
         if not language:
-            user_language = request.META['HTTP_ACCEPT_LANGUAGE'].split(',')[0]
-            lang_list = [lang[0] for lang in LANGUAGES]
-            if user_language in lang_list:
-                language = user_language
-            else:
+            try:
+                user_language = request.META.get('HTTP_ACCEPT_LANGUAGE').split(',')[0]
+            except KeyError:
                 language = 'en'
+            else:
+                lang_list = [lang[0] for lang in LANGUAGES]
+                if user_language in lang_list:
+                    language = user_language
+                else:
+                    language = 'en'
             response = redirect(reverse('home:home'))
             response.set_cookie('django_language', language)
             activate(language)

@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load avatar_tags %}
+{% load static %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block title %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/home_style.css' %}">
+{% endblock %}
+
+{% block head_title %}
 	{% translate 'Personal page' %}
 {% endblock %}
 
 {% block content %}
 <div class="main">
-	{% load static %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/home_style.css' %}">
+
+
 
 <div style="float: left; width: 50%;">
     <h1>Avatar:</h1>

@@ -3,10 +3,11 @@
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block media %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_edit.css' %}">
 {% endblock %}
 
-{% block title %}
+{% block head_title %}
     {% if article_id %}
         {% translate 'Editing' %} "{{ title }}" {% translate 'article' %}
     {% else %}
@@ -17,8 +18,6 @@
 
 {% block content %}
     <div class="main">
-
-        <link rel="stylesheet" type="text/css" href="{% static 'articles/css/article_edit.css' %}">
 
         <form method="post" id="add_article">
             {% csrf_token %}

@@ -3,9 +3,17 @@
 
 <!DOCTYPE html>
 <html>
-{% block head %}
+    <head>
     {% include 'head.html' %}
-{% endblock %}
+    {% block stylesheet %}
+    {% endblock %}
+    <title>
+        {% block head_title %}
+        {% endblock %}
+    </title>
+    {% block extra_head %}
+    {% endblock %}
+    </head>
 
 <body>
 {% block body %}
@@ -16,7 +24,7 @@
     {% block extra_body %}
     {% endblock %}
     </body>
-    </html>
+</html>
 {% endblock %}
 {% block script %}
 {% endblock %}

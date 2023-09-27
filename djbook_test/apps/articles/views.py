@@ -1,19 +1,18 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.base import View
 
-from djbook_test.settings import DEBUG
 from .forms import CommentForm, ArticleEditForm, text_validator, cleanhtml
 from .models import Article, Choice, Tag, Comment
 from .tasks import send_task, admin_send_task

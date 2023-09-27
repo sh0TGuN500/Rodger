@@ -1,10 +1,34 @@
-from django.http import HttpResponseRedirect
+from os import getenv
+from urllib.parse import urlparse, urlunparse
+
+import ipinfo
 from django.shortcuts import render, redirect
 from django.utils.translation import activate
-from urllib.parse import urlparse, urlunparse
+from .models import GuestData
+
+
+def user_checker(address):
+    access_token = getenv('ADDR_CHECK_API')
+    handler = ipinfo.getHandler(access_token)
+    details = handler.getDetails(address)
+    return details.all
+
+
+def get_address(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.headers:
+        addresses = request.headers['HTTP_X_FORWARDED_FOR'].split(',')
+        return addresses[-1].strip()
+    else:
+        return request.META['REMOTE_ADDR']
 
 
 def home(request):
+    user = request.user
+    device_data = request.META
+    address = get_address(request)
+    address_data = user_checker(address)
+    new = GuestData(user=user, device=device_data, address=address_data)
+    new.save()
     return render(request, 'home/home_page.html')
 
 
