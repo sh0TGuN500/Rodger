@@ -14,7 +14,7 @@ class LanguageMiddleware:
         if not language:
             try:
                 user_language = request.META.get('HTTP_ACCEPT_LANGUAGE').split(',')[0]
-            except KeyError:
+            except:
                 language = 'en'
             else:
                 lang_list = [lang[0] for lang in LANGUAGES]
