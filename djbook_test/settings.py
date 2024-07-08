@@ -195,10 +195,10 @@ STATICFILES_DIRS = [
 
 # GRAPPELLI_ADMIN_TITLE = "RODGER"
 
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
 
 SITE_ID = 2
 
@@ -224,12 +224,12 @@ except ImportError:
         'default': dj_database_url.config(default=getenv('JAWSDB_URL'))
     }
 
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": getenv('REDIS_URL'),
-        }
-    }
+    # CACHES = {
+    #     "default": {
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "LOCATION": getenv('REDIS_URL'),
+    #     }
+    # }
 
     SECURE_HSTS_SECONDS = 60
 
@@ -284,9 +284,9 @@ except ImportError:
 
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
-    CELERY_BROKER_URL = getenv('CLOUDAMQP_URL')
+    # CELERY_BROKER_URL = getenv('CLOUDAMQP_URL')
 
-    CELERY_RESULT_BACKEND = getenv('REDIS_URL')
+    # CELERY_RESULT_BACKEND = getenv('REDIS_URL')
 
     DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
     EMAIL_HOST = getenv('EMAIL_HOST')
