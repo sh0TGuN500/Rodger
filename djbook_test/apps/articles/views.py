@@ -15,7 +15,7 @@ from django.views.generic.base import View
 
 from .forms import CommentForm, ArticleEditForm, text_validator, cleanhtml
 from .models import Article, Choice, Tag, Comment
-from .tasks import send_task, admin_send_task
+# from .tasks import send_task, admin_send_task
 
 
 ########################################################################################################################
@@ -193,11 +193,11 @@ def article_db_save(request, article_id=None):
         {'article_url': article_absolute_url,
          'user': request.user.username,
          'article_title': article_model.title})
-    admin_send_task.delay(
-        _(f'New article posted: {article_model.title}'),
-        html_content,
-        # article_model.user.email
-    )
+    # admin_send_task.delay(
+    #     _(f'New article posted: {article_model.title}'),
+    #     html_content,
+    #     # article_model.user.email
+    # )
     return JsonResponse({'success': article_url_message})
 
 
@@ -290,12 +290,12 @@ class CommentCreate(LoginRequiredMixin, View):
         user = article.user
         #if not DEBUG:
         article_absolute_url = 'rodger-dj.herokuapp.com' + reverse_lazy('articles:detail', args=(article_id,))
-        send_task.delay(
-            _(f'New comment for {article.title}'),
-            _(f'''User {request.user.username} commented on your article {article_absolute_url}!
-            \nYou can\'t get rid of the mailing because I haven\'t implemented it.'''),
-            user_email=user.email,
-        )
+        # send_task.delay(
+        #     _(f'New comment for {article.title}'),
+        #     _(f'''User {request.user.username} commented on your article {article_absolute_url}!
+        #     \nYou can\'t get rid of the mailing because I haven\'t implemented it.'''),
+        #     user_email=user.email,
+        # )
         return JsonResponse({'success': _(' • Comment successful posted')})
 
 
